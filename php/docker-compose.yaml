@@ -1,0 +1,20 @@
+version: "3.7"
+
+services:
+  php:
+    build:
+      context: .
+    container_name: lalifeier-php8.1-SNAPSHOT
+    ports:
+      - "10022:22"
+      - 10080:80
+      - 10443:443
+      - 19000:9000
+    restart: always
+    environment:
+      - TIME_ZONE=${TIME_ZONE}
+    volumes:
+      # - ./nginx/etc/conf.d:/etc/nginx/conf.d
+      # - ./nginx/etc/nginx.conf:/etc/nginx/nginx.conf
+      # - ${DATA_PATH}/nginx/logs:/var/log/nginx
+      - /data/code:/data/web
