@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:7.4-fpm
 
 LABEL maintainer="lalifeier <lalifeier@gmail.com>"
 
@@ -11,6 +11,17 @@ RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.lis
     apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends
+
+
+# RUN curl -sSLf \
+#         -o /usr/local/bin/install-php-extensions \
+#         https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
+#     chmod +x /usr/local/bin/install-php-extensions && \
+#     install-php-extensions gd && \
+#     install-php-extensions pdo_mysql && \
+#     install-php-extensions mysqli && \
+#     install-php-extensions redis && \
+#     install-php-extensions xdebug
 
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
 

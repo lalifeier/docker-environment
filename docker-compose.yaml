@@ -46,22 +46,41 @@ services:
     # - mysql
     # - redis
 
-  php-fpm:
+  php81-fpm:
     build:
-      context: ./php-fpm
-    container_name: php-fpm
-    ports:
-      - ${PHP_FPM_PORT}:9000
+      context: ./php-fpm/php81
+    container_name: php81-fpm
+    # ports:
+    #   - ${PHP_FPM_PORT}:9000
     networks:
       - backend
     restart: always
     environment:
       - TIME_ZONE=${TIME_ZONE}
     volumes:
+      - ./php-fpm/php81/php.ini:/usr/local/etc/php/php.ini
+      - ./php-fpm/php81/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./php-fpm/php81/conf.d:/usr/local/etc/php/conf.d
+      - ${DATA_PATH}/php-fpm/logs:/var/log/php-fpm
       - ${CODE_PATH}:/data
-      - ./php-fpm/conf/php.ini:/usr/local/etc/php/php.ini
-      - ./php-fpm/conf/conf.d:/usr/local/etc/php/conf.d
-      - ./php-fpm/conf/www.conf:/usr/local/etc/php-fpm.d/www.conf
+
+  php74-fpm:
+    build:
+      context: ./php-fpm/php74
+    container_name: php74-fpm
+    # ports:
+    #   - ${PHP_FPM_PORT}:9000
+    networks:
+      - backend
+    restart: always
+    environment:
+      - TIME_ZONE=${TIME_ZONE}
+    volumes:
+      - ./php-fpm/php74/php.ini:/usr/local/etc/php/php.ini
+      - ./php-fpm/php74/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./php-fpm/php74/conf.d:/usr/local/etc/php/conf.d
+      - ${DATA_PATH}/php-fpm/logs:/var/log/php-fpm
+      - ${CODE_PATH}:/data
 
   # python:
   #   build:
@@ -96,7 +115,10 @@ services:
       - ./nginx/etc/conf.d:/etc/nginx/conf.d
       - ./nginx/etc/nginx.conf:/etc/nginx/nginx.conf
       - ${DATA_PATH}/nginx/logs:/var/log/nginx
-      - ${CODE_PATH}:/data
+      - ${CODE_PATH}:/var/www/html
+    # links:
+    #   - php74-fpm:php74-fpm
+    #   - php81-fpm:php81-fpm
 
   mysql:
     build:
@@ -114,8 +136,8 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - ./mysql/conf:/etc/mysql/conf.d
-      - ${DATA_PATH}/mysql/logs:/logs
       - ${DATA_PATH}/mysql/data:/var/lib/mysql
+      - ${DATA_PATH}/mysql/logs:/var/log/mysql
 
   redis:
     build:
