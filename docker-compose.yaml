@@ -42,6 +42,8 @@ services:
       - ${CODE_PATH}:/data
     stdin_open: true
     tty: true
+    extra_hosts:
+      - raw.githubusercontent.com:185.199.108.133
     # depends_on:
     # - mysql
     # - redis
@@ -82,22 +84,22 @@ services:
       - ${DATA_PATH}/php-fpm/logs:/var/log/php-fpm
       - ${CODE_PATH}:/data
 
-  # python:
-  #   build:
-  #     context: ./python
-  #   working_dir: /data
-  #   container_name: python
-  #   ports:
-  #     - 5000:5000
-  #   networks:
-  #     - backend
-  #   restart: always
-  #   environment:
-  #     - TIME_ZONE=${TIME_ZONE}
-  #   volumes:
-  #     - ${CODE_PATH}:/data
-  #   stdin_open: true
-  #   tty: true
+  python:
+    build:
+      context: ./python
+    working_dir: /data
+    container_name: python
+    ports:
+      - 5000:5000
+    networks:
+      - backend
+    restart: always
+    environment:
+      - TIME_ZONE=${TIME_ZONE}
+    volumes:
+      - ${CODE_PATH}:/data
+    stdin_open: true
+    tty: true
 
   nginx:
     build:

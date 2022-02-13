@@ -11,9 +11,6 @@
 
 # RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 
-# export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
 
 FROM alpine:latest
 
@@ -28,15 +25,21 @@ RUN apk update && \
 
 SHELL [ "/bin/bash", "-c" ]
 
-RUN touch ~/.bashrc && \
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash && \
+# curl -o- https://raw.fastgit.org/nvm-sh/nvm/v0.39.1/install.sh | bash && \
+
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash && \
     echo -e 'export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"\n[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm' > $HOME/.bashrc && \
     source $HOME/.bashrc && \
     nvm install -s $NODE_VERSION && \
-    nvm use $NODE_VERSION
-    # node -v && npm -v && \
-    # npm install -g nrm yarn pnpm && \
-    # nrm use taobao && \
-    # nvm cache clear
+    nvm use $NODE_VERSION && \
+    node -v && npm -v && \
+    npm install -g nrm && \
+    nrm use taobao && \
+    npm install -g yarn pnpm && \
+    nvm cache clear
 
 ENTRYPOINT [ "/bin/bash" ]
