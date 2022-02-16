@@ -29,3 +29,7 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 # Allow current user to run Docker commands
 sudo usermod -aG docker $USER
+
+
+# export COMPOSE_PROJECT_NAME=docker-environment
+# export COMPOSE_FILE=~/opt/docker-environment/docker-compose.yml
