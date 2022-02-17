@@ -1,27 +1,23 @@
 #!/bin/bash
+set -e
 
-# if [ "$(id -u)" -eq '0' ]
-# then
-#     USER_ID=${LOCAL_UID:-9001}
+USER=${LOCAL_USER:-user}
+USER_ID=${LOCAL_UID:-1000}
+GROUP_ID=${LOCAL_GID:-1000}
+echo "Starting with UID : $USER_ID, GID: $GROUP_ID,USER: $USER"
 
-#     usermod -u ${USER_ID} -g ${USER_ID} user > /dev/null 2>&1
-#     chown -R `id -u user`:`id -u user` /app > /dev/null 2>&1
+if id -u ${USER} >/dev/null 2>&1 ; then
+  exec "$@"
+  exit
+else
+  useradd -s /bin/bash -u $USER_ID -o -m $USER
+fi
 
-#     export HOME=/home/user
-#     exec gosu user "$0" "$@"
-# fi
+# usermod -u $USER_ID -o -m $USER
+groupmod -g $GROUP_ID $USER
 
-# exec "$@"
+export HOME=/home/$USER
 
-# https://blog.giovannidemizio.eu/2021/05/24/how-to-set-user-and-group-in-docker-compose/
+exec /usr/sbin/gosu "$USER" "$@"
 
-# https://denibertovic.com/posts/handling-permissions-with-docker-volumes/
-USER_ID=${LOCAL_UID:-9001}
-GROUP_ID=${LOCAL_GID:-9001}
-
-echo "Starting with UID: $USER_ID, GID: $GROUP_ID"
-useradd -u $USER_ID -o -m user
-groupmod -g $GROUP_ID user
-export HOME=/home/user
-
-exec /usr/sbin/gosu user "$@"
+tail -f /dev/null

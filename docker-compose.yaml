@@ -96,6 +96,9 @@ services:
     restart: always
     environment:
       - TIME_ZONE=${TIME_ZONE}
+      - LOCAL_USER=lalifeier
+      - LOCAL_UID=1000
+      - LOCAL_GID=1000
     volumes:
       - ${CODE_PATH}:/code
     stdin_open: true
