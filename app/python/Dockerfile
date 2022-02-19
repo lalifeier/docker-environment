@@ -1,25 +1,4 @@
-# FROM python:3.9 as build-stage
-
-# WORKDIR /app
-
-# COPY requirements.txt .
-# RUN pip install requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
-
-# FROM python:3.9-alpine as production-stage
-
-# WORKDIR /app
-
-# COPY --from=build-stage /usr/local/bin /usr/local/bin
-
-# COPY --from=build-stage /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
-
-# COPY . .
-
-# CMD ["/bin/sh"]
-
-
-
-FROM python:3.9-slim-bullseye as builder
+FROM python:3.9-slim-bullseye AS build
 
 WORKDIR /app
 
@@ -34,7 +13,7 @@ FROM frolvlad/alpine-glibc
 
 WORKDIR /app
 
-COPY --from=builder /app/dist/run .
+COPY --from=build /app/dist/run .
 
 CMD ["./run"]
 

@@ -1,4 +1,4 @@
-FROM php:8.1-fpm-alpine as builder
+FROM php:8.1-fpm-alpine AS build
 
 RUN apk update && apk add unzip
 
@@ -23,5 +23,5 @@ COPY ./docker/production/php/conf.d /usr/local/etc/php/conf.d
 
 WORKDIR /app
 
-COPY --from=builder /app ./
+COPY --from=build /app ./
 COPY ./ ./

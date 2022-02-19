@@ -12,26 +12,12 @@ RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/' /etc/apt/sources.list && \
     apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends && \
-    apt-get install -y make gosu && \
-    rm -rf /var/lib/apt/lists/* && \
-    # verify that the binary works
-    gosu nobody true
+    rm -rf /var/lib/apt/lists/*
 
-# ARG user=python
-# RUN useradd -ms /bin/bash $user
+ENV PATH /root/.local/bin:$PATH
 
-# USER $user
-# ENV PATH="/home/${user}/.local/bin:${PATH}"
-
-# RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple \
-# 	&& pip config set install.trusted-host mirrors.aliyun.com \
-#   && pip install --upgrade pip && pip install --user pipenv
+RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple \
+	&& pip config set install.trusted-host mirrors.aliyun.com \
+  && pip install --upgrade pip && pip install --user pipenv
 
 ENV PIP_REQUIRE_VIRTUALENV=true
-
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
-CMD ["/bin/bash"]

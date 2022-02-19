@@ -1,5 +1,4 @@
-# build stage
-FROM golang:latest as build
+FROM golang:latest AS build
 
 ENV GOPROXY="https://goproxy.io"
 ENV GO111MODULE="on"
@@ -8,11 +7,10 @@ ENV CGO_ENABLED=0
 
 WORKDIR /app
 
-COPY . /app
+COPY . .
 RUN make build
 
-# production stage
-FROM alpine as production
+FROM alpine
 # FROM centurylink/ca-certs
 
 WORKDIR /app
