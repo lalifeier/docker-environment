@@ -270,6 +270,20 @@ services:
     stdin_open: true
     tty: true
 
+  hue:
+    image: gethue/hue:latest
+    container_name: hue
+    ports:
+      - 8888:8888
+    networks:
+      - backend
+    restart: always
+    # environment:
+    volumes:
+      - ./hue/hue.ini:/usr/share/hue/desktop/conf/z-hue.ini
+    stdin_open: true
+    tty: true
+
   # consul:
   #   image: bitnami/consul:latest
   #   # container_name: consul
