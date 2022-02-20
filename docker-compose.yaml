@@ -250,42 +250,25 @@ services:
     depends_on:
       - zookeeper
 
-  kafka-eagle:
+  efak:
     build:
-      context: ./kafka-eagle
-    container_name: kafka-eagle
+      context: ./efak
+    container_name: efak
     ports:
       - 8048:8048
     networks:
       - backend
     restart: always
     environment:
-      - ZKSERVER=zookeeper:2181
-    # volumes:
-    # - ./kafka-eagle/system-config.properties:/opt/kafka-eagle/conf/system-config.properties
-    # - ${DATA_PATH}/kafka-eagle/logs:/opt/kafka-eagle/logs
-    # depends_on:
-    #   - zookeeper
-    #   - kafka
-
-  kafka-manager:
-    # image: sheepkiller/kafka-manager
-    image: hlebalbau/kafka-manager:stable
-    container_name: kafka-manager
-    ports:
-      - 9000:9000
-    networks:
-      - backend
-    restart: always
-    environment:
       - ZK_HOSTS=zookeeper:2181
-      - APPLICATION_SECRET=secret
-      # - KAFKA_MANAGER_AUTH_ENABLED=true
-      # - KAFKA_MANAGER_USERNAME="admin"
-      # - KAFKA_MANAGER_PASSWORD="123456d"
+    volumes:
+      - ./efak/conf/system-config.properties:/usr/local/efak/conf/system-config.properties
+      - ${DATA_PATH}/efak/logs:/usr/local/efak/logs
     depends_on:
       - zookeeper
       - kafka
+    stdin_open: true
+    tty: true
 
   # consul:
   #   image: bitnami/consul:latest
