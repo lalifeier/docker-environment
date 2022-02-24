@@ -162,6 +162,7 @@ services:
     build:
       context: ./mysql
     container_name: mysql
+    hostname: mysql
     ports:
       - ${MYSQL_PORT}:3306
     networks:
@@ -226,29 +227,30 @@ services:
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     # volumes:
-    #   - ${DATA_PATH}/zookeeper/data:/bitnami/zookeeper
+    #   - ./zookeeper/conf/zoo.cfg:/opt/bitnami/zookeeper/conf/zoo.cfg
+    #   - ${DATA_PATH}/zookeeper/data:/bitnami/zookeeper/data
 
   kafka:
     image: "bitnami/kafka:latest"
     container_name: kafka
     ports:
       - 9092:9092
-      - 9999:9999
+      # - 9999:9999
     networks:
       - backend
     restart: always
     environment:
-      - KAFKA_BROKER_ID=1
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+      # - KAFKA_BROKER_ID=1
+      # - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      # - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
-      - JMX_PORT=9999
+      # - JMX_PORT=9999
     # volumes:
     #   - ${DATA_PATH}/kafka/data:/bitnami/kafka/data
-    #   - ${DATA_PATH}/kafka/data:/bitnami/kafka/config
-    depends_on:
-      - zookeeper
+    #   - ${DATA_PATH}/kafka/config:/bitnami/kafka/config
+    # depends_on:
+    #   - zookeeper
 
   efak:
     build:
