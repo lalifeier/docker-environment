@@ -1,0 +1,27 @@
+version: "3.7"
+
+networks:
+  frontend:
+    driver: ${NETWORKS_DRIVER}
+  backend:
+    driver: ${NETWORKS_DRIVER}
+
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab
+    hostname: gitlab
+    ports:
+      - 80:80
+      - 443:443
+      - "22:22"
+    networks:
+      - backend
+    restart: always
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /usr/local/gitlab/etc:/etc/gitlab
+      - /usr/local/gitlab/log:/var/log/gitlab
+      - /usr/local/gitlab/opt:/var/opt/gitlab

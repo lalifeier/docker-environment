@@ -11,8 +11,7 @@ services:
       - 10443:443
       - 19000:9000
     restart: always
-    environment:
-      - TIME_ZONE=${TIME_ZONE}
+    environment: TZ=${TIME_ZONE}
     volumes:
       # - ./nginx/etc/conf.d:/etc/nginx/conf.d
       # - ./nginx/etc/nginx.conf:/etc/nginx/nginx.conf

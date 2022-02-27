@@ -1,0 +1,18 @@
+hostname: 192.168.1.180
+
+http:
+  port: 80
+
+# https:
+#  port: 443
+#  certificate: /your/certificate/path
+#  private_key: /your/private/key/path
+
+data_volume: /opt/harbor/data
+
+log:
+  level: info
+  local:
+    rotate_count: 50
+    rotate_size: 200M
+    location: /opt/harbor/log
