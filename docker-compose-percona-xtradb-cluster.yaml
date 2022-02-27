@@ -1,0 +1,74 @@
+version: "3.7"
+
+networks:
+  frontend:
+    driver: ${NETWORKS_DRIVER}
+  backend:
+    driver: ${NETWORKS_DRIVER}
+
+services:
+  pxc-node1:
+    image: percona/percona-xtradb-cluster:5.7
+    container_name: pxc-node1
+    hostname: pxc-node1
+    ports:
+      - 13306:3306
+    networks:
+      - backend
+    restart: always
+    privileged: true
+    environment:
+      - TZ=${TIME_ZONE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - CLUSTER_NAME=PXC
+      - XTRABACKUP_PASSWORD=pxc123
+    volumes:
+      # - ./pxc/node1/conf:/etc/mysql/conf.d
+      - ${DATA_PATH}/pxc/node1/data:/var/lib/mysql
+      - ${DATA_PATH}/pxc/node1/logs:/var/log/mysql
+
+  pxc-node2:
+    image: percona/percona-xtradb-cluster:5.7
+    container_name: pxc-node2
+    hostname: pxc-node2
+    ports:
+      - 13307:3306
+    networks:
+      - backend
+    restart: always
+    privileged: true
+    environment:
+      - TZ=${TIME_ZONE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - CLUSTER_NAME=PXC
+      - XTRABACKUP_PASSWORD=pxc123
+      - CLUSTER_JOIN=pxc-node1
+    volumes:
+      # - ./pxc/node2/conf:/etc/mysql/conf.d
+      - ${DATA_PATH}/pxc/node2/data:/var/lib/mysql
+      - ${DATA_PATH}/pxc/node2/logs:/var/log/mysql
+    depends_on:
+      - pxc-node1
+
+  pxc-node3:
+    image: percona/percona-xtradb-cluster:5.7
+    container_name: pxc-node3
+    hostname: pxc-node3
+    ports:
+      - 13308:3306
+    networks:
+      - backend
+    restart: always
+    privileged: true
+    environment:
+      - TZ=${TIME_ZONE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - CLUSTER_NAME=PXC
+      - XTRABACKUP_PASSWORD=pxc123
+      - CLUSTER_JOIN=pxc-node1
+    volumes:
+      # - ./pxc/node3/conf:/etc/mysql/conf.d
+      - ${DATA_PATH}/pxc/node3/data:/var/lib/mysql
+      - ${DATA_PATH}/pxc/node3/logs:/var/log/mysql
+    depends_on:
+      - pxc-node1

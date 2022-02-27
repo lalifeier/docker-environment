@@ -1,0 +1,65 @@
+version: "3.7"
+
+networks:
+  frontend:
+    driver: ${NETWORKS_DRIVER}
+  backend:
+    driver: ${NETWORKS_DRIVER}
+
+services:
+  zk1:
+    image: "bitnami/zookeeper:latest"
+    container_name: zk1
+    hostname: zk1
+    ports:
+      - 12181:2181
+      - 12888:2888
+      - 13888:3888
+    networks:
+      - backend
+    restart: always
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ZOO_SERVER_ID=1
+      - ZOO_SERVERS=0.0.0.0:12888:13888,zk2:22888:23888,zk3:32888:33888
+    # volumes:
+    #   - ./zookeeper/conf/zoo.cfg:/opt/bitnami/zookeeper/conf/zoo.cfg
+    #   - ${DATA_PATH}/zookeeper/data:/bitnami/zookeeper/data
+
+  zk2:
+    image: "bitnami/zookeeper:latest"
+    container_name: zk2
+    hostname: zk2
+    ports:
+      - 22181:2181
+      - 22888:2888
+      - 23888:3888
+    networks:
+      - backend
+    restart: always
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ZOO_SERVER_ID=2
+      - ZOO_SERVERS=zk1:12888:13888,0.0.0.0:22888:23888,zk3:32888:33888
+    # volumes:
+    #   - ./zookeeper/conf/zoo.cfg:/opt/bitnami/zookeeper/conf/zoo.cfg
+    #   - ${DATA_PATH}/zookeeper/data:/bitnami/zookeeper/data
+
+  zk3:
+    image: "bitnami/zookeeper:latest"
+    container_name: zk3
+    hostname: zk3
+    ports:
+      - 32181:2181
+      - 32888:2888
+      - 33888:3888
+    networks:
+      - backend
+    restart: always
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ZOO_SERVER_ID=3
+      - ZOO_SERVERS=zk1:12888:13888,zk2:22888:23888,0.0.0.0:32888:33888
+    # volumes:
+    #   - ./zookeeper/conf/zoo.cfg:/opt/bitnami/zookeeper/conf/zoo.cfg
+    #   - ${DATA_PATH}/zookeeper/data:/bitnami/zookeeper/data

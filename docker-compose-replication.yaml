@@ -1,0 +1,52 @@
+version: "3.7"
+
+networks:
+  frontend:
+    driver: ${NETWORKS_DRIVER}
+  backend:
+    driver: ${NETWORKS_DRIVER}
+
+services:
+  mysql-master:
+    image: mishamx/mysql
+    container_name: mysql-master
+    hostname: mysql-master
+    ports:
+      - 13306:3306
+    networks:
+      - backend
+    restart: always
+    privileged: true
+    environment:
+      - TZ=${TIME_ZONE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_REPLICATION_USER=backup
+      - MYSQL_REPLICATION_PASSWORD=backup123
+    # volumes:
+    # - ./replication/mysql-master/conf:/etc/mysql/conf.d
+    # - ${DATA_PATH}/replication/mysql-master/data:/var/lib/mysql
+    # - ${DATA_PATH}/replication/mysql-master/logs:/var/log/mysql
+
+  mysql-slave:
+    image: mishamx/mysql
+    container_name: mysql-slave
+    hostname: mysql-slave
+    ports:
+      - 13307:3306
+    networks:
+      - backend
+    restart: always
+    privileged: true
+    environment:
+      - TZ=${TIME_ZONE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_REPLICATION_USER=backup
+      - MYSQL_REPLICATION_PASSWORD=backup123
+      - MYSQL_MASTER_HOST=mysql-master
+      - MYSQL_MASTER_PORT=3306
+    # volumes:
+    # - ./replication/mysql-slave/conf:/etc/mysql/conf.d
+    # - ${DATA_PATH}/replication/mysql-slave/data:/var/lib/mysql
+    # - ${DATA_PATH}/replication/mysql-slave/logs:/var/log/mysql
+    depends_on:
+      - mysql-master

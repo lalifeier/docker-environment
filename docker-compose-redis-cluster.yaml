@@ -1,0 +1,62 @@
+version: "3.7"
+
+networks:
+  frontend:
+    driver: ${NETWORKS_DRIVER}
+  backend:
+    driver: ${NETWORKS_DRIVER}
+
+services:
+  redis-node1:
+    image: bitnami/redis-cluster:latest
+    container_name: redis-node1
+    hostname: redis-node1
+    ports:
+      - 16379:6379
+    networks:
+      - backend
+    restart: always
+    # privileged: true
+    environment:
+      - TZ=${TIME_ZONE}
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_NODES=redis-node1 redis-node2 redis-node3
+    volumes:
+      # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
+      - ${DATA_PATH}/redis-cluster/node1/data:/bitnami/redis/data
+
+  redis-node2:
+    image: bitnami/redis-cluster:latest
+    container_name: redis-node2
+    hostname: redis-node2
+    ports:
+      - 16380:6379
+    networks:
+      - backend
+    restart: always
+    # privileged: true
+    environment:
+      - TZ=${TIME_ZONE}
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_NODES=redis-node1 redis-node2 redis-node3
+    volumes:
+      # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
+      - ${DATA_PATH}/redis-cluster/node2/data:/bitnami/redis/data
+
+  redis-node3:
+    image: bitnami/redis-cluster:latest
+    container_name: redis-node3
+    hostname: redis-node3
+    ports:
+      - 16381:6379
+    networks:
+      - backend
+    restart: always
+    # privileged: true
+    environment:
+      - TZ=${TIME_ZONE}
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_NODES=redis-node1 redis-node2 redis-node3
+    volumes:
+      # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
+      - ${DATA_PATH}/redis-cluster/node3/data:/bitnami/redis/data

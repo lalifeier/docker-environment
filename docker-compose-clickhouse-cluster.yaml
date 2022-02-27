@@ -1,0 +1,140 @@
+version: "3.7"
+
+networks:
+  frontend:
+    driver: ${NETWORKS_DRIVER}
+  backend:
+    driver: ${NETWORKS_DRIVER}
+
+services:
+  ch1:
+    build:
+      context: ./clickhouse-server
+    container_name: ch1
+    hostname: ch1
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - 18123:8123
+      - 19000:9000
+    networks:
+      - backend
+    restart: always
+    volumes:
+      - ./clickhouse-cluster/ch1/conf/config.xml:/etc/clickhouse-server/config.xml
+      - ./clickhouse-cluster/ch1/conf/users.xml:/etc/clickhouse-server/users.xml
+      - ./clickhouse-cluster/ch1/conf/metrika.xml:/etc/metrika.xml
+      # - ${DATA_PATH}/clickhouse-cluster/ch1/data:/var/lib/clickhouse
+      # - ${DATA_PATH}/clickhouse-cluster/ch1/logs:/var/log/clickhouse-server
+
+  ch2:
+    build:
+      context: ./clickhouse-server
+    container_name: ch2
+    hostname: ch2
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - 18124:8123
+      - 19001:9000
+    networks:
+      - backend
+    restart: always
+    volumes:
+      - ./clickhouse-cluster/ch2/conf/config.xml:/etc/clickhouse-server/config.xml
+      - ./clickhouse-cluster/ch2/conf/users.xml:/etc/clickhouse-server/users.xml
+      - ./clickhouse-cluster/ch2/conf/metrika.xml:/etc/metrika.xml
+      # - ${DATA_PATH}/clickhouse-cluster/ch2/data:/var/lib/clickhouse
+      # - ${DATA_PATH}/clickhouse-cluster/ch2/logs:/var/log/clickhouse-server
+
+  ch3:
+    build:
+      context: ./clickhouse-server
+    container_name: ch3
+    hostname: ch3
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - 18125:8123
+      - 19002:9000
+    networks:
+      - backend
+    restart: always
+    volumes:
+      - ./clickhouse-cluster/ch3/conf/config.xml:/etc/clickhouse-server/config.xml
+      - ./clickhouse-cluster/ch3/conf/users.xml:/etc/clickhouse-server/users.xml
+      - ./clickhouse-cluster/ch3/conf/metrika.xml:/etc/metrika.xml
+      # - ${DATA_PATH}/clickhouse-cluster/ch3/data:/var/lib/clickhouse
+      # - ${DATA_PATH}/clickhouse-cluster/ch3/logs:/var/log/clickhouse-server
+
+  ch4:
+    build:
+      context: ./clickhouse-server
+    container_name: ch4
+    hostname: ch4
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - 18126:8123
+      - 19003:9000
+    networks:
+      - backend
+    restart: always
+    volumes:
+      - ./clickhouse-cluster/ch1/conf/config.xml:/etc/clickhouse-server/config.xml
+      - ./clickhouse-cluster/ch1/conf/users.xml:/etc/clickhouse-server/users.xml
+      - ./clickhouse-cluster/ch1/conf/metrika.xml:/etc/metrika.xml
+      # - ${DATA_PATH}/clickhouse-cluster/ch1/data:/var/lib/clickhouse
+      # - ${DATA_PATH}/clickhouse-cluster/ch1/logs:/var/log/clickhouse-server
+
+  ch5:
+    build:
+      context: ./clickhouse-server
+    container_name: ch5
+    hostname: ch5
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - 18127:8123
+      - 19004:9000
+    networks:
+      - backend
+    restart: always
+    volumes:
+      - ./clickhouse-cluster/ch5/conf/config.xml:/etc/clickhouse-server/config.xml
+      - ./clickhouse-cluster/ch5/conf/users.xml:/etc/clickhouse-server/users.xml
+      - ./clickhouse-cluster/ch5/conf/metrika.xml:/etc/metrika.xml
+      # - ${DATA_PATH}/clickhouse-cluster/ch2/data:/var/lib/clickhouse
+      # - ${DATA_PATH}/clickhouse-cluster/ch2/logs:/var/log/clickhouse-server
+
+  ch6:
+    build:
+      context: ./clickhouse-server
+    container_name: ch6
+    hostname: ch6
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - 18128:8123
+      - 19005:9000
+    networks:
+      - backend
+    restart: always
+    volumes:
+      - ./clickhouse-cluster/ch6/conf/config.xml:/etc/clickhouse-server/config.xml
+      - ./clickhouse-cluster/ch6/conf/users.xml:/etc/clickhouse-server/users.xml
+      - ./clickhouse-cluster/ch6/conf/metrika.xml:/etc/metrika.xml
+      # - ${DATA_PATH}/clickhouse-cluster/ch3/data:/var/lib/clickhouse
+      # - ${DATA_PATH}/clickhouse-cluster/ch3/logs:/var/log/clickhouse-server

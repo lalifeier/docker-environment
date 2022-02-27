@@ -180,7 +180,7 @@
 
 
     <!-- Same for hosts without support for IPv6: -->
-    <listen_host>0.0.0.0</listen_host>
+    <!-- <listen_host>0.0.0.0</listen_host> -->
 
     <!-- Default values - try listen localhost on IPv4 and IPv6. -->
     <!--
@@ -618,13 +618,7 @@
     <!-- Configuration of clusters that could be used in Distributed tables.
          https://clickhouse.com/docs/en/operations/table_engines/distributed/
       -->
-    <!-- <remote_servers></remote_servers> -->
-
-
-    <include_from>/etc/clickhouse-server/config.d/metrika.xml</include_from>
     <remote_servers incl="clickhouse_remote_servers" />
-    <zookeeper incl="zookeeper-servers" optional="true" />
-    <macros incl="macros" optional="true" />
 
     <!-- The list of hosts allowed to use in URL-related storage engines and table functions.
         If this section is not present in configuration, all hosts are allowed.
@@ -674,6 +668,7 @@
         </node>
     </zookeeper>
     -->
+    <zookeeper incl="zookeeper-servers" optional="true" />
 
     <!-- Substitutions for parameters of replicated tables.
           Optional. If you don't use replicated tables, you could omit that.
@@ -686,6 +681,7 @@
         <replica>example01-01-1</replica>
     </macros>
     -->
+    <macros incl="macros" optional="true" />
 
 
     <!-- Reloading interval for embedded dictionaries, in seconds. Default: 3600. -->
