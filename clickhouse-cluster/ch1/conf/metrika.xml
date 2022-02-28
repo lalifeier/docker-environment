@@ -81,9 +81,9 @@
     <replica>cluster01-01-01</replica>
   </macros>
 
-  <networks>
+  <!-- <networks>
     <ip>::/0</ip>
-  </networks>
+  </networks> -->
 
   <clickhouse_compression>
     <case>

@@ -1,0 +1,149 @@
+version: "3.7"
+
+networks:
+  bridge-net:
+    driver: bridge
+    # ipam:
+    #   config:
+    #     - subnet: 172.20.0.0/16
+    external:
+      name: zookeeper-cluster_bridge-net
+
+services:
+  ch1:
+    image: yandex/clickhouse-server:latest
+    container_name: ch1
+    hostname: ch1
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - 18123:8123
+      - 19000:9000
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./ch1/conf/config.xml:/etc/clickhouse-server/config.xml
+      - ./ch1/conf/users.xml:/etc/clickhouse-server/users.xml
+      - ./ch1/conf/metrika.xml:/etc/metrika.xml
+      - /data/clickhouse-cluster/ch1/data:/var/lib/clickhouse
+      - /data/clickhouse-cluster/ch1/logs:/var/log/clickhouse-server
+
+  ch2:
+    image: yandex/clickhouse-server:latest
+    container_name: ch2
+    hostname: ch2
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - 18124:8123
+      - 19001:9000
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./ch2/conf/config.xml:/etc/clickhouse-server/config.xml
+      - ./ch2/conf/users.xml:/etc/clickhouse-server/users.xml
+      - ./ch2/conf/metrika.xml:/etc/metrika.xml
+      - /data/clickhouse-cluster/ch2/data:/var/lib/clickhouse
+      - /data/clickhouse-cluster/ch2/logs:/var/log/clickhouse-server
+
+  ch3:
+    image: yandex/clickhouse-server:latest
+    container_name: ch3
+    hostname: ch3
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - 18125:8123
+      - 19002:9000
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./ch3/conf/config.xml:/etc/clickhouse-server/config.xml
+      - ./ch3/conf/users.xml:/etc/clickhouse-server/users.xml
+      - ./ch3/conf/metrika.xml:/etc/metrika.xml
+      - /data/clickhouse-cluster/ch3/data:/var/lib/clickhouse
+      - /data/clickhouse-cluster/ch3/logs:/var/log/clickhouse-server
+
+  ch4:
+    image: yandex/clickhouse-server:latest
+    container_name: ch4
+    hostname: ch4
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - 18126:8123
+      - 19003:9000
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./ch4/conf/config.xml:/etc/clickhouse-server/config.xml
+      - ./ch4/conf/users.xml:/etc/clickhouse-server/users.xml
+      - ./ch4/conf/metrika.xml:/etc/metrika.xml
+      - /data/clickhouse-cluster/ch4/data:/var/lib/clickhouse
+      - /data/clickhouse-cluster/ch4/logs:/var/log/clickhouse-server
+
+  ch5:
+    image: yandex/clickhouse-server:latest
+    container_name: ch5
+    hostname: ch5
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - 18127:8123
+      - 19004:9000
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./ch5/conf/config.xml:/etc/clickhouse-server/config.xml
+      - ./ch5/conf/users.xml:/etc/clickhouse-server/users.xml
+      - ./ch5/conf/metrika.xml:/etc/metrika.xml
+      - /data/clickhouse-cluster/ch5/data:/var/lib/clickhouse
+      - /data/clickhouse-cluster/ch5/logs:/var/log/clickhouse-server
+
+  ch6:
+    image: yandex/clickhouse-server:latest
+    container_name: ch6
+    hostname: ch6
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - 18128:8123
+      - 19005:9000
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./ch6/conf/config.xml:/etc/clickhouse-server/config.xml
+      - ./ch6/conf/users.xml:/etc/clickhouse-server/users.xml
+      - ./ch6/conf/metrika.xml:/etc/metrika.xml
+      - /data/clickhouse-cluster/ch6/data:/var/lib/clickhouse
+      - /data/clickhouse-cluster/ch6/logs:/var/log/clickhouse-server
