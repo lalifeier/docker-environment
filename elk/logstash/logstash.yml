@@ -1,0 +1,5 @@
+path.config: /usr/share/logstash/config/*.conf
+
+xpack.monitoring.enabled: true
+
+xpack.monitoring.elasticsearch.hosts: ["http://elasticsearch:9200"]

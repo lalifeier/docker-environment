@@ -1,0 +1,20 @@
+input{
+  beats {
+    port => 5044
+    codec => "json"
+    id => 'beat_test'
+  }
+
+}
+
+
+output{
+  elasticsearch {
+    hosts => ["http://elasticsearch:9200"]
+    index => "logtest"
+  }
+
+  stdout {
+    codec => rubydebug
+  }
+}

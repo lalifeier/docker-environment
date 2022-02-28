@@ -1,0 +1,27 @@
+version: "3.7"
+
+networks:
+  bridge-net:
+    driver: bridge
+
+services:
+  nginx:
+    build:
+      context: .
+    container_name: nginx
+    ports:
+      - 1080:80
+      - 1443:443
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./etc/conf.d:/etc/nginx/conf.d
+      - ./etc/nginx.conf:/etc/nginx/nginx.conf
+      - /data/nginx/logs:/var/log/nginx
+      - /code:/var/www/html
+    # links:
+    #   - php74-fpm:php74-fpm
+    #   - php81-fpm:php81-fpm

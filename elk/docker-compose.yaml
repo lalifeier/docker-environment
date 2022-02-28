@@ -1,0 +1,72 @@
+version: "3.7"
+
+networks:
+  bridge-net:
+    driver: bridge
+
+services:
+  elasticsearch:
+    image: elasticsearch
+    container_name: elasticsearch
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      # - discovery.type=single-node
+      # - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    volumes:
+      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - /data/elk/elasticsearch/data:/usr/share/elasticsearch/data
+
+  kibana:
+    image: kibana
+    container_name: kibana
+    ports:
+      - 5601:5601
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - SERVER_NAME=kibana
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - XPACK_MONITORING_ENABLED=true
+    volumes:
+      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    depends_on:
+      - elasticsearch
+
+  logstash:
+    image: logstash
+    container_name: logstash
+    ports:
+      - 5044:5044
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - ./logstash/logstash.conf:/usr/share/logstash/config/logstash.conf
+      - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - /data/elk/logstash/data:/usr/share/logstash/data
+
+  filebeat:
+    image: filebeat
+    container_name: filebeat
+    ports:
+      - 5044:5044
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - /data/elk/filebeat/log:/usr/share/filebeat/log
+      - /data/elk/filebeat/data:/usr/share/filebeat/data
+    depends_on:
+      - elasticsearch
+      - kibana
