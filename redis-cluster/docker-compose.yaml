@@ -1,10 +1,8 @@
 version: "3.7"
 
 networks:
-  frontend:
-    driver: ${NETWORKS_DRIVER}
-  backend:
-    driver: ${NETWORKS_DRIVER}
+  bridge-net:
+    driver: bridge
 
 services:
   redis-node1:
@@ -14,16 +12,16 @@ services:
     ports:
       - 16379:6379
     networks:
-      - backend
+      - bridge-net
     restart: always
-    # privileged: true
+    privileged: true
     environment:
-      - TZ=${TIME_ZONE}
+      - TZ=Asia/Shanghai
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_NODES=redis-node1 redis-node2 redis-node3
     volumes:
       # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-      - ${DATA_PATH}/redis-cluster/node1/data:/bitnami/redis/data
+      - /data/redis-cluster/node1/data:/bitnami/redis/data
 
   redis-node2:
     image: bitnami/redis-cluster:latest
@@ -32,16 +30,16 @@ services:
     ports:
       - 16380:6379
     networks:
-      - backend
+      - bridge-net
     restart: always
-    # privileged: true
+    privileged: true
     environment:
-      - TZ=${TIME_ZONE}
+      - TZ=Asia/Shanghai
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_NODES=redis-node1 redis-node2 redis-node3
     volumes:
       # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-      - ${DATA_PATH}/redis-cluster/node2/data:/bitnami/redis/data
+      - /data/redis-cluster/node2/data:/bitnami/redis/data
 
   redis-node3:
     image: bitnami/redis-cluster:latest
@@ -50,13 +48,13 @@ services:
     ports:
       - 16381:6379
     networks:
-      - backend
+      - bridge-net
     restart: always
-    # privileged: true
+    privileged: true
     environment:
-      - TZ=${TIME_ZONE}
+      - TZ=Asia/Shanghai
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_NODES=redis-node1 redis-node2 redis-node3
     volumes:
       # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-      - ${DATA_PATH}/redis-cluster/node3/data:/bitnami/redis/data
+      - /data/redis-cluster/node3/data:/bitnami/redis/data

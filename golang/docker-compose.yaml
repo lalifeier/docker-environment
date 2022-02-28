@@ -1,0 +1,22 @@
+version: "3.7"
+
+networks:
+  bridge-net:
+    driver: bridge
+
+services:
+  golang:
+    image: golang:latest
+    working_dir: /usr/go/src/
+    container_name: golang
+    ports:
+      - 8081:8081
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /data:/usr/go/src/
+    stdin_open: true
+    tty: true

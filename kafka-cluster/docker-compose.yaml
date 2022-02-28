@@ -1,10 +1,8 @@
 version: "3.7"
 
 networks:
-  frontend:
-    driver: ${NETWORKS_DRIVER}
-  backend:
-    driver: ${NETWORKS_DRIVER}
+  bridge-net:
+    driver: bridge
 
 services:
   zookeeper:
@@ -12,6 +10,7 @@ services:
     ports:
       - "2181:2181"
     environment:
+      - TZ=Asia/Shanghai
       - ALLOW_ANONYMOUS_LOGIN=yes
 
   kafka1:
@@ -21,9 +20,10 @@ services:
     ports:
       - 19093:9093
     networks:
-      - backend
+      - bridge-net
     restart: always
     environment:
+      - TZ=Asia/Shanghai
       - KAFKA_BROKER_ID=1
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
@@ -41,9 +41,10 @@ services:
     ports:
       - 19094:9093
     networks:
-      - backend
+      - bridge-net
     restart: always
     environment:
+      - TZ=Asia/Shanghai
       - KAFKA_BROKER_ID=2
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
@@ -61,8 +62,10 @@ services:
     ports:
       - 19095:9093
     networks:
-      - backend
+      - bridge-net
     restart: always
+    environment:
+      - TZ=Asia/Shanghai
       - KAFKA_BROKER_ID=3
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes

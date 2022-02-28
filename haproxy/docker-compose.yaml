@@ -1,0 +1,18 @@
+version: "3.7"
+
+networks:
+  bridge-net:
+    driver: bridge
+
+services:
+  haproxy:
+    image: haproxy:latest
+    container_name: haproxy
+    hostname: haproxy
+    ports:
+      - 8888:8888
+    networks:
+      - bridge-net
+    restart: always
+    volumes:
+      - ./conf/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg

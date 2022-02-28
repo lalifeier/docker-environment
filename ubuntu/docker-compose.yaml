@@ -1,0 +1,25 @@
+version: "3.7"
+
+networks:
+  bridge-net:
+    driver: bridge
+
+services:
+  ubuntu:
+    build:
+      context: .
+    working_dir: /code
+    container_name: ubuntu
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - LOCAL_USER=lalifeier
+      - LOCAL_UID=1000
+      - LOCAL_GID=1000
+    volumes:
+      - /code:/code
+    stdin_open: true
+    tty: true
+    # user: "${UID}:${GID}"

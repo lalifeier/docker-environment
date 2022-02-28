@@ -1,5 +1,6 @@
 # FROM python:latest
-FROM python:3.8-slim-bullseye
+FROM python:3.9-slim-bullseye
+# FROM bitnami/python:latest
 
 LABEL maintainer="lalifeier <lalifeier@gmail.com>"
 
@@ -12,7 +13,6 @@ RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/' /etc/apt/sources.list && \
     apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends && \
-    apt-get install -y make && \
     rm -rf /var/lib/apt/lists/*
 
 ENV PATH /root/.local/bin:$PATH

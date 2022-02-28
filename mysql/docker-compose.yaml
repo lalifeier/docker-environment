@@ -1,0 +1,26 @@
+version: "3.7"
+
+networks:
+  bridge-net:
+    driver: bridge
+
+services:
+  mysql:
+    build:
+      context: .
+    container_name: mysql
+    hostname: mysql
+    ports:
+      - 3306:3306
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_USER=lalifeir
+      - MYSQL_PASSWORD=123456
+      - MYSQL_ROOT_PASSWORD=123456
+    volumes:
+      - ./conf:/etc/mysql/conf.d
+      - /data/mysql/data:/var/lib/mysql
+      - /data/mysql/logs:/var/log/mysql

@@ -1,89 +1,10 @@
 version: "3.7"
 
 networks:
-  frontend:
-    driver: ${NETWORKS_DRIVER}
-  backend:
-    driver: ${NETWORKS_DRIVER}
+  bridge-net:
+    driver: bridge
 
 services:
-  golang:
-    build:
-      context: ./golang
-    working_dir: /usr/go/src/
-    container_name: golang
-    ports:
-      - 8081:8081
-    networks:
-      - backend
-    restart: always
-    environment:
-      - TZ=${TIME_ZONE}
-    volumes:
-      - ${CODE_PATH}:/usr/go/src/
-    stdin_open: true
-    tty: true
-    # depends_on:
-    # - mysql
-
-  node:
-    build:
-      context: ./node
-    working_dir: /data
-    container_name: node
-    ports:
-      - 3000:3000
-    networks:
-      - backend
-    restart: always
-    environment:
-      - TZ=${TIME_ZONE}
-    volumes:
-      - ${CODE_PATH}:/data
-    stdin_open: true
-    tty: true
-    extra_hosts:
-      - raw.githubusercontent.com:185.199.108.133
-    # depends_on:
-    # - mysql
-    # - redis
-
-  php81-fpm:
-    build:
-      context: ./php-fpm/php81
-    container_name: php81-fpm
-    # ports:
-    #   - ${PHP_FPM_PORT}:9000
-    networks:
-      - backend
-    restart: always
-    environment:
-      - TZ=${TIME_ZONE}
-    volumes:
-      - ./php-fpm/php81/php.ini:/usr/local/etc/php/php.ini
-      - ./php-fpm/php81/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
-      - ./php-fpm/php81/conf.d:/usr/local/etc/php/conf.d
-      - ${DATA_PATH}/php-fpm/logs:/var/log/php-fpm
-      - ${CODE_PATH}:/data
-
-  php74-fpm:
-    build:
-      context: ./php-fpm/php74
-    container_name: php74-fpm
-    # ports:
-    #   - ${PHP_FPM_PORT}:9000
-    networks:
-      - backend
-    restart: always
-    environment:
-      - TZ=${TIME_ZONE}
-    volumes:
-      - ./php-fpm/php74/php.ini:/usr/local/etc/php/php.ini
-      - ./php-fpm/php74/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
-      - ./php-fpm/php74/conf.d:/usr/local/etc/php/conf.d
-      - ${DATA_PATH}/php-fpm/logs:/var/log/php-fpm
-      - ${CODE_PATH}:/data
-
   python:
     build:
       context: ./python
@@ -92,7 +13,7 @@ services:
     ports:
       - 5000:5000
     networks:
-      - backend
+      - bridge-net
     restart: always
     environment:
       - TZ=${TIME_ZONE}
@@ -100,42 +21,6 @@ services:
       - ${CODE_PATH}:/code
     stdin_open: true
     tty: true
-
-  java:
-    build:
-      context: ./java
-    working_dir: /code
-    container_name: java
-    # ports:
-    #   - 8000:8000
-    networks:
-      - backend
-    restart: always
-    environment:
-      - TZ=${TIME_ZONE}
-    volumes:
-      - ${CODE_PATH}:/code
-    stdin_open: true
-    tty: true
-
-  ubuntu:
-    build:
-      context: ./ubuntu
-    working_dir: /code
-    container_name: ubuntu
-    networks:
-      - backend
-    restart: always
-    environment:
-      - TZ=${TIME_ZONE}
-      - LOCAL_USER=${LOCAL_USER}
-      - LOCAL_UID=${LOCAL_UID}
-      - LOCAL_GID=${LOCAL_GID}
-    volumes:
-      - ${CODE_PATH}:/code
-    stdin_open: true
-    tty: true
-    # user: "${UID}:${GID}"
 
   nginx:
     build:
@@ -145,7 +30,7 @@ services:
       - ${NGINX_HTTP_PORT}:80
       - ${NGINX_HTTPS_PORT}:443
     networks:
-      - backend
+      - bridge-net
     restart: always
     environment:
       - TZ=${TIME_ZONE}
@@ -158,134 +43,6 @@ services:
     #   - php74-fpm:php74-fpm
     #   - php81-fpm:php81-fpm
 
-  mysql:
-    build:
-      context: ./mysql
-    container_name: mysql
-    hostname: mysql
-    ports:
-      - ${MYSQL_PORT}:3306
-    networks:
-      - backend
-    restart: always
-    environment:
-      - TZ=${TIME_ZONE}
-      - MYSQL_USER=${MYSQL_USERNAME}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-    volumes:
-      - ./mysql/conf:/etc/mysql/conf.d
-      - ${DATA_PATH}/mysql/data:/var/lib/mysql
-      - ${DATA_PATH}/mysql/logs:/var/log/mysql
-
-  redis:
-    build:
-      context: ./redis
-    container_name: redis
-    ports:
-      - ${REDIS_PORT}:6379
-    networks:
-      - backend
-    restart: always
-    environment:
-      - TZ=${TIME_ZONE}
-    volumes:
-      - ./redis/redis.conf:/etc/redis/redis.conf
-      - ${DATA_PATH}/redis/data:/data
-
-  clickhouse-server:
-    build:
-      context: ./clickhouse-server
-    container_name: clickhouse-server
-    ulimits:
-      nofile:
-        soft: 262144
-        hard: 262144
-    ports:
-      - ${CLICKHOUSE_HTTP_PORT}:8123
-      - ${CLICKHOUSE_CLIENT_PORT}:9000
-    networks:
-      - backend
-    restart: always
-    environment:
-      - TZ=${TIME_ZONE}
-    volumes:
-      - ./clickhouse-server/conf/config.xml:/etc/clickhouse-server/config.xml
-      - ./clickhouse-server/conf/users.xml:/etc/clickhouse-server/users.xml
-      - ${DATA_PATH}/clickhouse-server/data:/var/lib/clickhouse
-      - ${DATA_PATH}/clickhouse-server/logs:/var/log/clickhouse-server
-
-  zookeeper:
-    image: "bitnami/zookeeper:latest"
-    container_name: zookeeper
-    hostname: zookeeper
-    ports:
-      - 2181:2181
-    networks:
-      - backend
-    restart: always
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-    # volumes:
-    #   - ./zookeeper/conf/zoo.cfg:/opt/bitnami/zookeeper/conf/zoo.cfg
-    #   - ${DATA_PATH}/zookeeper/data:/bitnami/zookeeper/data
-
-  kafka:
-    image: "bitnami/kafka:latest"
-    container_name: kafka
-    ports:
-      - 9092:9092
-      # - 9999:9999
-    networks:
-      - backend
-    restart: always
-    environment:
-      # - KAFKA_BROKER_ID=1
-      # - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
-      # - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
-      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-      - ALLOW_PLAINTEXT_LISTENER=yes
-      # - JMX_PORT=9999
-    # volumes:
-    #   - ${DATA_PATH}/kafka/data:/bitnami/kafka/data
-    #   - ${DATA_PATH}/kafka/config:/bitnami/kafka/config
-    # depends_on:
-    #   - zookeeper
-
-  efak:
-    build:
-      context: ./efak
-    container_name: efak
-    ports:
-      - 8048:8048
-    networks:
-      - backend
-    restart: always
-    environment:
-      - ZK_HOSTS=zookeeper:2181
-    volumes:
-      - ./efak/conf/system-config.properties:/usr/local/efak/conf/system-config.properties
-      - ${DATA_PATH}/efak/logs:/usr/local/efak/logs
-    depends_on:
-      - zookeeper
-      - kafka
-    stdin_open: true
-    tty: true
-
-  hue:
-    image: gethue/hue:latest
-    container_name: hue
-    ports:
-      - 8888:8888
-    networks:
-      - backend
-    restart: always
-    # environment:
-    volumes:
-      - ./hue/hue.ini:/usr/share/hue/desktop/conf/z-hue.ini
-    stdin_open: true
-    tty: true
-
   # consul:
   #   image: bitnami/consul:latest
   #   # container_name: consul
@@ -297,7 +54,7 @@ services:
   #     - 8600:8600
   #     - 8600:8600/udp
   #   networks:
-  #     - backend
+  #     - bridge-net
   #   restart: always
   #   volumes:
   #     - ${DATA_PATH}/consul/data:/bitnami
@@ -316,7 +73,7 @@ services:
   #     - 14269:14269
   #     - 9411:9411
   #   networks:
-  #     - backend
+  #     - bridge-net
   #   restart: always
   #   environment:
   #     COLLECTOR_ZIPKIN_HOST_PORT: 9411
@@ -327,7 +84,7 @@ services:
   #   ports:
   #     - ${PROMETHEUS_PORT}:9090
   #   networks:
-  #     - backend
+  #     - bridge-net
   #   restart: always
   #   environment:
   #     - TZ=${TIME_ZONE}
@@ -346,7 +103,7 @@ services:
   #     - "${DTM_HTTP_PORT}:36789"
   #     - "${DTM_GRPC_PORT}:36790"
   #   networks:
-  #     - backend
+  #     - bridge-net
   #   restart: always
   #   volumes:
   #     - ${DATA_PATH}/dtm/config.yml:/app/dtm/configs/config.yaml

@@ -1,0 +1,23 @@
+version: "3.7"
+
+networks:
+  bridge-net:
+    driver: bridge
+
+services:
+  node:
+    build:
+      context: .
+    working_dir: /data
+    container_name: node
+    ports:
+      - 3000:3000
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /data:/data
+    stdin_open: true
+    tty: true

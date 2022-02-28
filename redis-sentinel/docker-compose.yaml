@@ -1,10 +1,8 @@
 version: "3.7"
 
 networks:
-  frontend:
-    driver: ${NETWORKS_DRIVER}
-  backend:
-    driver: ${NETWORKS_DRIVER}
+  bridge-net:
+    driver: bridge
 
 services:
   redis-master:
@@ -14,16 +12,16 @@ services:
     ports:
       - 16379:6379
     networks:
-      - backend
+      - bridge-net
     restart: always
     privileged: true
     environment:
-      - TZ=${TIME_ZONE}
+      - TZ=Asia/Shanghai
       - REDIS_REPLICATION_MODE=master
       - REDIS_PASSWORD=''
-    # volumes:
-    #   # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-    #   - ${DATA_PATH}/redis-cluster/node1/data:/bitnami/redis/data
+    volumes:
+      #   # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
+      - /data/redis-cluster/node1/data:/bitnami/redis/data
 
   redis-slave-node1:
     image: "bitnami/redis:latest"
@@ -32,18 +30,18 @@ services:
     ports:
       - 16380:6379
     networks:
-      - backend
+      - bridge-net
     restart: always
     privileged: true
     environment:
-      - TZ=${TIME_ZONE}
+      - TZ=Asia/Shanghai
       - REDIS_REPLICATION_MODE=slave
       - REDIS_PASSWORD=''
       - REDIS_MASTER_HOST=redis-master
       - REDIS_MASTER_PASSWORD=''
-    # volumes:
-    # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-    #   - ${DATA_PATH}/redis-cluster/node1/data:/bitnami/redis/data
+    volumes:
+      # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
+      - /data/redis-cluster/node1/data:/bitnami/redis/data
     depends_on:
       - redis-master
 
@@ -54,18 +52,18 @@ services:
     ports:
       - 16381:6379
     networks:
-      - backend
+      - bridge-net
     restart: always
     privileged: true
     environment:
-      - TZ=${TIME_ZONE}
+      - TZ=Asia/Shanghai
       - REDIS_REPLICATION_MODE=slave
       - REDIS_PASSWORD=''
       - REDIS_MASTER_HOST=redis-master
       - REDIS_MASTER_PASSWORD=''
-    # volumes:
-    # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-    #   - ${DATA_PATH}/redis-cluster/node1/data:/bitnami/redis/data
+    volumes:
+      # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
+      - /data/redis-cluster/node1/data:/bitnami/redis/data
     depends_on:
       - redis-master
 
@@ -76,17 +74,17 @@ services:
     ports:
       - "26379:26379"
     networks:
-      - backend
+      - bridge-net
     restart: always
     privileged: true
     environment:
-      - TZ=${TIME_ZONE}
+      - TZ=Asia/Shanghai
       - REDIS_MASTER_HOST=redis-master
       - REDIS_MASTER_PASSWORD=''
       - REDIS_SENTINEL_DOWN_AFTER_MILLISECONDS=1000
-    # volumes:
-    # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-    #   - ${DATA_PATH}/redis-cluster/node1/data:/bitnami/redis/data
+    volumes:
+      # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
+      - /data/redis-cluster/node1/data:/bitnami/redis/data
     depends_on:
       - redis-master
       - redis-slave-node1
@@ -99,17 +97,17 @@ services:
     ports:
       - "26380:26379"
     networks:
-      - backend
+      - bridge-net
     restart: always
     privileged: true
     environment:
-      - TZ=${TIME_ZONE}
+      - TZ=Asia/Shanghai
       - REDIS_MASTER_HOST=redis-master
       - REDIS_MASTER_PASSWORD=''
       - REDIS_SENTINEL_DOWN_AFTER_MILLISECONDS=1000
-    # volumes:
-    # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-    #   - ${DATA_PATH}/redis-cluster/node1/data:/bitnami/redis/data
+    volumes:
+      # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
+      - /data/redis-cluster/node1/data:/bitnami/redis/data
     depends_on:
       - redis-master
       - redis-slave-node1
@@ -122,17 +120,17 @@ services:
     ports:
       - "26381:26379"
     networks:
-      - backend
+      - bridge-net
     restart: always
     privileged: true
     environment:
-      - TZ=${TIME_ZONE}
+      - TZ=Asia/Shanghai
       - REDIS_MASTER_HOST=redis-master
       - REDIS_MASTER_PASSWORD=''
       - REDIS_SENTINEL_DOWN_AFTER_MILLISECONDS=1000
-    # volumes:
-    # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-    #   - ${DATA_PATH}/redis-cluster/node1/data:/bitnami/redis/data
+    volumes:
+      # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
+      - /data/redis-cluster/node1/data:/bitnami/redis/data
     depends_on:
       - redis-master
       - redis-slave-node1

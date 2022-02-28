@@ -1,0 +1,42 @@
+version: "3.7"
+
+networks:
+  bridge-net:
+    driver: bridge
+
+services:
+  php81-fpm:
+    build:
+      context: ./php81
+    container_name: php81-fpm
+    ports:
+      - 19000:9000
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./php81/php.ini:/usr/local/etc/php/php.ini
+      - ./php81/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./php81/conf.d:/usr/local/etc/php/conf.d
+      - /data/php-fpm/php81/logs:/var/log/php-fpm
+      - /code:/data
+
+  php74-fpm:
+    build:
+      context: ./php74
+    container_name: php74-fpm
+    ports:
+      - 19001:9000
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./php74/php.ini:/usr/local/etc/php/php.ini
+      - ./php74/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./php74/conf.d:/usr/local/etc/php/conf.d
+      - /data/php-fpm/php74/logs:/var/log/php-fpm
+      - /code:/data

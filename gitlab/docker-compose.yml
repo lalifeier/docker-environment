@@ -1,10 +1,8 @@
 version: "3.7"
 
 networks:
-  frontend:
-    driver: ${NETWORKS_DRIVER}
-  backend:
-    driver: ${NETWORKS_DRIVER}
+  bridge-net:
+    driver: bridge
 
 services:
   gitlab:
@@ -16,12 +14,12 @@ services:
       - 443:443
       - "22:22"
     networks:
-      - backend
+      - bridge-net
     restart: always
     privileged: true
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - /usr/local/gitlab/etc:/etc/gitlab
-      - /usr/local/gitlab/log:/var/log/gitlab
-      - /usr/local/gitlab/opt:/var/opt/gitlab
+      - /data/gitlab/etc:/etc/gitlab
+      - /data/gitlab/log:/var/log/gitlab
+      - /data/gitlab/opt:/var/opt/gitlab

@@ -1,0 +1,42 @@
+version: "3.7"
+
+networks:
+  bridge-net:
+    driver: bridge
+
+services:
+  nginx-node1:
+    image: nginx:stable-alpine
+    container_name: nginx-node1
+    hostname: nginx-node1
+    ports:
+      - 1081:80
+    networks:
+      - bridge-net
+    restart: always
+    volumes:
+      - ./node1:/usr/share/nginx/html
+
+  nginx-node2:
+    image: nginx:stable-alpine
+    container_name: nginx-node2
+    hostname: nginx-node2
+    ports:
+      - 1082:80
+    networks:
+      - bridge-net
+    restart: always
+    volumes:
+      - ./node2:/usr/share/nginx/html
+
+  nginx-node3:
+    image: nginx:stable-alpine
+    container_name: nginx-node3
+    hostname: nginx-node3
+    ports:
+      - 1083:80
+    networks:
+      - bridge-net
+    restart: always
+    volumes:
+      - ./node3:/usr/share/nginx/html

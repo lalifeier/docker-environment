@@ -1,0 +1,38 @@
+version: "3.7"
+
+networks:
+  bridge-net:
+    driver: bridge
+
+services:
+  haproxy-master:
+    build:
+      context: .
+    container_name: haproxy-master
+    hostname: haproxy-master
+    ports:
+      - 18001:8000
+      - 10081:80
+    networks:
+      - bridge-net
+    restart: always
+    privileged: true
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+      - ./keepalived/keepalived-master.conf:/etc/keepalived/keepalived.conf
+
+  haproxy-backup:
+    build:
+      context: .
+    container_name: haproxy-backup
+    hostname: haproxy-backup
+    ports:
+      - 18002:8000
+      - 10082:80
+    networks:
+      - bridge-net
+    restart: always
+    privileged: true
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+      - ./keepalived/keepalived-backup.conf:/etc/keepalived/keepalived.conf

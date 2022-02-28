@@ -1,0 +1,21 @@
+version: "3.7"
+
+networks:
+  bridge-net:
+    driver: bridge
+
+services:
+  hue:
+    image: gethue/hue:latest
+    container_name: hue
+    ports:
+      - 8888:8888
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./hue.ini:/usr/share/hue/desktop/conf/z-hue.ini
+    stdin_open: true
+    tty: true

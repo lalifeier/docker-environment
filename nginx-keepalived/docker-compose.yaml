@@ -1,0 +1,53 @@
+version: "3.7"
+
+networks:
+  bridge-net:
+    driver: bridge
+
+services:
+  nginx-master:
+    build:
+      context: .
+    container_name: nginx-master
+    hostname: nginx-master
+    ports:
+      - 8000:80
+    networks:
+      - bridge-net
+    restart: always
+    privileged: true
+    volumes:
+      # - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      # - ./nginx/conf.d:etc/nginx/conf.d
+      - ../nginx/index-master.html:/usr/share/nginx/html/index.html
+      - ./keepalived/keepalived-master.conf:/etc/keepalived/keepalived.conf
+
+  nginx-backup:
+    build:
+      context: .
+    container_name: nginx-backup
+    hostname: nginx-backup
+    ports:
+      - 8001:80
+    networks:
+      - bridge-net
+    restart: always
+    privileged: true
+    volumes:
+      # - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      # - ./nginx/conf.d:etc/nginx/conf.d
+      - ../nginx/index-backup.html:/usr/share/nginx/html/index.html
+      - ./keepalived/keepalived-backup.conf:/etc/keepalived/keepalived.conf
+
+  # haproxy:
+  #   image: haproxy:alpine
+  #   container_name: haproxy
+  #   hostname: haproxy
+  #   ports:
+  #     - 18000:8000
+  #     - 10080:80
+  #   networks:
+  #     - bridge-net
+  #   restart: always
+  #   volumes:
+  #     - ./haproxy//haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg

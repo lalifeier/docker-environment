@@ -1,10 +1,8 @@
 version: "3.7"
 
 networks:
-  frontend:
-    driver: ${NETWORKS_DRIVER}
-  backend:
-    driver: ${NETWORKS_DRIVER}
+  bridge-net:
+    driver: bridge
 
 services:
   pxc-node1:
@@ -14,18 +12,18 @@ services:
     ports:
       - 13306:3306
     networks:
-      - backend
+      - bridge-net
     restart: always
     privileged: true
     environment:
-      - TZ=${TIME_ZONE}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=123456
       - CLUSTER_NAME=PXC
       - XTRABACKUP_PASSWORD=pxc123
     volumes:
       # - ./pxc/node1/conf:/etc/mysql/conf.d
-      - ${DATA_PATH}/pxc/node1/data:/var/lib/mysql
-      - ${DATA_PATH}/pxc/node1/logs:/var/log/mysql
+      - /data/pxc/node1/data:/var/lib/mysql
+      - /data/pxc/node1/logs:/var/log/mysql
 
   pxc-node2:
     image: percona/percona-xtradb-cluster:5.7
@@ -34,19 +32,19 @@ services:
     ports:
       - 13307:3306
     networks:
-      - backend
+      - bridge-net
     restart: always
     privileged: true
     environment:
-      - TZ=${TIME_ZONE}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=123456
       - CLUSTER_NAME=PXC
       - XTRABACKUP_PASSWORD=pxc123
       - CLUSTER_JOIN=pxc-node1
     volumes:
       # - ./pxc/node2/conf:/etc/mysql/conf.d
-      - ${DATA_PATH}/pxc/node2/data:/var/lib/mysql
-      - ${DATA_PATH}/pxc/node2/logs:/var/log/mysql
+      - /data/pxc/node2/data:/var/lib/mysql
+      - /data/pxc/node2/logs:/var/log/mysql
     depends_on:
       - pxc-node1
 
@@ -57,18 +55,18 @@ services:
     ports:
       - 13308:3306
     networks:
-      - backend
+      - bridge-net
     restart: always
     privileged: true
     environment:
-      - TZ=${TIME_ZONE}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=123456
       - CLUSTER_NAME=PXC
       - XTRABACKUP_PASSWORD=pxc123
       - CLUSTER_JOIN=pxc-node1
     volumes:
       # - ./pxc/node3/conf:/etc/mysql/conf.d
-      - ${DATA_PATH}/pxc/node3/data:/var/lib/mysql
-      - ${DATA_PATH}/pxc/node3/logs:/var/log/mysql
+      - /data/pxc/node3/data:/var/lib/mysql
+      - /data/pxc/node3/logs:/var/log/mysql
     depends_on:
       - pxc-node1

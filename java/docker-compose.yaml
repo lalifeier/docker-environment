@@ -1,0 +1,23 @@
+version: "3.7"
+
+networks:
+  bridge-net:
+    driver: bridge
+
+services:
+  java:
+    build:
+      context: .
+    working_dir: /code
+    container_name: java
+    # ports:
+    #   - 8000:8000
+    networks:
+      - bridge-net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /code:/code
+    stdin_open: true
+    tty: true
