@@ -1,13 +1,8 @@
 version: "3.7"
 
 networks:
-  bridge-net:
-    driver: bridge
-    # ipam:
-    #   config:
-    #     - subnet: 172.20.0.0/16
-    external:
-      name: zookeeper-cluster_bridge-net
+  app_net:
+    external: true
 
 services:
   ch1:
@@ -22,7 +17,7 @@ services:
       - 18123:8123
       - 19000:9000
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -45,7 +40,7 @@ services:
       - 18124:8123
       - 19001:9000
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -68,7 +63,7 @@ services:
       - 18125:8123
       - 19002:9000
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -91,7 +86,7 @@ services:
       - 18126:8123
       - 19003:9000
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -114,7 +109,7 @@ services:
       - 18127:8123
       - 19004:9000
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -137,7 +132,7 @@ services:
       - 18128:8123
       - 19005:9000
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai

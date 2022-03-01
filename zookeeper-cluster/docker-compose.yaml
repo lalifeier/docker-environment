@@ -1,8 +1,8 @@
 version: "3.7"
 
 networks:
-  bridge-net:
-    driver: bridge
+  app_net:
+    external: true
 
 services:
   zk1:
@@ -14,7 +14,7 @@ services:
       - 12888:2888
       - 13888:3888
     networks:
-      - bridge-net
+      - app_net
     restart: always
     user: root
     environment:
@@ -35,7 +35,7 @@ services:
       - 22888:2888
       - 23888:3888
     networks:
-      - bridge-net
+      - app_net
     restart: always
     user: root
     environment:
@@ -56,7 +56,7 @@ services:
       - 32888:2888
       - 33888:3888
     networks:
-      - bridge-net
+      - app_net
     restart: always
     user: root
     environment:
