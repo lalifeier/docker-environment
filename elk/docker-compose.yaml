@@ -95,7 +95,7 @@ services:
       - /data/elk/logstash/data:/usr/share/logstash/data
 
   filebeat:
-    image: filebeat:${STACK_VERSION}
+    image: elastic/filebeat:${STACK_VERSION}
     container_name: filebeat
     ports:
       - 5044:5044
