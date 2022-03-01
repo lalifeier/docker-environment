@@ -1,8 +1,8 @@
 version: "3.7"
 
 networks:
-  bridge-net:
-    driver: bridge
+  app_net:
+    external: true
 
 services:
   jenkins:
@@ -13,7 +13,7 @@ services:
       - 8989:8080
       - 50000:50000
     networks:
-      - bridge-net
+      - app_net
     restart: always
     privileged: true
     environment:

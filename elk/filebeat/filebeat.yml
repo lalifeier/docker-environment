@@ -1,10 +1,8 @@
 filebeat.inputs:
   - type: log
     enabled: true
-
-  paths:
-    - /usr/share/filebeat/data/*.log
-  fields_under_root: true
+    paths:
+      - /usr/share/filebeat/data/*.log
 
 output.logstash:
   hosts: ["logstash:5044"]

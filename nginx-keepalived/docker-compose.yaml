@@ -1,8 +1,8 @@
 version: "3.7"
 
 networks:
-  bridge-net:
-    driver: bridge
+  app_net:
+    external: true
 
 services:
   nginx-master:
@@ -13,7 +13,7 @@ services:
     ports:
       - 8000:80
     networks:
-      - bridge-net
+      - app_net
     restart: always
     privileged: true
     volumes:
@@ -30,7 +30,7 @@ services:
     ports:
       - 8001:80
     networks:
-      - bridge-net
+      - app_net
     restart: always
     privileged: true
     volumes:
@@ -47,7 +47,7 @@ services:
   #     - 18000:8000
   #     - 10080:80
   #   networks:
-  #     - bridge-net
+  #     - app_net
   #   restart: always
   #   volumes:
   #     - ./haproxy//haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg

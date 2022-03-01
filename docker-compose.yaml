@@ -1,8 +1,8 @@
 version: "3.7"
 
 networks:
-  bridge-net:
-    driver: bridge
+  app_net:
+    external: true
 # services:
 # consul:
 #   image: bitnami/consul:latest
@@ -15,7 +15,7 @@ networks:
 #     - 8600:8600
 #     - 8600:8600/udp
 #   networks:
-#     - bridge-net
+#     - app_net
 #   restart: always
 #   volumes:
 #     - ${DATA_PATH}/consul/data:/bitnami
@@ -34,7 +34,7 @@ networks:
 #     - 14269:14269
 #     - 9411:9411
 #   networks:
-#     - bridge-net
+#     - app_net
 #   restart: always
 #   environment:
 #     COLLECTOR_ZIPKIN_HOST_PORT: 9411
@@ -45,7 +45,7 @@ networks:
 #   ports:
 #     - ${PROMETHEUS_PORT}:9090
 #   networks:
-#     - bridge-net
+#     - app_net
 #   restart: always
 #   environment:
 #     - TZ=${TIME_ZONE}
@@ -64,7 +64,7 @@ networks:
 #     - "${DTM_HTTP_PORT}:36789"
 #     - "${DTM_GRPC_PORT}:36790"
 #   networks:
-#     - bridge-net
+#     - app_net
 #   restart: always
 #   volumes:
 #     - ${DATA_PATH}/dtm/config.yml:/app/dtm/configs/config.yaml

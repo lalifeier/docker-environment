@@ -1,8 +1,8 @@
 version: "3.7"
 
 networks:
-  bridge-net:
-    driver: bridge
+  app_net:
+    external: true
 
 services:
   prometheus:
@@ -11,7 +11,7 @@ services:
     ports:
       - 9090:9090
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -26,7 +26,7 @@ services:
     ports:
       - 3000:3000
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai

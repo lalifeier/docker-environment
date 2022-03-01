@@ -1,8 +1,8 @@
 version: "3.7"
 
 networks:
-  bridge-net:
-    driver: bridge
+  app_net:
+    external: true
 
 services:
   redis:
@@ -11,7 +11,7 @@ services:
     ports:
       - 6379:6379
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai

@@ -1,8 +1,8 @@
 version: "3.7"
 
 networks:
-  bridge-net:
-    driver: bridge
+  app_net:
+    external: true
 
 services:
   haproxy-master:
@@ -14,7 +14,7 @@ services:
       - 18001:8000
       - 10081:80
     networks:
-      - bridge-net
+      - app_net
     restart: always
     privileged: true
     volumes:
@@ -30,7 +30,7 @@ services:
       - 18002:8000
       - 10082:80
     networks:
-      - bridge-net
+      - app_net
     restart: always
     privileged: true
     volumes:

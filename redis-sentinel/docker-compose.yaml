@@ -1,8 +1,8 @@
 version: "3.7"
 
 networks:
-  bridge-net:
-    driver: bridge
+  app_net:
+    external: true
 
 services:
   redis-master:
@@ -12,7 +12,7 @@ services:
     ports:
       - 16379:6379
     networks:
-      - bridge-net
+      - app_net
     restart: always
     privileged: true
     environment:
@@ -30,7 +30,7 @@ services:
     ports:
       - 16380:6379
     networks:
-      - bridge-net
+      - app_net
     restart: always
     privileged: true
     environment:
@@ -52,7 +52,7 @@ services:
     ports:
       - 16381:6379
     networks:
-      - bridge-net
+      - app_net
     restart: always
     privileged: true
     environment:
@@ -74,7 +74,7 @@ services:
     ports:
       - "26379:26379"
     networks:
-      - bridge-net
+      - app_net
     restart: always
     privileged: true
     environment:
@@ -97,7 +97,7 @@ services:
     ports:
       - "26380:26379"
     networks:
-      - bridge-net
+      - app_net
     restart: always
     privileged: true
     environment:
@@ -120,7 +120,7 @@ services:
     ports:
       - "26381:26379"
     networks:
-      - bridge-net
+      - app_net
     restart: always
     privileged: true
     environment:

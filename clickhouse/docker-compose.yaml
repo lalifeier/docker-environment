@@ -1,8 +1,8 @@
 version: "3.7"
 
 networks:
-  bridge-net:
-    driver: bridge
+  app_net:
+    external: true
 
 services:
   clickhouse:
@@ -16,7 +16,7 @@ services:
       - 18123:8123
       - 19000:9000
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai

@@ -1,8 +1,8 @@
 version: "3.7"
 
 networks:
-  bridge-net:
-    driver: bridge
+  app_net:
+    external: true
 
 services:
   nginx:
@@ -13,7 +13,7 @@ services:
       - 1080:80
       - 1443:443
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai

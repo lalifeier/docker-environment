@@ -1,72 +1,114 @@
 version: "3.7"
 
 networks:
-  bridge-net:
-    driver: bridge
+  app_net:
+    external: true
 
 services:
-  elasticsearch:
-    image: elasticsearch
-    container_name: elasticsearch
+  es-node1:
+    image: elasticsearch:${STACK_VERSION}
+    container_name: es-node1
     ports:
-      - 9200:9200
-      - 9300:9300
+      - 19200:9200
+      - 19300:9300
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai
-      # - discovery.type=single-node
-      # - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
     volumes:
-      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - /data/elk/elasticsearch/data:/usr/share/elasticsearch/data
+      - ./es-node1/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      # - ./es-node1/cert/elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12
+      - /data/elk/es-node1/data:/usr/share/elasticsearch/data
+      - /data/elk/es-node1/logs:/usr/share/elasticsearch/logs
+      - /data/elk/es-node1/plugins:/usr/share/elasticsearch/plugins
+
+  es-node2:
+    image: elasticsearch:${STACK_VERSION}
+    container_name: es-node2
+    ports:
+      - 19201:9200
+      - 19301:9300
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    volumes:
+      - ./es-node2/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      # - ./es-node2/cert/elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12
+      - /data/elk/es-node2/data:/usr/share/elasticsearch/data
+      - /data/elk/es-node2/logs:/usr/share/elasticsearch/logs
+      - /data/elk/es-node2/plugins:/usr/share/elasticsearch/plugins
+
+  es-node3:
+    image: elasticsearch:${STACK_VERSION}
+    container_name: es-node3
+    ports:
+      - 19202:9200
+      - 19302:9300
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    volumes:
+      - ./es-node3/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      # - ./es-node3/cert/elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12
+      - /data/elk/es-node3/data:/usr/share/elasticsearch/data
+      - /data/elk/es-node2/logs:/usr/share/elasticsearch/logs
+      - /data/elk/es-node3/plugins:/usr/share/elasticsearch/plugins
 
   kibana:
-    image: kibana
+    image: kibana:${STACK_VERSION}
     container_name: kibana
     ports:
       - 5601:5601
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai
-      - SERVER_NAME=kibana
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      - XPACK_MONITORING_ENABLED=true
+      - ELASTICSEARCH_HOSTS=http://es-node1:9200
     volumes:
       - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     depends_on:
-      - elasticsearch
+      - es-node1
+      - es-node2
+      - es-node3
 
   logstash:
-    image: logstash
+    image: logstash:${STACK_VERSION}
     container_name: logstash
     ports:
       - 5044:5044
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai
       - ./logstash/logstash.conf:/usr/share/logstash/config/logstash.conf
-      - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
       - /data/elk/logstash/data:/usr/share/logstash/data
 
   filebeat:
-    image: filebeat
+    image: filebeat:${STACK_VERSION}
     container_name: filebeat
     ports:
       - 5044:5044
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai
       - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
-      - /data/elk/filebeat/log:/usr/share/filebeat/log
       - /data/elk/filebeat/data:/usr/share/filebeat/data
+      - /data/elk/filebeat/log:/usr/share/filebeat/log
     depends_on:
-      - elasticsearch
+      - es-node1
+      - es-node2
+      - es-node3
       - kibana

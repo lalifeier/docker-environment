@@ -1,8 +1,8 @@
 version: "3.7"
 
 networks:
-  bridge-net:
-    driver: bridge
+  app_net:
+    external: true
 
 services:
   zookeeper:
@@ -20,7 +20,7 @@ services:
     ports:
       - 19093:9093
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -41,7 +41,7 @@ services:
     ports:
       - 19094:9093
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -62,7 +62,7 @@ services:
     ports:
       - 19095:9093
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       - TZ=Asia/Shanghai

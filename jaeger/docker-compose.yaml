@@ -1,8 +1,8 @@
 version: "3.7"
 
 networks:
-  bridge-net:
-    driver: bridge
+  app_net:
+    external: true
 
 services:
   jaeger:
@@ -19,7 +19,7 @@ services:
       - 14269:14269
       - 9411:9411
     networks:
-      - bridge-net
+      - app_net
     restart: always
     environment:
       COLLECTOR_ZIPKIN_HOST_PORT: 9411

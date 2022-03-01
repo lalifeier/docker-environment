@@ -2,8 +2,7 @@
 server.name: kibana
 server.port: 5601
 server.host: "0.0.0.0"
-elasticsearch.hosts:
-  ["http://es-node1:9200", "http://es-node2:9200", "http://es-node3:9200"]
+elasticsearch.hosts: ["http://elasticsearch:9200"]
 # elasticsearch.username: "elastic"
 # elasticsearch.password: "ZcPg1CyTW46hbPR2MXgq"
 monitoring.ui.container.elasticsearch.enabled: true
