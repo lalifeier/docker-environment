@@ -6,8 +6,9 @@ networks:
 
 services:
   prometheus:
-    image: bitnami/prometheus:latest
+    image: prom/prometheus
     container_name: prometheus
+    hostname: prometheus
     ports:
       - 9090:9090
     networks:
@@ -16,8 +17,8 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - ./prometheus.yml:/opt/bitnami/prometheus/conf/prometheus.yml
-      - /data/prometheus/data:/opt/bitnami/prometheus/data
+      - ./conf/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /data/prometheus/data:/prometheus
 
   grafana:
     image: grafana/grafana:latest
@@ -30,5 +31,20 @@ services:
     restart: always
     environment:
       - TZ=Asia/Shanghai
+      # - GF_SECURITY_ADMIN_USER=admin
+      # - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
       - /data/grafana/data:/var/lib/grafana
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    ports:
+      - 9100:9100
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - "/:/host:ro,rslave"
