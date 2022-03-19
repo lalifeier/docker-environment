@@ -1,0 +1,112 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  zookeeper:
+    image: "bitnami/zookeeper:latest"
+    container_name: zookeeper
+    hostname: zookeeper
+    ports:
+      - 2181:2181
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      # - ZOO_ENABLE_AUTH=yes
+      # - ZOO_SERVER_USERS=kafka
+      # - ZOO_SERVER_PASSWORDS=kafka_password
+      # - ZOO_4LW_COMMANDS_WHITELIST=srvr,mntr,conf,ruok
+      # - KAFKA_OPTS=-Dzookeeper.4lw.commands.whitelist=*
+    # volumes:
+    # - ./zookeeper/bin/zkServer.sh:/opt/bitnami/zookeeper/bin/zkServer.sh
+    #   - ./zookeeper/conf/zoo.cfg:/opt/bitnami/zookeeper/conf/zoo.cfg
+    #   - /data/zookeeper:/bitnami/zookeeper
+
+  kafka:
+    image: "bitnami/kafka:latest"
+    # image: "bitnami/kafka:2"
+    container_name: kafka
+    hostname: kafka
+    ports:
+      - 9092:9092
+      - 9093:9093
+      - 9999:9999
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      # 允许使用PLAINTEXT协议(镜像中默认为关闭,需要手动开启)
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
+      # 关闭自动创建 topic 功能
+      # - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false
+      # 全局消息过期时间 6 小时(测试时可以设置短一点)
+      # - KAFKA_CFG_LOG_RETENTION_HOURS=6
+      # 开启JMX监控
+      - JMX_PORT=9999
+      # - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.rmi.port=9999
+    # volumes:
+    #   - /data/kafka:/bitnami/kafka
+    # - ./kafka/bin/kafka-server-start.sh:/opt/bitnami/kafka/bin/kafka-server-start.sh
+    depends_on:
+      - zookeeper
+
+  # kafka_manager:
+  #   image: "hlebalbau/kafka-manager:latest"
+  #   ports:
+  #     - "9000:9000"
+  #   networks:
+  #     - app_net
+  #   restart: always
+  #   environment:
+  #     ZK_HOSTS: "zookeeper:2181"
+  #     APPLICATION_SECRET: lalifeier
+  #   depends_on:
+  #     - zookeeper
+  #     - kafka
+
+  efak:
+    image: nickzurich/kafka-eagle:latest
+    container_name: efak
+    ports:
+      - 8048:8048
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - EFAK_CLUSTER_ZK_LIST=zookeeper:2181
+    depends_on:
+      - kafka
+
+  # efak:
+  #   build:
+  #     context: ./efak
+  #   container_name: efak
+  #   ports:
+  #     - 8048:8048
+  #   networks:
+  #     - app_net
+  #   restart: always
+  #   environment:
+  #     - TZ=Asia/Shanghai
+  #     - ZK_HOSTS=zookeeper:2181
+  #   volumes:
+  #     - ./efak/conf/system-config.properties:/usr/local/efak/conf/system-config.properties
+  #     - /data/efak/logs:/usr/local/efak/logs
+  #   depends_on:
+  #     - zookeeper
+  #     - kafka
+  #   stdin_open: true
+  #   tty: true

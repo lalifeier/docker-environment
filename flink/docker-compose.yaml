@@ -1,0 +1,49 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  jobmanager:
+    image: flink:latest
+    container_name: jobmanager
+    # expose:
+    # - "6123"
+    ports:
+      - 8081:8081
+    networks:
+      - app_net
+    restart: always
+    command: jobmanager
+    volumes:
+      # - ./jobmanager/conf/flink-conf.yaml:/opt/flink/conf/flink-conf.yaml
+      - /data/flink/jobmanager:/opt/flink/usrlib
+    environment:
+      - TZ=Asia/Shanghai
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+
+  taskmanager:
+    image: flink:latest
+    container_name: taskmanager
+    # expose:
+    #   - "6121"
+    #   - "6122"
+    networks:
+      - app_net
+    restart: always
+    command: taskmanager
+    # scale: 1
+    volumes:
+      # - ./taskmanager/conf/flink-conf.yaml:/opt/flink/conf/flink-conf.yaml
+      - /data/flink/taskmanager:/opt/flink/usrlib
+    environment:
+      - TZ=Asia/Shanghai
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        taskmanager.numberOfTaskSlots: 2
+    depends_on:
+      - jobmanager

@@ -1,0 +1,23 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  zookeeper:
+    image: "bitnami/zookeeper:latest"
+    container_name: zookeeper
+    hostname: zookeeper
+    ports:
+      - 2181:2181
+    networks:
+      - app_net
+    restart: always
+    user: root
+    environment:
+      - TZ=Asia/Shanghai
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    volumes:
+      #   - ./zookeeper/conf/zoo.cfg:/opt/bitnami/zookeeper/conf/zoo.cfg
+      - /data/zookeeper:/bitnami/zookeeper

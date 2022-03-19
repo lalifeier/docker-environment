@@ -1,0 +1,62 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  clickhouse:
+    image: yandex/clickhouse-server:latest
+    container_name: clickhouse
+    hostname: clickhouse
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - 8123:8123
+      - 9000:9000
+      - 9363:9363
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./clickhouse/config.xml:/etc/clickhouse-server/config.xml
+      - ./clickhouse/users.xml:/etc/clickhouse-server/users.xml
+      - /data/clickhouse-server/data:/var/lib/clickhouse
+      - /data/clickhouse-server/logs:/var/log/clickhouse-server
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    hostname: prometheus
+    user: root
+    ports:
+      - 9090:9090
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /data/prometheus/data:/prometheus
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    hostname: grafana
+    user: root
+    ports:
+      - 3000:3000
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      # - GF_SECURITY_ADMIN_USER=admin
+      # - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - /data/grafana/data:/var/lib/grafana

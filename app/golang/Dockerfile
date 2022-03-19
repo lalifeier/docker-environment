@@ -1,21 +1,24 @@
-FROM golang:latest AS build
+FROM golang:alpine AS build
 
-ENV GOPROXY="https://goproxy.io"
-ENV GO111MODULE="on"
-# https://stackoverflow.com/questions/36279253/go-compiled-binary-wont-run-in-an-alpine-docker-container-on-ubuntu-host
-ENV CGO_ENABLED=0
+ENV CGO_ENABLED 0
+ENV GOOS linux
+ENV GOPROXY https://goproxy.cn,direct
 
-WORKDIR /app
+WORKDIR /build
 
+ADD go.mod .
+ADD go.sum .
+RUN go mod download
 COPY . .
-RUN make build
+RUN go build -ldflags="-s -w" -o /app/hello ./hello.go
+
 
 FROM alpine
-# FROM centurylink/ca-certs
+
+RUN apk update --no-cache && apk add --no-cache ca-certificates tzdata
+ENV TZ Asia/Shanghai
 
 WORKDIR /app
-COPY --from=build /app .
+COPY --from=build /app/hello /app/hello
 
-EXPOSE 8081
-
-ENTRYPOINT ["./server"]
+CMD ["./hello"]
