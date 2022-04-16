@@ -8,7 +8,7 @@ services:
   jobmanager:
     # build:
     #   context: .
-    images: pyflink:1.14.4
+    image: pyflink:1.14.4
     container_name: jobmanager
     # expose:
     # - "6123"
@@ -30,7 +30,7 @@ services:
   taskmanager:
     # build:
     #   context: .
-    images: pyflink:1.14.4
+    image: pyflink:1.14.4
     container_name: taskmanager
     # expose:
     #   - "6121"
