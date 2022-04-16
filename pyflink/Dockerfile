@@ -1,29 +1,17 @@
 FROM flink:latest
 
+ARG FLINK_VERSION=1.14.4
+
 LABEL maintainer="lalifeier <lalifeier@gmail.com>"
 
 ENV TIME_ZONE=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TIME_ZONE /etc/localtime && echo $TIME_ZONE > /etc/timezone
 
-# RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/' /etc/apt/sources.list && \
-#     sed -i 's/security.debian.org/mirrors.aliyun.com/' /etc/apt/sources.list && \
-#     sed -i 's/security-cdn.debian.org/mirrors.aliyun.com/' /etc/apt/sources.list && \
-#     apt-get update && \
-#     apt-get upgrade -y && \
-#     apt-get install -y --no-install-recommends && \
-#     apt-get -y install curl bzip2 && \
-#     curl -sSL https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh && \
-#     bash /tmp/miniconda.sh -bfp /usr/local && \
-#     rm -rf /tmp/miniconda.sh && \
-#     conda install -y python=3.8  && conda update conda && \
-#     apt-get -y remove curl bzip2  && apt-get -y autoremove && apt-get autoclean && \
-#     rm -rf /var/lib/apt/lists/* /var/log/dpkg.log && conda clean --all --yes && \
-#     pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
-#     pip config set install.trusted-host mirrors.aliyun.com && \
-#     pip install --upgrade pip && \
-#     pip install apache-flink
-
-RUN apt-get update -y && \
+RUN set -ex && \
+    sed -i 's/deb.debian.org/mirrors.aliyun.com/' /etc/apt/sources.list && \
+    sed -i 's/security.debian.org/mirrors.aliyun.com/' /etc/apt/sources.list && \
+    sed -i 's/security-cdn.debian.org/mirrors.aliyun.com/' /etc/apt/sources.list && \
+    apt-get update && \
     apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev libffi-dev && \
     wget https://www.python.org/ftp/python/3.8.13/Python-3.8.13.tgz && \
     tar -xvf Python-3.8.13.tgz && \
@@ -34,7 +22,14 @@ RUN apt-get update -y && \
     ldconfig /usr/local/lib && \
     cd .. && rm -f Python-3.8.13.tgz && rm -rf Python-3.8.13 && \
     ln -s /usr/local/bin/python3 /usr/local/bin/python && \
+    ln -s /usr/local/bin/pip3 /usr/local/bin/pip && \
+    python -m pip install --upgrade pip && \
+    pip install apache-flink==${FLINK_VERSION} && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install apache-flink
+  # echo "taskmanager.memory.jvm-metaspace.size: 512m" >> /opt/flink/conf/flink-conf.yaml; \
+  # echo "rest.port: 4000" >> /opt/flink/conf/flink-conf.yaml; \
+  # echo "metrics.reporters: prom" >> /opt/flink/conf/flink-conf.yaml; \
+  # echo "metrics.reporter.prom.class: org.apache.flink.metrics.prometheus.PrometheusReporter" >> /opt/flink/conf/flink-conf.yaml; \
+  # echo "metrics.reporter.prom.port: 9249,9250" >> /opt/flink/conf/flink-conf.yaml

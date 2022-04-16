@@ -6,8 +6,9 @@ networks:
 
 services:
   jobmanager:
-    build:
-      context: .
+    # build:
+    #   context: .
+    images: pyflink:1.14.4
     container_name: jobmanager
     # expose:
     # - "6123"
@@ -27,8 +28,9 @@ services:
         jobmanager.rpc.address: jobmanager
 
   taskmanager:
-    build:
-      context: .
+    # build:
+    #   context: .
+    images: pyflink:1.14.4
     container_name: taskmanager
     # expose:
     #   - "6121"

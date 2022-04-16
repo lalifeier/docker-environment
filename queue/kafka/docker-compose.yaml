@@ -29,7 +29,6 @@ services:
 
   kafka:
     image: "bitnami/kafka:latest"
-    # image: "bitnami/kafka:2"
     container_name: kafka
     hostname: kafka
     ports:
