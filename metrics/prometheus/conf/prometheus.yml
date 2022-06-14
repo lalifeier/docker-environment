@@ -28,7 +28,9 @@ scrape_configs:
     static_configs:
       - targets: ["prometheus:9090"]
 
+  # https://grafana.com/grafana/dashboards/8919
+  # https://grafana.com/grafana/dashboards/9276
   - job_name: "node"
 
     static_configs:
-      - targets: ["localhost:9100"]
+      - targets: ["node_exporter:9100"]
