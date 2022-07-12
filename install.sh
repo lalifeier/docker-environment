@@ -33,3 +33,6 @@ sudo usermod -aG docker $USER
 
 # export COMPOSE_PROJECT_NAME=docker-environment
 # export COMPOSE_FILE=~/opt/docker-environment/docker-compose.yml
+
+
+# docker network create app_net

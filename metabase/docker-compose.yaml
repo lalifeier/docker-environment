@@ -1,0 +1,32 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    ports:
+      - 3000:3000
+    networks:
+      - app_net
+    restart: always
+    volumes:
+      - /data/metabase/metabase-data:/metabase-data
+      # - ./plugins:/plugins
+      # - type: bind
+      #   source: ./plugins
+      #   target: /plugins
+
+    environment:
+      - TZ=Asia/Shanghai
+      # - JAVA_TIMEZONE=Asia/Shanghai
+      # - MB_DB_FILE=/metabase-data/metabase.db
+      # - MB_DB_TYPE=postgres
+      # - MB_DB_DBNAME=metabaseappdb
+      # - MB_DB_PORT=5432
+      # - MB_DB_USER=name
+      # - MB_DB_PASS=password
+      # - MB_DB_HOST=my-database-host
