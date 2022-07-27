@@ -1,0 +1,84 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  flutter:
+    build:
+      context: .
+    container_name: flutter
+    ports:
+      - 42000:42000
+      - 8090:8090
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      # - UID=$(id -u)
+      # - GID=$(id -g)
+    volumes:
+      - /data/code:/data/code
+
+#   flutter-android:
+#     build:
+#       context: .
+#     container_name: flutter
+#     # ports:
+#     #   - 42000:42000
+#     networks:
+#       - app_net
+#     restart: always
+#     environment:
+#       - TZ=Asia/Shanghai
+#       # - UID=$(id -u)
+#       # - GID=$(id -g)
+#     volumes:
+#       - /data/code:/data/code
+#       - /dev/bus/usb:/dev/bus/usb
+#     devices:
+#       - /dev/bus
+
+
+# # xhost local:$USER
+#   flutter-android-emulator:
+#     build:
+#       context: .
+#     container_name: flutter
+#     ports:
+#       - 42000:42000
+#     networks:
+#       - app_net
+#     restart: always
+#     environment:
+#       - TZ=Asia/Shanghai
+#       # - UID=$(id -u)
+#       # - GID=$(id -g)
+#       # - DISPLAY
+#     volumes:
+#       - /data/code:/data/code
+#       - /tmp/.X11-unix:/tmp/.X11-unix
+#     devices:
+#       - /dev/kvm
+#       - /dev/dri:/dev/dri
+#     entrypoint: flutter-android-emulator
+
+#   flutter-web:
+#     build:
+#       context: .
+#     container_name: flutter
+#     ports:
+#       - 42000:42000
+#       - 8090:8090
+#     networks:
+#       - app_net
+#     restart: always
+#     environment:
+#       - TZ=Asia/Shanghai
+#       # - UID=$(id -u)
+#       # - GID=$(id -g)
+#     volumes:
+#       - /data/code:/data/code
+#     entrypoint: flutter-web
