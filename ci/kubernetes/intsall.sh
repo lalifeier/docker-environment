@@ -1,0 +1,54 @@
+#!/bin/sh
+
+# kubeadm
+# https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+
+# Update the apt package index and install packages needed to use the Kubernetes apt repository
+sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl
+
+# Download the Google Cloud public signing key
+# sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+curl -s https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
+
+# Add the Kubernetes apt repository:
+# echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+tee /etc/apt/sources.list.d/kubernetes.list <<-'EOF'
+deb https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial main
+EOF
+
+# Update apt package index, install kubelet, kubeadm and kubectl, and pin their version
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+
+# systemctl enable kubelet
+
+sudo kubeadm init --pod-network-cidr 192.168.0.0/16 \
+    --image-repository registry.aliyuncs.com/google_containers \
+    --apiserver-advertise-address 172.16.3.50 \
+    --apiserver-bind-port 6443 \
+    --token-ttl 0
+
+# kubeadm config print init-defaults > kubeadm-init.yaml
+
+# advertiseAddress: 1.2.3.4
+# imageRepository: k8s.gcr.io
+# imageRepository: registry.cn-hangzhou.aliyuncs.com/google_containers
+
+# kubeadm config images pull --config kubeadm-init.yaml
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+
+# Calico
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+
+# kubectl get pod -A
+# kubectl get pod -o wide
+
+# Dashboard
+# https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/#deploying-the-dashboard-ui
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
