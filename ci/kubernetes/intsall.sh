@@ -13,7 +13,7 @@ curl -s https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add 
 
 # Add the Kubernetes apt repository:
 # echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-tee /etc/apt/sources.list.d/kubernetes.list <<-'EOF'
+cat > /etc/apt/sources.list.d/kubernetes.list <<EOF
 deb https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial main
 EOF
 
@@ -24,17 +24,18 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 # systemctl enable kubelet
 
-sudo kubeadm init --pod-network-cidr 192.168.0.0/16 \
+sudo kubeadm init \
     --image-repository registry.aliyuncs.com/google_containers \
-    --apiserver-advertise-address 172.16.3.50 \
-    --apiserver-bind-port 6443 \
+    # --apiserver-advertise-address 0.0.0.0 \
+    # --apiserver-bind-port 6443 \
+    # --service-cidr 10.96.0.0/12 \
+    --pod-network-cidr 192.168.0.0/16 \
     --token-ttl 0
 
 # kubeadm config print init-defaults > kubeadm-init.yaml
 
-# advertiseAddress: 1.2.3.4
-# imageRepository: k8s.gcr.io
-# imageRepository: registry.cn-hangzhou.aliyuncs.com/google_containers
+# advertiseAddress:
+# imageRepository: registry.aliyuncs.com/google_containers
 
 # kubeadm config images pull --config kubeadm-init.yaml
 
@@ -42,12 +43,14 @@ mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
+# kubectl completion zsh
+# echo 'source <(kubectl completion bash)' >> ~/.bashrc
+# source ~/.bashrc
 
 # Calico
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 
-# kubectl get pod -A
-# kubectl get pod -o wide
+# kubectl taint nodes --all node-role.kubernetes.io/control-plane- node-role.kubernetes.io/master-
 
 # Dashboard
 # https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/#deploying-the-dashboard-ui
