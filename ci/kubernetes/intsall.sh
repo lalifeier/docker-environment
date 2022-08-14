@@ -26,11 +26,15 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 sudo kubeadm init \
     --image-repository registry.aliyuncs.com/google_containers \
-    # --apiserver-advertise-address 0.0.0.0 \
-    # --apiserver-bind-port 6443 \
-    # --service-cidr 10.96.0.0/12 \
     --pod-network-cidr 192.168.0.0/16 \
     --token-ttl 0
+# sudo kubeadm init \
+#     --image-repository registry.aliyuncs.com/google_containers \
+#     # --apiserver-advertise-address 0.0.0.0 \
+#     # --apiserver-bind-port 6443 \
+#     # --service-cidr 10.96.0.0/12 \
+#     --pod-network-cidr 192.168.0.0/16 \
+#     --token-ttl 0
 
 # kubeadm config print init-defaults > kubeadm-init.yaml
 
@@ -54,4 +58,17 @@ kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 
 # Dashboard
 # https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/#deploying-the-dashboard-ui
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
+
+# kubectl apply -f dashboard-admin.yaml
+# kubectl -n kubernetes-dashboard create token admin-user
+
+# kubectl delete -f dashboard-admin.yaml
+# kubectl delete -f dashboard-read-only.yaml
+
+# kubectl proxy --address='0.0.0.0' --accept-hosts='^*$'
+
+
+
+# kubectl -n kubernetes-dashboard edit service kubernetes-dashboard
+# sed -i '/targetPort: 8443/a\ \ \ \ \ \ nodePort: 31707\n\ \ type: NodePort' recommended.yaml

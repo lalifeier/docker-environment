@@ -68,7 +68,7 @@ ENV FLUTTER_EMULATOR_NAME=flutter_emulator
 RUN mkdir -p ${FLUTTER_HOME} \
     && git clone --depth 1 --branch ${FLUTTER_VERSION} https://github.com/flutter/flutter.git ${FLUTTER_HOME} \
     && flutter config --no-analytics --enable-web \
-    && flutter precache \
+    # && flutter precache \
     && yes | flutter doctor --android-licenses \
     && flutter doctor \
     && flutter emulators --create \
