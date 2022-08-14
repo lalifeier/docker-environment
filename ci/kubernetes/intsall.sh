@@ -9,7 +9,7 @@ sudo apt-get install -y apt-transport-https ca-certificates curl
 
 # Download the Google Cloud public signing key
 # sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-curl -s https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
+sudo curl -s https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
 
 # Add the Kubernetes apt repository:
 # echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
@@ -28,6 +28,7 @@ sudo kubeadm init \
     --image-repository registry.aliyuncs.com/google_containers \
     --pod-network-cidr 192.168.0.0/16 \
     --token-ttl 0
+
 # sudo kubeadm init \
 #     --image-repository registry.aliyuncs.com/google_containers \
 #     # --apiserver-advertise-address 0.0.0.0 \
@@ -54,11 +55,17 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 # Calico
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 
+# Flannel
+# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
 # kubectl taint nodes --all node-role.kubernetes.io/control-plane- node-role.kubernetes.io/master-
 
 # Dashboard
 # https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/#deploying-the-dashboard-ui
+# https
 # kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
+# http
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/alternative.yaml
 
 # kubectl apply -f dashboard-admin.yaml
 # kubectl -n kubernetes-dashboard create token admin-user
