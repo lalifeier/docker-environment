@@ -1,5 +1,55 @@
 #!/bin/sh
 
+# 关闭swap
+# 临时修改
+sudo swapoff  -a
+# 永久修改
+sudo sed -ri 's/.*swap.*/#&/' /etc/fstab
+
+# 设置主机名
+hostnamectl set-hostname master
+
+# 同步时间
+# sudo apt install ntpdate
+# sudo ntpdate cn.pool.ntp.org
+# sudo hwclock --systohc
+
+# 将桥接的IPV4流量传递到iptables
+# sudo modprobe br_netfilter
+# echo '1' | sudo tee -a /proc/sys/net/ipv4/ip_forward
+# echo '1' | sudo tee -a /proc/sys/net/bridge/bridge-nf-call-iptables
+# echo '1' | sudo tee -a /proc/sys/net/bridge/bridge-nf-call-ip6tables
+# sudo sysctl -p
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+sudo sysctl --system
+
+# [ERROR CRI]: container runtime is not running
+# rpc error: code = Unimplemented desc = unknown service runtime.v1alpha2.RuntimeService
+# sudo rm /etc/containerd/config.toml
+# systemctl restart containerd
+
+# error execution phase wait-control-plane: couldn't initialize a Kubernetes cluste
+# cat <<EOF | sudo tee /etc/docker/daemon.json
+# {
+#   "exec-opts": ["native.cgroupdriver=systemd"],
+#   "log-driver": "json-file",
+#   "log-opts": {
+#     "max-size": "100m"
+#   },
+#   "storage-driver": "overlay2",
+#   "storage-opts": [
+#     "overlay2.override_kernel_check=true"
+#   ],
+#   "data-root": "/data/docker",
+#   "registry-mirrors": ["http://f1361db2.m.daocloud.io"]
+# }
+# EOF
+# sudo systemctl daemon-reload
+# sudo systemctl restart docker
+
 # kubeadm
 # https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
@@ -9,11 +59,11 @@ sudo apt-get install -y apt-transport-https ca-certificates curl
 
 # Download the Google Cloud public signing key
 # sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-sudo curl -s https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
+curl -s https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
 
 # Add the Kubernetes apt repository:
 # echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-cat > /etc/apt/sources.list.d/kubernetes.list <<EOF
+cat << EOF | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
 deb https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial main
 EOF
 
@@ -43,6 +93,7 @@ sudo kubeadm init \
 # imageRepository: registry.aliyuncs.com/google_containers
 
 # kubeadm config images pull --config kubeadm-init.yaml
+# kubeadm init --config kubeadm-config.yaml
 
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
