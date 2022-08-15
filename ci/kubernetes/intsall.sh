@@ -15,14 +15,11 @@ hostnamectl set-hostname master
 # sudo hwclock --systohc
 
 # 将桥接的IPV4流量传递到iptables
-# sudo modprobe br_netfilter
-# echo '1' | sudo tee -a /proc/sys/net/ipv4/ip_forward
-# echo '1' | sudo tee -a /proc/sys/net/bridge/bridge-nf-call-iptables
-# echo '1' | sudo tee -a /proc/sys/net/bridge/bridge-nf-call-ip6tables
-# sudo sysctl -p
+sudo modprobe br_netfilter
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables = 1
+net.ipv4.ip_forward                 = 1
 EOF
 sudo sysctl --system
 
@@ -35,15 +32,6 @@ sudo sysctl --system
 # cat <<EOF | sudo tee /etc/docker/daemon.json
 # {
 #   "exec-opts": ["native.cgroupdriver=systemd"],
-#   "log-driver": "json-file",
-#   "log-opts": {
-#     "max-size": "100m"
-#   },
-#   "storage-driver": "overlay2",
-#   "storage-opts": [
-#     "overlay2.override_kernel_check=true"
-#   ],
-#   "data-root": "/data/docker",
 #   "registry-mirrors": ["http://f1361db2.m.daocloud.io"]
 # }
 # EOF
@@ -70,7 +58,7 @@ EOF
 # Update apt package index, install kubelet, kubeadm and kubectl, and pin their version
 sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
-sudo apt-mark hold kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl && apt-mark showhold
 
 # systemctl enable kubelet
 
