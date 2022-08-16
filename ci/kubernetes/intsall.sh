@@ -118,3 +118,7 @@ kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 
 # kubectl -n kubernetes-dashboard edit service kubernetes-dashboard
 # sed -i '/targetPort: 8443/a\ \ \ \ \ \ nodePort: 31707\n\ \ type: NodePort' recommended.yaml
+
+
+# kubectl get pods -n kube-system
+# kubectl get ingress -n kubernetes-dashboard

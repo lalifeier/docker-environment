@@ -4,17 +4,17 @@
 sudo kubeadm reset -f
 
 rm -rf $HOME/.kube
-rm -rf /etc/cni/net.d
-rm -rf /var/run/flannel
+sudo rm -rf /etc/cni/net.d
+sudo rm -rf /var/run/flannel
 
 ip link del cni0
 ip link del flannel.1
 
 # ipvsadm -C
 
-iptables -F && iptables -t nat -F && iptables -t mangle -F && iptables -X
+sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
 
-systemctl restart containerd
+sudo systemctl restart containerd
 
 # calico
 # sudo kubeadm init \

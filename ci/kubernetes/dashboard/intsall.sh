@@ -1,18 +1,25 @@
 #!/bin/sh
 
+kubectl create ns kubernetes-dashboard
+openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout dashboard.key -out dashboard.crt -subj "/C=CN/ST=ShangHai/L=ShangHai/O=Lalifeier/OU=Lalifeier/CN=*.domain.com"
+kubectl create secret tls kubernetes-dashboard-certs --cert=dashboard.crt --key=dashboard.key -n kubernetes-dashboard
+
 # https
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
 # http
 # kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/alternative.yaml
 
 # token
-kubectl apply -f dashboard-admin.yaml
-kubectl apply -f dashboard-read-only.yaml
-
-# kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
+kubectl apply -f dashboard/dashboard-admin.yaml
+kubectl apply -f dashboard/dashboard-read-only.yaml
 
 # kubectl delete -f dashboard-admin.yaml
 # kubectl delete -f dashboard-read-only.yaml
+
+# kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
+
+kubectl create -f dashboard-ingress.yaml
+kubectl get ingress -n kubernetes-dashboard
 
 # API Server
 # https://<master-ip>:<apiserver-port>/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
@@ -33,19 +40,3 @@ kubectl apply -f dashboard-read-only.yaml
 # kubectl -n kubernetes-dashboard edit service kubernetes-dashboard
 # sed -i '/targetPort: 8443/a\ \ \ \ \ \ nodePort: 31707\n\ \ type: NodePort' recommended.yaml
 # kubectl -n kubernetes-dashboard get service kubernetes-dashboard
-
-
-# ingress
-# mkdir certs
-# cd certs
-# openssl genrsa -out dashboard.key 2048
-# openssl req -new -key dashboard.key -out dashboard.csr
-# openssl x509 -req -sha256 -days 365 -in dashboard.csr -signkey dashboard.key -out dashboard.crt
-
-# kubectl -n kubernetes-dashboard create secret generic kubernetes-dashboard-certs --from-file=dashboard.key --from-file=dashboard.crt
-
-# kubectl -n kubernetes-dashboard create secret tls kubernetes-dashboard-certs1 --cert=certs/tls.crt --key=certs/tls.key
-# mkdir certs
-# openssl req -nodes -newkey rsa:2048 -keyout certs/dashboard.key -out certs/dashboard.csr -subj "/C=/ST=/L=/O=/OU=/CN=kubernetes-dashboard"
-# openssl x509 -req -sha256 -days 10000 -in certs/dashboard.csr -signkey certs/dashboard.key -out certs/dashboard.crt
-# kubectl create secret generic kubernetes-dashboard-certs --from-file=certs -n kube-system
