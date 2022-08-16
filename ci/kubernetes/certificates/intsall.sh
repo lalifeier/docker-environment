@@ -8,7 +8,8 @@ cd certs
 # openssl req -new -key dashboard.key -out dashboard.csr
 # openssl x509 -req -sha256 -days 365 -in dashboard.csr -signkey dashboard.key -out dashboard.crt
 
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout dashboard.key -out dashboard.crt -subj /C=CN/O=kube/CN=dk8s-dashboard.domain.com
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout dashboard.key -out dashboard.crt -subj "/CN=dk8s-dashboard.domain.com/O=dk8s-dashboard.domain.com"
+
 
 # kubectl delete secret kubernetes-dashboard-certs -n kubernetes-dashboard
 # kubectl -n kubernetes-dashboard create secret generic kubernetes-dashboard-certs --from-file=dashboard.key --from-file=dashboard.crt
