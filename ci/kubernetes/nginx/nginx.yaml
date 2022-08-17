@@ -1,0 +1,73 @@
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: nginx
+#   labels:
+#     app: nginx
+# spec:
+#   containers:
+#     - name: nginx
+#       image: nginx:alpine
+#       ports:
+#         - containerPort: 80
+# ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  # replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    run: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-traefix
+  namespace: kube-server
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    # kubernetes.io/tls-acme: "true"
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod" #letsencrypt-staging
+    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+
+spec:
+  # tls:
+  #   - hosts:
+  #       - test.domain.com
+  #     secretName: test.domain.com-tls
+
+  rules:
+    - host: test.domain.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-service
+                port:
+                  number: 80
