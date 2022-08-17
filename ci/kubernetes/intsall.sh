@@ -120,5 +120,8 @@ kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 # sed -i '/targetPort: 8443/a\ \ \ \ \ \ nodePort: 31707\n\ \ type: NodePort' recommended.yaml
 
 
+# kubectl get pods --all-namespaces -owide
+# kubectl describe pod [pod]  -n kubernetes-dashboard
 # kubectl get pods -n kube-system
+# kubectl get svc -n kubernetes-dashboard
 # kubectl get ingress -n kubernetes-dashboard
