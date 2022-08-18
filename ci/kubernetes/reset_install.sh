@@ -7,8 +7,9 @@ rm -rf $HOME/.kube
 sudo rm -rf /etc/cni/net.d
 sudo rm -rf /var/run/flannel
 
-ip link del cni0
-ip link del flannel.1
+ifconfig cni0 down && ip link delete cni0
+ifconfig flannel.1 down && ip link delete flannel.1
+# sudo rm -rf /var/lib/cni
 
 # ipvsadm -C
 
