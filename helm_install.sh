@@ -13,6 +13,7 @@ helm repo add elastic https://helm.elastic.co
 helm repo add gitlab https://charts.gitlab.io
 helm repo add harbor https://helm.goharbor.io
 helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo add traefik https://helm.traefik.io/traefik
 helm repo add incubator https://charts.helm.sh/incubator
 # helm repo add incubator http://mirror.azure.cn/kubernetes/charts-incubator
 helm repo add stable https://charts.helm.sh/stable

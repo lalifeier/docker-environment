@@ -37,3 +37,7 @@ helm upgrade ingress-nginx-internal-controller ingress-nginx/ingress-nginx \
 
 # uninstall
 helm -n kube-server uninstall ingress-nginx-external-controller
+
+# helm install ingress-nginx ingress-nginx/ingress-nginx \
+#     -n kube-server \
+#     --create-namespace

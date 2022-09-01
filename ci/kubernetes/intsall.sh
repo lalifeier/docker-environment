@@ -88,8 +88,8 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 # kubectl completion zsh
-# echo 'source <(kubectl completion bash)' >> ~/.bashrc
-# source ~/.bashrc
+# echo 'source <(kubectl completion zsh)' >> ~/.zshrc
+# source ~/.zshrc
 
 # Calico
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
@@ -125,3 +125,5 @@ kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 # kubectl get pods -n kube-system
 # kubectl get svc -n kubernetes-dashboard
 # kubectl get ingress -n kubernetes-dashboard
+
+# kubectl create namespace kube-server
