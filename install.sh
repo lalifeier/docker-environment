@@ -5,7 +5,7 @@ curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh --mirror Aliyun
 
 # Docker mirror
-sudo cat > /etc/docker/daemon.json <<EOF
+cat <<EOF | sudo tee /etc/docker/daemon.json
 {
     "registry-mirrors": [
         "https://1nj0zren.mirror.aliyuncs.com",
