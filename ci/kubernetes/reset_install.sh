@@ -3,13 +3,13 @@
 
 sudo kubeadm reset -f
 
-rm -rf $HOME/.kube
+sudo rm -rf $HOME/.kube
 sudo rm -rf /etc/cni/net.d
 sudo rm -rf /var/run/flannel
 
 ifconfig cni0 down && ip link delete cni0
 ifconfig flannel.1 down && ip link delete flannel.1
-# sudo rm -rf /var/lib/cni
+sudo rm -rf /var/lib/cni
 
 # ipvsadm -C
 
@@ -43,6 +43,5 @@ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documen
 # kubectl apply -f https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter.yaml
 # kubectl apply -f https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter-all-features.yaml
 
-
-# kubectl taint nodes --all node-role.kubernetes.io/control-plane- node-role.kubernetes.io/master-
-kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+kubectl taint nodes --all node-role.kubernetes.io/control-plane- node-role.kubernetes.io/master-
+# kubectl taint nodes --all node-role.kubernetes.io/control-plane-

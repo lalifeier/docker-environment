@@ -12,7 +12,7 @@ kubectl create ingress demo-localhost --class=nginx --rule="demo.localdev.me/*=d
 
 kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 80:80 --address 0.0.0.0
 
-echo '127.0.0.1 demo.localdev.me' >> /etc/hosts
+#echo '127.0.0.1 demo.localdev.me' >> /etc/hosts
 
 # kubectl delete ingress demo
 # kubectl delete service demo
