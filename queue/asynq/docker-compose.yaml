@@ -1,0 +1,20 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  asynq:
+    image: "hibiken/asynqmon:latest"
+    container_name: asynq
+    ports:
+      - 8080:8080
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    command:
+      - "--redis-addr=redis:6379"
+      - "--redis-password="
