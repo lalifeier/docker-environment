@@ -82,6 +82,7 @@ metadata:
     # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 
 spec:
+  # ingressClassName: nginx
   # tls:
   #   - hosts:
   #       - test.domain.com
