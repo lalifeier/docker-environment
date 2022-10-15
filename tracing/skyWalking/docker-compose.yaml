@@ -18,15 +18,15 @@ services:
       - TZ=Asia/Shanghai
       - discovery.type=single-node
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    volumes:
-      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      # - ./elasticsearch/cert/elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12
-      - /data/elasticsearch/data:/usr/share/elasticsearch/data
-      - /data/elasticsearch/logs:/usr/share/elasticsearch/logs
-      - /data/elasticsearch/plugins:/usr/share/elasticsearch/plugins
+    # volumes:
+    #   - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    # - ./elasticsearch/cert/elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12
+    # - /data/elasticsearch/data:/usr/share/elasticsearch/data
+    # - /data/elasticsearch/logs:/usr/share/elasticsearch/logs
+    # - /data/elasticsearch/plugins:/usr/share/elasticsearch/plugins
 
   skywalking-oap:
-    image: skywalking-oap-server:latest
+    image: apache/skywalking-oap-server:latest
     container_name: skywalking-oap
     ports:
       - 11800:11800
