@@ -6,7 +6,7 @@ networks:
 
 services:
   elasticsearch:
-    image: elasticsearch:8.0.0
+    image: elasticsearch:7.17.6
     container_name: elasticsearch
     ports:
       - 9200:9200
@@ -14,12 +14,19 @@ services:
     networks:
       - app_net
     restart: always
+    privileged: true
     environment:
       - TZ=Asia/Shanghai
       - discovery.type=single-node
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - node.name=elasticsearch
+      - cluster.name=elasticsearch-cluster
+      - network.bind_host=0.0.0.0
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
     # volumes:
-    #   - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    # - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    # - ./elasticsearch/config/certs:/usr/share/elasticsearch/config/certs
     # - ./elasticsearch/cert/elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12
     # - /data/elasticsearch/data:/usr/share/elasticsearch/data
     # - /data/elasticsearch/logs:/usr/share/elasticsearch/logs
