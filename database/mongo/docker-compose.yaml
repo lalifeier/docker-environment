@@ -1,0 +1,28 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - 27017:27017
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - MONGO_INITDB_DATABASE=test
+      - MONGODB_INITDB_ROOT_USERNAME=admin
+      - MONGODB_INITDB_ROOT_PASSWORD=123456
+      - MONGO_USERNAME=user
+      - MONGO_PASSWORD=123456
+    volumes:
+      - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
+      - /data/mongo/data:/data/db
+      # - /data/mongo/conf:/data/configdb
+      # - /data/mongo/logs:/data/log
+    command: [--auth]
