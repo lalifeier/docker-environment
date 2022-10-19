@@ -1,0 +1,75 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  mongo-rs1:
+    image: mongo:latest
+    container_name: mongo-rs1
+    ports:
+      - 27017:27017
+    networks:
+      - app_net
+    restart: always
+    # privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+      - MONGO_INITDB_DATABASE=test
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+      - MONGO_USERNAME=user
+      - MONGO_PASSWORD=123456
+    volumes:
+      - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
+      - ./conf:/etc/mongo
+      - /data/mongo-rs1/db:/data/db
+      # - /data/mongo-rs1/log:/var/log/mongodb
+    command: mongod --replSet rs0 --config /etc/mongo/mongod.conf
+
+  mongo-rs2:
+    image: mongo:latest
+    container_name: mongo-rs2
+    ports:
+      - 27018:27017
+    networks:
+      - app_net
+    restart: always
+    # privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+      - MONGO_INITDB_DATABASE=test
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+      - MONGO_USERNAME=user
+      - MONGO_PASSWORD=123456
+    volumes:
+      - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
+      - ./conf:/etc/mongo
+      - /data/mongo-rs2/db:/data/db
+      # - /data/mongo-rs2/log:/var/log/mongodb
+    command: mongod --replSet rs0 --config /etc/mongo/mongod.conf
+
+  mongo-rs3:
+    image: mongo:latest
+    container_name: mongo-rs3
+    ports:
+      - 27019:27017
+    networks:
+      - app_net
+    restart: always
+    # privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+      - MONGO_INITDB_DATABASE=test
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+      - MONGO_USERNAME=user
+      - MONGO_PASSWORD=123456
+    volumes:
+      - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
+      - ./conf:/etc/mongo
+      - /data/mongo-rs3/db:/data/db
+      # - /data/mongo-rs3/log:/var/log/mongodb
+    command: mongod --replSet rs0 --config /etc/mongo/mongod.conf

@@ -13,16 +13,17 @@ services:
     networks:
       - app_net
     restart: always
+    # privileged: true
     environment:
       - TZ=Asia/Shanghai
       - MONGO_INITDB_DATABASE=test
-      - MONGODB_INITDB_ROOT_USERNAME=admin
-      - MONGODB_INITDB_ROOT_PASSWORD=123456
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123456
       - MONGO_USERNAME=user
       - MONGO_PASSWORD=123456
     volumes:
       - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
-      - /data/mongo/data:/data/db
-      # - /data/mongo/conf:/data/configdb
-      # - /data/mongo/logs:/data/log
-    command: [--auth]
+      - ./conf:/etc/mongo
+      - /data/mongo/db:/data/db
+      - /data/mongo/log:/var/log/mongodb
+    command: ["mongod", "--config", "/etc/mongo/mongod.conf"]
