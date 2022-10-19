@@ -9,67 +9,91 @@ services:
     image: mongo:latest
     container_name: mongo-rs1
     ports:
-      - 27017:27017
+      - 37017:27017
     networks:
       - app_net
     restart: always
     # privileged: true
     environment:
       - TZ=Asia/Shanghai
-      - MONGO_INITDB_DATABASE=test
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=123456
-      - MONGO_USERNAME=user
-      - MONGO_PASSWORD=123456
+      # - MONGO_INITDB_DATABASE=test
+      # - MONGO_INITDB_ROOT_USERNAME=root
+      # - MONGO_INITDB_ROOT_PASSWORD=123456
+      # - MONGO_USERNAME=user
+      # - MONGO_PASSWORD=123456
     volumes:
-      - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
+      # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./conf:/etc/mongo
-      - /data/mongo-rs1/db:/data/db
+      # - /data/mongo-rs1/db:/data/db
       # - /data/mongo-rs1/log:/var/log/mongodb
-    command: mongod --replSet rs0 --config /etc/mongo/mongod.conf
+    command: mongod --config /etc/mongo/mongod.conf
+    # healthcheck:
+    #   # test: test $$(echo "rs.status().ok" | mongo -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --quiet) -eq 1
+    #   test: test $$(echo "rs.initiate({_id:'replset0',members:[{_id:0,host:\"mongo-rs1:27017\"},{_id:1,host:\"mongo-rs2:27017\"},{_id:2,host:\"mongo-rs3:27017\"}]}).ok || rs.status().ok" | mongo --port 27017 --quiet) -eq 1
+    #   interval: 10s
+    #   start_period: 30s
 
   mongo-rs2:
     image: mongo:latest
     container_name: mongo-rs2
     ports:
-      - 27018:27017
+      - 37018:27017
     networks:
       - app_net
     restart: always
     # privileged: true
     environment:
       - TZ=Asia/Shanghai
-      - MONGO_INITDB_DATABASE=test
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=123456
-      - MONGO_USERNAME=user
-      - MONGO_PASSWORD=123456
+      # - MONGO_INITDB_DATABASE=test
+      # - MONGO_INITDB_ROOT_USERNAME=root
+      # - MONGO_INITDB_ROOT_PASSWORD=123456
+      # - MONGO_USERNAME=user
+      # - MONGO_PASSWORD=123456
     volumes:
-      - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
+      # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./conf:/etc/mongo
-      - /data/mongo-rs2/db:/data/db
+      # - /data/mongo-rs2/db:/data/db
       # - /data/mongo-rs2/log:/var/log/mongodb
-    command: mongod --replSet rs0 --config /etc/mongo/mongod.conf
+    command: mongod --config /etc/mongo/mongod.conf
 
   mongo-rs3:
     image: mongo:latest
     container_name: mongo-rs3
     ports:
-      - 27019:27017
+      - 37019:27017
     networks:
       - app_net
     restart: always
     # privileged: true
     environment:
       - TZ=Asia/Shanghai
-      - MONGO_INITDB_DATABASE=test
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=123456
-      - MONGO_USERNAME=user
-      - MONGO_PASSWORD=123456
+      # - MONGO_INITDB_DATABASE=test
+      # - MONGO_INITDB_ROOT_USERNAME=root
+      # - MONGO_INITDB_ROOT_PASSWORD=123456
+      # - MONGO_USERNAME=user
+      # - MONGO_PASSWORD=123456
     volumes:
-      - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
+      # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./conf:/etc/mongo
-      - /data/mongo-rs3/db:/data/db
+      # - /data/mongo-rs3/db:/data/db
       # - /data/mongo-rs3/log:/var/log/mongodb
-    command: mongod --replSet rs0 --config /etc/mongo/mongod.conf
+    command: mongod --config /etc/mongo/mongod.conf
+
+  mongo-init:
+    image: mongo:latest
+    container_name: mongo-init
+    networks:
+      - app_net
+    restart: always
+    # privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+    command:
+      - mongo
+      - mongodb://@mongo-rs1:27017/admin
+      - --eval
+      - 'rs.initiate({_id:"replset0", members: [{_id:0,host:"mongo-rs1:27017",priority:2},{_id:1,host:"mongo-rs2:27017",priority:1},{_id:2,host:"mongo-rs3:27017",arbiterOnly:true}]});cfg = rs.conf();cfg.members[0].priority=2;rs.reconfig(cfg, { force: true})'
+    depends_on:
+      - mongo-rs1
+      - mongo-rs2
+      - mongo-rs3
