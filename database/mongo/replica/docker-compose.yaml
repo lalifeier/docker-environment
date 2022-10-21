@@ -75,39 +75,39 @@ services:
       # - /data/mongo-replica/rs3/log:/var/log/mongodb
     command: mongod --config /data/configdb/mongod.conf
 
-  # mongo-init:
-  #   image: mongo:6.0.2-focal
-  #   container_name: mongo-init
-  #   networks:
-  #     - app_net
-  #   restart: on-failure:5
-  #   # privileged: true
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #   command:
-  #     - mongosh
-  #     - mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo-rs1:27017/admin
-  #     # - --host mongo-rs1 --port 27017 -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD}
-  #     - --eval
-  #     - 'rs.initiate({_id:"replset0", members: [{_id:0,host:"mongo-rs1:27017"},{_id:1,host:"mongo-rs2:27017"},{_id:2,host:"mongo-rs3:27017"}]});cfg = rs.conf();cfg.members[0].priority=2;rs.reconfig(cfg)'
-  #   depends_on:
-  #     - mongo-rs1
-  #     - mongo-rs2
-  #     - mongo-rs3
-
-  mongo-replica-setup:
+  mongo-init:
     image: mongo:6.0.2-focal
-    container_name: mongo-replica-setup
-    restart: on-failure
+    container_name: mongo-init
     networks:
       - app_net
+    restart: on-failure:5
+    # privileged: true
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-    volumes:
-      - ./scripts/setup-replica.sh:/scripts/setup-replica.sh
-    entrypoint: ["bash", "/scripts/setup-replica.sh"]
+      - TZ=Asia/Shanghai
+    command:
+      - mongosh
+      - mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo-rs1:27017/admin
+      # - --host mongo-rs1 --port 27017 -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD}
+      - --eval
+      - 'rs.initiate({_id:"replset0", members: [{_id:0,host:"mongo-rs1:27017"},{_id:1,host:"mongo-rs2:27017"},{_id:2,host:"mongo-rs3:27017"}]});cfg = rs.conf();cfg.members[0].priority=2;rs.reconfig(cfg)'
     depends_on:
       - mongo-rs1
       - mongo-rs2
       - mongo-rs3
+
+  # mongo-replica-setup:
+  #   image: mongo:6.0.2-focal
+  #   container_name: mongo-replica-setup
+  #   restart: on-failure
+  #   networks:
+  #     - app_net
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+  #     MONGO_INITDB_ROOT_PASSWORD: ${DATABASEMONGO_INITDB_ROOT_PASSWORD_PASSWORD}
+  #   volumes:
+  #     - ./scripts/setup-replica.sh:/scripts/setup-replica.sh
+  #   entrypoint: ["bash", "/scripts/setup-replica.sh"]
+  #   depends_on:
+  #     - mongo-rs1
+  #     - mongo-rs2
+  #     - mongo-rs3
