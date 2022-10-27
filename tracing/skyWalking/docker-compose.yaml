@@ -45,6 +45,7 @@ services:
       - TZ=Asia/Shanghai
       - SW_STORAGE=elasticsearch
       - SW_STORAGE_ES_CLUSTER_NODES=elasticsearch:9200
+      - JAVA_OPTS=-Xms2048m -Xmx2048m
     # volumes:
     # - ./skywalking/config/alarm-settings.yml:/skywalking/config/alarm-settings.yml
     # - ./skywalking/ext-config:/skywalking/ext-config
@@ -61,6 +62,6 @@ services:
     restart: always
     environment:
       - TZ=Asia/Shanghai
-      - SW_OAP_ADDRESS=skywalking-oap:12800
+      - SW_OAP_ADDRESS=http://skywalking-oap:12800
     depends_on:
       - skywalking-oap
