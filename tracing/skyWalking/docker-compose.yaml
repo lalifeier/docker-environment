@@ -33,7 +33,7 @@ services:
     # - /data/elasticsearch/plugins:/usr/share/elasticsearch/plugins
 
   skywalking-oap:
-    image: apache/skywalking-oap-server:latest
+    image: apache/skywalking-oap-server:9.2.0
     container_name: skywalking-oap
     ports:
       - 11800:11800
@@ -52,7 +52,7 @@ services:
       - elasticsearch
 
   skywalking-ui:
-    image: apache/skywalking-ui:latest
+    image: apache/skywalking-ui:9.2.0
     container_name: skywalking-ui
     ports:
       - 8088:8080
