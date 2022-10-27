@@ -25,5 +25,5 @@ services:
       - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./conf:/etc/mongo
       - /data/mongo/db:/data/db
-      - /data/mongo/log:/var/log/mongodb
+      #- /data/mongo/log:/var/log/mongodb
     command: ["mongod", "--config", "/etc/mongo/mongod.conf"]

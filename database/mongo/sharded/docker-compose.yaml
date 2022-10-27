@@ -9,8 +9,6 @@ services:
   mongo-config-server1:
     image: mongo:latest
     container_name: mongo-config-server1
-    ports:
-      - 27018:27017
     networks:
       - app_net
     restart: always
@@ -25,15 +23,13 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./config-server/conf:/etc/mongo
-      # - /data/mongo/sharded/mongo-config-server1/db:/data/db
-      # - /data/mongo/sharded/mongo-config-server1/log:/var/log/mongodb
+      # - /data/mongo/sharded/config/server1/db:/data/db
+      # - /data/mongo/sharded/config/server1/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   mongo-config-server2:
     image: mongo:latest
     container_name: mongo-config-server2
-    ports:
-      - 27019:27017
     networks:
       - app_net
     restart: always
@@ -48,15 +44,13 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./config-server/conf:/etc/mongo
-      # - /data/mongo/sharded/mongo-config-server2/db:/data/db
-      # - /data/mongo/sharded/mongo-config-server2/log:/var/log/mongodb
+      # - /data/mongo/sharded/config/server2/db:/data/db
+      # - /data/mongo/sharded/config/server2/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   mongo-config-server3:
     image: mongo:latest
     container_name: mongo-config-server3
-    ports:
-      - 27020:27017
     networks:
       - app_net
     restart: always
@@ -71,16 +65,14 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./config-server/conf:/etc/mongo
-      # - /data/mongo/sharded/mongo-config-server3/db:/data/db
-      # - /data/mongo/sharded/mongo-config-server3/log:/var/log/mongodb
+      # - /data/mongo/sharded/config/server3/db:/data/db
+      # - /data/mongo/sharded/config/server3/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   # shard server Shard1: sh1r1 ~ sh1r3
   mongo-shard1-server1:
     image: mongo:latest
     container_name: mongo-shard1-server1
-    ports:
-      - 28017:27017
     networks:
       - app_net
     restart: always
@@ -95,15 +87,13 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./shard1-server/conf:/etc/mongo
-      # - /data/mongo/sharded/mongo-shard1-server1/db:/data/db
-      # - /data/mongo/sharded/mongo-shard1-server1/log:/var/log/mongodb
+      # - /data/mongo/sharded/shard1/server1/db:/data/db
+      # - /data/mongo/sharded/shard1/server1/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   mongo-shard1-server2:
     image: mongo:latest
     container_name: mongo-shard1-server2
-    ports:
-      - 28018:27017
     networks:
       - app_net
     restart: always
@@ -118,15 +108,13 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./shard1-server/conf:/etc/mongo
-      # - /data/mongo/sharded/mongo-shard1-server2/db:/data/db
-      # - /data/mongo/sharded/mongo-shard1-server2/log:/var/log/mongodb
+      # - /data/mongo/sharded/shard1/server2/db:/data/db
+      # - /data/mongo/sharded/shard1/server2/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   mongo-shard1-server3:
     image: mongo:latest
     container_name: mongo-shard1-server3
-    ports:
-      - 28019:27017
     networks:
       - app_net
     restart: always
@@ -141,14 +129,78 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./shard1-server/conf:/etc/mongo
-      # - /data/mongo/sharded/mongo-shard1-server3/db:/data/db
-      # - /data/mongo/sharded/mongo-shard1-server3/log:/var/log/mongodb
+      # - /data/mongo/sharded/shard1/server3/db:/data/db
+      # - /data/mongo/sharded/shard1/server3/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   # shard server Shard2: sh2r1 ~ sh2r3
   mongo-shard2-server1:
     image: mongo:latest
     container_name: mongo-shard2-server1
+    networks:
+      - app_net
+    restart: always
+    # privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+      # - MONGO_INITDB_DATABASE=test
+      # - MONGO_INITDB_ROOT_USERNAME=root
+      # - MONGO_INITDB_ROOT_PASSWORD=123456
+      # - MONGO_USERNAME=user
+      # - MONGO_PASSWORD=123456
+    volumes:
+      # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
+      - ./shard2-server/conf:/etc/mongo
+      # - /data/mongo/sharded/shard2/server1/db:/data/db
+      # - /data/mongo/sharded/shard2/server1/log:/var/log/mongodb
+    command: mongod --config /etc/mongo/mongo.conf
+
+  mongo-shard2-server2:
+    image: mongo:latest
+    container_name: mongo-shard2-server2
+    networks:
+      - app_net
+    restart: always
+    # privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+      # - MONGO_INITDB_DATABASE=test
+      # - MONGO_INITDB_ROOT_USERNAME=root
+      # - MONGO_INITDB_ROOT_PASSWORD=123456
+      # - MONGO_USERNAME=user
+      # - MONGO_PASSWORD=123456
+    volumes:
+      # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
+      - ./shard2-server/conf:/etc/mongo
+      # - /data/mongo/sharded/shard2/server2/db:/data/db
+      # - /data/mongo/sharded/shard2/server2/log:/var/log/mongodb
+    command: mongod --config /etc/mongo/mongo.conf
+
+  mongo-shard2-server3:
+    image: mongo:latest
+    container_name: mongo-shard1-server3
+    networks:
+      - app_net
+    restart: always
+    # privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+      # - MONGO_INITDB_DATABASE=test
+      # - MONGO_INITDB_ROOT_USERNAME=root
+      # - MONGO_INITDB_ROOT_PASSWORD=123456
+      # - MONGO_USERNAME=user
+      # - MONGO_PASSWORD=123456
+    volumes:
+      # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
+      - ./shard2-server/conf:/etc/mongo
+      # - /data/mongo/sharded/shard2/server3/db:/data/db
+      # - /data/mongo/sharded/shard2/server3/log:/var/log/mongodb
+    command: mongod --config /etc/mongo/mongo.conf
+
+  # router
+  mongos-server1:
+    image: mongo:latest
+    container_name: mongos-server
     ports:
       - 37017:27017
     networks:
@@ -164,14 +216,14 @@ services:
       # - MONGO_PASSWORD=123456
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
-      - ./shard2-server/conf:/etc/mongo
-      # - /data/mongo/sharded/mongo-shard2-server1/db:/data/db
-      # - /data/mongo/sharded/mongo-shard2-server1/log:/var/log/mongodb
+      - ./mongos-server/conf:/etc/mongo
+      # - /data/mongo/sharded/mongos/server1/db:/data/db
+      # - /data/mongo/sharded/mongos/server1/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
-  mongo-shard2-server2:
+  mongos-server2:
     image: mongo:latest
-    container_name: mongo-shard2-server2
+    container_name: mongos-server
     ports:
       - 37018:27017
     networks:
@@ -187,14 +239,14 @@ services:
       # - MONGO_PASSWORD=123456
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
-      - ./shard2-server/conf:/etc/mongo
-      # - /data/mongo/sharded/mongo-shard2-server2/db:/data/db
-      # - /data/mongo/sharded/mongo-shard2-server2/log:/var/log/mongodb
+      - ./mongos-server/conf:/etc/mongo
+      # - /data/mongo/sharded/mongos/server2/db:/data/db
+      # - /data/mongo/sharded/mongos/server2/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
-  mongo-shard2-server3:
+  mongos-server3:
     image: mongo:latest
-    container_name: mongo-shard1-server3
+    container_name: mongos-server
     ports:
       - 37019:27017
     networks:
@@ -210,31 +262,7 @@ services:
       # - MONGO_PASSWORD=123456
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
-      - ./shard2-server/conf:/etc/mongo
-      # - /data/mongo/sharded/mongo/sharded/mongo-shard2-server3/db:/data/db
-      # - /data/mongo/sharded/mongo/sharded/mongo-shard2-server3/log:/var/log/mongodb
-    command: mongod --config /etc/mongo/mongo.conf
-
-  # router
-  mongos-server:
-    image: mongo:latest
-    container_name: mongos-server
-    ports:
-      - 27017:27017
-    networks:
-      - app_net
-    restart: always
-    # privileged: true
-    environment:
-      - TZ=Asia/Shanghai
-      # - MONGO_INITDB_DATABASE=test
-      # - MONGO_INITDB_ROOT_USERNAME=root
-      # - MONGO_INITDB_ROOT_PASSWORD=123456
-      # - MONGO_USERNAME=user
-      # - MONGO_PASSWORD=123456
-    volumes:
-      # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./mongos-server/conf:/etc/mongo
-      # - /data/mongo/sharded/mongo/sharded/mongos-server/db:/data/db
-      # - /data/mongo/sharded/mongo/sharded/mongos-server/log:/var/log/mongodb
+      # - /data/mongo/sharded/mongos/server3/db:/data/db
+      # - /data/mongo/sharded/mongos/server3/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
