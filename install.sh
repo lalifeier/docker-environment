@@ -15,7 +15,8 @@ cat <<EOF | sudo tee /etc/docker/daemon.json
         "https://hub-mirror.c.163.com",
         "https://mirror.baidubce.com",
         "https://registry.docker-cn.com"
-    ]
+    ],
+    "host": ["tcp://0.0.0.0:2375"]
 }
 EOF
 sudo systemctl daemon-reload
@@ -36,3 +37,10 @@ sudo usermod -aG docker $USER
 
 
 # docker network create app_net
+
+# docker开通2375端口
+# sudo vim /usr/lib/systemd/system/docker.service
+# 增加 -H tcp://0.0.0.0:2375
+# ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H fd:// --containerd=/run/containerd/containerd.sock
+# sudo systemctl daemon-reload
+# sudo systemctl restart docker

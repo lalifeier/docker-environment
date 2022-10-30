@@ -2,8 +2,8 @@
 
 # curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
-wget https://get.helm.sh/helm-v3.9.3-linux-amd64.tar.gz
-# wget https://repo.huaweicloud.com/helm/v3.9.3/helm-v3.9.3-linux-amd64.tar.gz
+# wget https://get.helm.sh/helm-v3.9.3-linux-amd64.tar.gz
+wget https://repo.huaweicloud.com/helm/v3.9.3/helm-v3.9.3-linux-amd64.tar.gz
 tar -zxvf helm-v3.9.3-linux-amd64.tar.gz
 sudo mv linux-amd64/helm /usr/local/bin/helm
 
