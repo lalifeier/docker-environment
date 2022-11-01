@@ -11,9 +11,9 @@ kubectl create ns zadig
 
 # 域名访问
 export NAMESPACE=zadig
-export DOMAIN=zadig.github.com
+export DOMAIN=zadig.domain.local.com
 
-helm upgrade --install zadig koderover-chart/zadig --create-namespace --namespace ${NAMESPACE} --version=1.15.0 --set endpoint.FQDN=${DOMAIN} \
+helm install zadig koderover-chart/zadig --create-namespace --namespace ${NAMESPACE} --version=1.15.0 --debug --set endpoint.FQDN=${DOMAIN} \
     --set global.extensions.extAuth.extauthzServerRef.namespace=${NAMESPACE} \
     --set "dex.config.staticClients[0].redirectURIs[0]=http://${DOMAIN}/api/v1/callback,dex.config.staticClients[0].id=zadig,dex.config.staticClients[0].name=zadig,dex.config.staticClients[0].secret=ZXhhbXBsZS1hcHAtc2VjcmV0"
 
@@ -22,7 +22,7 @@ export NAMESPACE=zadig
 export IP=172.16.5.76
 export PORT=30001
 
-helm upgrade --install zadig koderover-chart/zadig --namespace ${NAMESPACE} --version=1.15.0 --set endpoint.type=IP \
+helm install zadig koderover-chart/zadig --namespace ${NAMESPACE} --version=1.15.0 --debug --set endpoint.type=IP \
     --set endpoint.IP=${IP} \
     --set gloo.gatewayProxies.gatewayProxy.service.httpNodePort=${PORT} \
     --set global.extensions.extAuth.extauthzServerRef.namespace=${NAMESPACE} \
@@ -63,3 +63,6 @@ helm upgrade --install --create-namespace -n zadig
 # 卸载
 helm list -n zadig # 获得 Zadig 的 release name
 helm uninstall zadig -n zadig
+
+
+# kubectl port-forward -n zadig svc/gateway-proxy 32000:80

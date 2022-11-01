@@ -33,12 +33,17 @@ kubectl get nodes
 # k3d kubeconfig get devcluster > $HOME/k3d/kubeconfig
 # export KUBECONFIG=$HOME/k3d/kubeconfig
 
+# WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /root/k3d/kubeconfig
+# chmod o-r ~/k3d/kubeconfig
+# chmod g-r ~/k3d/kubeconfig
+
 # kubectl cluster-info
 
 # helm repo add traefik https://helm.traefik.io/traefik
 # helm repo add traefik https://containous.github.io/traefik-helm-chart
 # helm install traefik traefik/traefik
 # kubectl port-forward $(kubectl get pods --selector "app.kubernetes.io/name=traefik" --output=name) --address 0.0.0.0 9000:9000
+
 # http://localhost:9000/dashboard/
 
 
