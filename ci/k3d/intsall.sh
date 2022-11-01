@@ -12,14 +12,11 @@ curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 
 # k3d cluster create devcluster
 
-# k3d cluster create devcluster \
-# --api-port 127.0.0.1:6443 \
-# -p 80:80@loadbalancer \
-# -p 443:443@loadbalancer \
-# --k3s-server-arg "--no-deploy=traefik"
+k3d cluster create devcluster --port 8080:80@loadbalancer --port 8443:443@loadbalancer --api-port 6443 --servers 1 --agents 3 --k3s-arg "--disable=traefik@server:0"
 
-# k3d cluster create devcluster --servers 1 --agents 3 --api-port 127.0.0.1:6443 -p 80:80@loadbalancer -p 443:443@loadbalancer --k3s-arg "--disable=traefik@server:0"
-k3d cluster create devcluster --servers 1 --agents 3 --k3s-arg "--disable=traefik@server:0"
+# https://hub.docker.com/r/rancher/k3s/tags
+# k3d cluster create devcluster --port 8080:80@loadbalancer --port 8443:443@loadbalancer --api-port 6443 --image rancher/k3s:v1.25.3-k3s1 --servers 1 --agents 3 --k3s-arg "--disable=traefik@server:0"
+
 
 # docker pull rancher/k3s:v1.24.4-k3s1
 # wget https://github.com/k3s-io/k3s/releases/download/v1.24.4-k3s1/k3s-airgap-images-amd64.tar.gz
@@ -38,6 +35,7 @@ kubectl get nodes
 # chmod g-r ~/k3d/kubeconfig
 
 # kubectl cluster-info
+# kubectl get nodes
 
 # helm repo add traefik https://helm.traefik.io/traefik
 # helm repo add traefik https://containous.github.io/traefik-helm-chart
