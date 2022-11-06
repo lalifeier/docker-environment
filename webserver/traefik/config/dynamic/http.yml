@@ -1,0 +1,53 @@
+http:
+  routers:
+    api:
+      entryPoints:
+        - http
+      rule: Host(`traefik.docker.localhost`)
+      service: api@internal
+      middlewares:
+        - auth
+        # - redirect-to-https
+
+    api-tls:
+      entryPoints:
+        - https
+      rule: Host(`traefik.docker.localhost`)
+      service: api@internal
+      tls:
+        certResolver: lets-encrypt
+      middlewares:
+        - auth
+        # - redirect-to-https
+
+    whoami:
+      entryPoints:
+        - http
+      rule: Host(`whoami.docker.localhost`)
+      service: whoami-traefik@docker
+      # middlewares:
+      #   - redirect-to-https
+
+    whoami-tls:
+      entryPoints:
+        - https
+      rule: Host(`whoami.docker.localhost`)
+      service: whoami-traefik@docker
+      tls:
+        certResolver: lets-encrypt
+
+  # services:
+
+  middlewares:
+    redirect-to-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+    auth:
+      basicAuth:
+        users:
+          # htpasswd -nb admin 123456
+          # docker run --rm -it --entrypoint /usr/local/apache2/bin/htpasswd httpd:alpine -nb admin 123456
+          # admin 123456
+          - admin:$apr1$h.LY4N8w$EPX9LL1R8hL5vcvMNeQ0o0

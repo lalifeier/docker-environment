@@ -1,0 +1,44 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  traefik:
+    image: traefik:v2.9.4
+    container_name: traefik
+    labels:
+      - traefik.enable=true
+    #   # - traefik.docker.network=app_net
+    #   # - traefik.http.routers.traefik-secure.entrypoints=websecure
+    #   - traefik.http.routers.api.rule=Host(`traefik.$DOMAIN`)
+    #   - traefik.http.routers.api.service=api@internal
+    # DNS CHALLENGE
+    # - traefik.http.routers.traefik.tls.certresolver=lets-encrypt
+    # - traefik.http.routers.traefik.tls.domains[0].main=*.$DOMAIN
+    # - traefik.http.routers.traefik.tls.domains[0].sans=$DOMAIN
+    # HTTP REDIRECT
+    # - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+    # - traefik.http.routers.redirect-https.rule=hostregexp(`{host:.+}`)
+    # - traefik.http.routers.redirect-https.entrypoints=web
+    # - traefik.http.routers.redirect-https.middlewares=redirect-to-https
+    env_file: .env
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+      # - 3306:3306
+      # - 6379:6379
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config/static:/etc/traefik:ro
+      - ./config/dynamic:/data/traefik/config:ro
+      # chmod 600 acme.json
+      - ./letsencrypt/acme.json:/letsencrypt/acme.json
+    # command: --api.insecure=true --providers.docker

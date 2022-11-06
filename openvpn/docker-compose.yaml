@@ -1,0 +1,21 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  openvpn:
+    image: kylemanna/openvpn:latest
+    container_name: openvpn
+    ports:
+      - 1194:1194/udp
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /data/openvpn:/conf:/etc/openvpn
+    cap_add:
+      - NET_ADMIN

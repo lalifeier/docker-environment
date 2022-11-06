@@ -1,0 +1,27 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  postgres:
+    # image: postgres:latest
+    image: postgres:alpine
+    container_name: postgres
+    # labels:
+    # 设置Host 为 postgres.docker.localhost 进行域名访问
+    # - "traefik.http.routers.postgres.rule=Host(`postgres.docker.localhost`)"
+    ports:
+      - 5432:5432
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=123456
+      # - ALLOW_IP_RANGE=0.0.0.0/0
+    volumes:
+      - /data/postgresql/standalone/data:/var/lib/postgresql/data

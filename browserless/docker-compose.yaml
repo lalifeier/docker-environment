@@ -1,0 +1,17 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  browserless:
+    image: browserless/chrome
+    container_name: browserless
+    ports:
+      - 3000:3000
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai

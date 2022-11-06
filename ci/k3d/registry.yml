@@ -1,0 +1,7 @@
+mirrors:
+  "docker.io":
+    endpoint:
+      - "https://1nj0zren.mirror.aliyuncs.com"
+      - "https://docker.mirrors.ustc.edu.cn"
+      - "http://hub-mirror.c.163.com"
+      - "https://registry.docker-cn.com"

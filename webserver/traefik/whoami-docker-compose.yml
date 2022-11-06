@@ -1,0 +1,23 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  whoami:
+    image: containous/whoami:latest
+    container_name: whoami
+    labels:
+      - traefik.enable=true
+    # - traefik.http.routers.whoami.entrypoints=http
+    # - traefik.http.routers.whoami.rule=Host(`whoami.$DOMAIN`)
+    # - traefik.http.routers.whoami.tls=true
+    # - traefik.http.routers.whoami.tls.certresolver=lets-encrypt
+    # - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+    # - traefik.port=80
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai

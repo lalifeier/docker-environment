@@ -1,0 +1,13 @@
+certificatesResolvers:
+  lets-encrypt:
+    acme:
+      # caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+      email: "lalifeier@gmail.com"
+      storage: "/letsencrypt/acme.json"
+      httpChallenge:
+        entryPoint: http
+      # dnsChallenge:
+      #   provider: cloudflare
+      #   resolvers:
+      #     - "1.1.1.1:53"
+      #     - "8.8.8.8:53"

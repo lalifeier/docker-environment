@@ -1,0 +1,13 @@
+# tcp:
+#   routers:
+#     mysql:
+#       entryPoints:
+#         - mysql
+#       rule: "HostSNI(`*`)"
+#       service: mysql
+#   services:
+# mysql:
+#   loadBalancer:
+#     servers:
+#       - address: "10.19.*.210:6601"
+#       - address: "10.19.*.210:6602"
