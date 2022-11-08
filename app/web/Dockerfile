@@ -1,12 +1,14 @@
-ENV APP_PATH=/app
+ARG APP_PATH=/app
 
 # Stage: staging
 FROM node:lts-slim AS staging
 
-RUN npm install -g pnpm &&
-    pnpm config set registry https://registry.npmmirror.com
+ARG APP_PATH
 
 WORKDIR $APP_PATH
+
+RUN npm install -g pnpm && \
+    pnpm config set registry https://registry.npmmirror.com
 
 COPY .npmrc package.json pnpm-lock.yaml ./
 
@@ -18,6 +20,8 @@ COPY . .
 # Stage: development
 FROM staging as development
 
+ARG APP_PATH
+
 WORKDIR $APP_PATH
 
 RUN pnpm install
@@ -28,6 +32,8 @@ CMD ["pnpm", "dev"]
 # Stage: build
 FROM staging as build
 
+ARG APP_PATH
+
 WORKDIR $APP_PATH
 
 RUN pnpm build
@@ -35,6 +41,8 @@ RUN pnpm build
 
 # Stage: production
 FROM nginx:stable-alpine AS production
+
+ARG APP_PATH
 
 WORKDIR $APP_PATH
 
