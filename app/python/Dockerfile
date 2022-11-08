@@ -1,32 +1,71 @@
-FROM python:3.9-slim-bullseye AS build
+ARG APP_NAME=demo
+ARG APP_PATH=/opt/$APP_NAME
+ARG PYTHON_VERSION=3.9.13-slim
+ARG POETRY_VERSION=1.1.11
 
-WORKDIR /app
+# Stage: staging
+FROM python:$PYTHON_VERSION as staging
 
-RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple \
-	&& pip config set install.trusted-host mirrors.aliyun.com \
-  && pip install -r requirements.txt \
-  && pip install pyinstaller
+ENV \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONFAULTHANDLER=1
+ENV \
+    POETRY_VERSION=$POETRY_VERSION \
+    POETRY_HOME="/opt/poetry" \
+    POETRY_VIRTUALENVS_IN_PROJECT=true \
+    POETRY_NO_INTERACTION=1
 
-RUN pyinstaller --hidden-import=tornado --onefile -d -y run.py
+ENV PATH="$POETRY_HOME/bin:$PATH"
 
-FROM frolvlad/alpine-glibc
+RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
 
-WORKDIR /app
+WORKDIR $APP_PATH
 
-COPY --from=build /app/dist/run .
+COPY poetry.lock pyproject.toml ./
+COPY ./$APP_NAME ./$APP_NAME
 
-CMD ["./run"]
+# Stage: development
+FROM staging as development
+
+ENV FASTAPI_ENV=development
+
+WORKDIR $APP_PATH
+
+RUN poetry install
+
+CMD ["uvicorn", "--reload", "main:app"]
 
 
-# FROM python:3.8.5-slim-buster AS base
+# Stage: build
+FROM staging as build
 
-# FROM base AS builder
-# COPY requirements.txt .
-# RUN python -m pip install --user -r requirements.txt
+WORKDIR $APP_PATH
 
-# FROM base AS release
-# COPY --from=builder /root/.local /root/.local
-# COPY ./src .
-# EXPOSE 8080
-# ENV PATH=/root/.local/bin:$PATH
-# CMD [ "python", "app.py" ]
+RUN poetry build --format wheel
+RUN poetry export --format requirements.txt --output constraints.txt --without-hashes
+
+
+# Stage: production
+FROM python:$PYTHON_VERSION as production
+
+ENV FASTAPI_ENV=production
+
+ENV \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONFAULTHANDLER=1
+
+ENV \
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_DEFAULT_TIMEOUT=100
+
+COPY --from=build $APP_PATH/dist/*.whl ./
+COPY --from=build $APP_PATH/constraints.txt ./
+
+RUN pip install ./$APP_NAME*.whl --constraint constraints.txt
+
+WORKDIR $APP_PATH
+
+CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "main:app"]

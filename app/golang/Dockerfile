@@ -1,24 +1,27 @@
+ENV APP_PATH=/app \
+    APP_NANE=hello
+
 FROM golang:alpine AS build
 
-ENV CGO_ENABLED 0
-ENV GOOS linux
-ENV GOPROXY https://goproxy.cn,direct
+ENV CGO_ENABLED 0 \
+    GOOS linux \
+    GOPROXY https://goproxy.cn,direct
 
-WORKDIR /build
+WORKDIR $APP_PATH
 
-ADD go.mod .
-ADD go.sum .
+COPY go.mod go.sum ./
 RUN go mod download
-COPY . .
-RUN go build -ldflags="-s -w" -o /app/hello ./hello.go
 
+COPY . .
+
+RUN go build -ldflags="-s -w" -o $APP_PATH/$APP_NANE ./main.go
 
 FROM alpine
 
 RUN apk update --no-cache && apk add --no-cache ca-certificates tzdata
-ENV TZ Asia/Shanghai
 
-WORKDIR /app
-COPY --from=build /app/hello /app/hello
+WORKDIR $APP_PATH
 
-CMD ["./hello"]
+COPY --from=build $APP_PATH/$APP_NANE $APP_PATH/$APP_NANE
+
+CMD ["sh", "-c", "${APP_NANE}"]

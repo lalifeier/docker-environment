@@ -1,15 +1,18 @@
+ENV APP_PATH=/app
+
 FROM maven:3.8.4-openjdk-8-slim AS build
 
-WORKDIR /app
+WORKDIR $APP_PATH
 
-COPY src ./src
 COPY pom.xml ./
+COPY src ./src
+
 RUN mvn clean install -Dmaven.test.skip=true
 
 FROM openjdk:8-jdk-alpine
 
-WORKDIR /usr/src/
+WORKDIR $APP_PATH
 
-COPY --from=build /app/target/spring-boot-0.0.1-SNAPSHOT.jar /usr/src/app.jar
+COPY --from=build $APP_PATH/target/*.jar $APP_PATH/app.jar
 
 ENTRYPOINT ["java","-jar","app.jar"]
