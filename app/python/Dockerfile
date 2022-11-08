@@ -6,6 +6,10 @@ ARG POETRY_VERSION=1.1.11
 # Stage: staging
 FROM python:$PYTHON_VERSION as staging
 
+ARG APP_NAME
+ARG APP_PATH
+ARG POETRY_VERSION
+
 ENV \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -18,7 +22,12 @@ ENV \
 
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
-RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+        curl \
+        build-essential
+
+RUN curl -sSL https://install.python-poetry.org | python3 -
 
 WORKDIR $APP_PATH
 
@@ -28,17 +37,28 @@ COPY ./$APP_NAME ./$APP_NAME
 # Stage: development
 FROM staging as development
 
+ARG APP_PATH
+ARG APP_NAME
+
+ENV APP_NAME=$APP_NAME
+
 ENV FASTAPI_ENV=development
 
 WORKDIR $APP_PATH
 
 RUN poetry install
 
-CMD ["uvicorn", "--reload", "main:app"]
+COPY ./docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+ENTRYPOINT /docker-entrypoint.sh $0 $@
+CMD ["poetry" , "run" , "uvicorn", "--reload", "--host=0.0.0.0", "--port=8000", "${APP_NAME}:app"]
 
 
 # Stage: build
 FROM staging as build
+
+ARG APP_PATH
 
 WORKDIR $APP_PATH
 
@@ -48,6 +68,9 @@ RUN poetry export --format requirements.txt --output constraints.txt --without-h
 
 # Stage: production
 FROM python:$PYTHON_VERSION as production
+
+ARG APP_NAME
+ARG APP_PATH
 
 ENV FASTAPI_ENV=production
 
@@ -68,4 +91,8 @@ RUN pip install ./$APP_NAME*.whl --constraint constraints.txt
 
 WORKDIR $APP_PATH
 
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "main:app"]
+COPY ./docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "${APP_NAME}:app"]
