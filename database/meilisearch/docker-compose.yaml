@@ -1,0 +1,20 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    container_name: meilisearch
+    ports:
+      - 7700:7700
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      # - MEILI_MASTER_KEY=
+    volumes:
+      - /data/meilisearch/data:/meili_data
