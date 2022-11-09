@@ -1,0 +1,19 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  dashy:
+    image: lissy93/dashy:latest
+    container_name: dashy
+    ports:
+      - 8080:80
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    # volumes:
+    # - ./conf.yml:/app/public/conf.yml
