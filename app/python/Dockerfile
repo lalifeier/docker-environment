@@ -52,7 +52,7 @@ COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
 ENTRYPOINT /docker-entrypoint.sh $0 $@
-CMD ["poetry" , "run" , "uvicorn", "--reload", "--host=0.0.0.0", "--port=8000", "${APP_NAME}:app"]
+CMD ["poetry" , "run" , "uvicorn", "--reload", "--host=0.0.0.0", "--port=8080", "${APP_NAME}:app"]
 
 
 # Stage: build
@@ -71,6 +71,8 @@ FROM python:$PYTHON_VERSION as production
 
 ARG APP_NAME
 ARG APP_PATH
+
+ENV APP_NAME=$APP_NAME
 
 ENV FASTAPI_ENV=production
 
@@ -91,8 +93,11 @@ RUN pip install ./$APP_NAME*.whl --constraint constraints.txt
 
 WORKDIR $APP_PATH
 
+COPY ./gunicorn_conf.py /gunicorn_conf.py
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
+
 RUN chmod +x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "${APP_NAME}:app"]
+# CMD ["gunicorn",  "-k", "uvicorn.workers.UvicornWorker", "--bind :80",  "--workers 1", "--threads 1", "--timeout 0", "${APP_NAME}:app"]
+CMD ["gunicorn", "--worker-class uvicorn.workers.UvicornWorker", "--config /gunicorn_conf.py", "${APP_NAME}:app"]
