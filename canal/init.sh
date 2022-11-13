@@ -23,4 +23,6 @@ FLUSH PRIVILEGES;
 #         allows_query_when_mysql_lost=true,
 #         max_wait_time_when_mysql_unavailable=10000;
 
-# docker cp canal-server:/home/admin/canal-server/conf/example/instance.properties ./
+# docker cp canal-server:/home/admin/canal-server/conf ./canal-server
+
+# docker cp canal-adapter:/opt/canal/adapter/conf ./canal-adapter

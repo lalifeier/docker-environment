@@ -104,10 +104,11 @@ services:
     restart: always
     environment:
       - TZ=Asia/Shanghai
-    # volumes:
-    # - ./canal-adapter/conf:/opt/adapter/conf
-    # depends_on:
-    #   - canal-server
+    volumes:
+      # - ./canal-adapter/conf/application.yml:/opt/canal/adapter/conf/application.yml
+      - ./canal-adapter/conf:/opt/canal/adapter/conf
+    depends_on:
+      - canal-server
 
   canal-admin:
     image: canal/canal-admin:v1.1.6
@@ -125,7 +126,7 @@ services:
       - spring.datasource.address=mysql:3306
       - spring.datasource.database=canal_manager
       - spring.datasource.username=root
-      - spring.datasource.password=123456
+      - spring.datasource.password=canal
       - mysql
     depends_on:
       - mysql

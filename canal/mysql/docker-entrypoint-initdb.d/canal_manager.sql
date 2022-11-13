@@ -1,3 +1,5 @@
+-- https://github.com/alibaba/canal/blob/master/admin/admin-web/src/main/resources/canal_manager.sql
+
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `canal_manager` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_bin */;
 
 USE `canal_manager`;
