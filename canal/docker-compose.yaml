@@ -5,24 +5,25 @@ networks:
     external: true
 
 services:
-  # mysql:
-  #   image: mysql:8.0
-  #   container_name: mysql
-  #   hostname: mysql
-  #   ports:
-  #     - 3306:3306
-  #   networks:
-  #     - app_net
-  #   restart: always
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #     - MYSQL_USER=lalifeir
-  #     - MYSQL_PASSWORD=123456
-  #     - MYSQL_ROOT_PASSWORD=123456
-  #   volumes:
-  #     - ./mysql/conf.d:/etc/mysql/conf.d
-  #     - /data/mysql/data:/var/lib/mysql
-  #     - /data/mysql/logs:/var/log/mysql
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    hostname: mysql
+    ports:
+      - 3306:3306
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_USER=lalifeir
+      - MYSQL_PASSWORD=123456
+      - MYSQL_ROOT_PASSWORD=123456
+    volumes:
+      - ./mysql/conf.d:/etc/mysql/conf.d
+      - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - /data/mysql/data:/var/lib/mysql
+      - /data/mysql/logs:/var/log/mysql
 
   # elasticsearch:
   #   image: elasticsearch:7.17.6
@@ -127,3 +128,4 @@ services:
       - spring.datasource.database=canal_manager
       - spring.datasource.username=root
       - spring.datasource.password=123456
+      - mysql
