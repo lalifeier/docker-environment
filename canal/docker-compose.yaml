@@ -22,44 +22,42 @@ services:
     volumes:
       - ./mysql/conf.d:/etc/mysql/conf.d
       - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-      - /data/mysql/data:/var/lib/mysql
+      # - /data/mysql/data:/var/lib/mysql
       - /data/mysql/logs:/var/log/mysql
 
-  # elasticsearch:
-  #   image: elasticsearch:7.17.6
-  #   container_name: elasticsearch
-  #   ports:
-  #     - 9200:9200
-  #     - 9300:9300
-  #   networks:
-  #     - app_net
-  #   restart: always
-  #   privileged: true
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #     - discovery.type=single-node
-  #     - ES_JAVA_OPTS=-Xms512m -Xmx512m
-  #     - node.name=elasticsearch
-  #     - cluster.name=elasticsearch-cluster
-  #     - network.bind_host=0.0.0.0
-  #     - bootstrap.memory_lock=true
-  #     - xpack.security.enabled=false
+  elasticsearch:
+    image: elasticsearch:7.17.6
+    container_name: elasticsearch
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - app_net
+    restart: always
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - node.name=elasticsearch
+      - cluster.name=elasticsearch-cluster
+      - network.bind_host=0.0.0.0
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
 
-  # kibana:
-  #   image: kibana:7.17.6
-  #   container_name: kibana
-  #   ports:
-  #     - 5601:5601
-  #   networks:
-  #     - app_net
-  #   restart: always
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #     - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-  #   volumes:
-  #     - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
-  #   depends_on:
-  #     - elasticsearch
+  kibana:
+    image: kibana:7.17.6
+    container_name: kibana
+    ports:
+      - 5601:5601
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
 
   canal-server:
     image: canal/canal-server:v1.1.6
@@ -84,32 +82,32 @@ services:
       - canal.admin.manager=canal-admin:8089
       - canal.admin.port=11110
       - canal.admin.user=admin
-      # select password (‘admin’)
-      - canal.admin.passwd=4ACFE3202A5FF5CF467898FC58AAB1D615029441
+      # select password('123456');
+      # mysql8.0 select upper(sha1(unhex(sha1('123456'))))
+      - canal.admin.passwd=6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9
+      # - canal.admin.register.cluster=test
     volumes:
       # - ./canal-server/conf:/home/admin/canal-server/conf
       - /data/canal-server/logs:/home/admin/canal-server/logs
     depends_on:
       - canal-admin
 
-  # canal-adapter:
-  #   # image: slpcat/canal-adapter:v1.1.5
-  #   build:
-  #     context: ./canal-adapter
-  #   container_name: canal-adapter
-  #   ports:
-  #     - 8081:8081
-  #   networks:
-  #     - app_net
-  #   restart: always
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #   volumes:
-  #     - ./canal-adapter/conf:/opt/adapter/conf
-  #   # - ./canal-adapter/conf/application.yml:/opt/canal-adapter/conf/application.yml
-  #   # - ./canal-adapter/conf/rdb/mytest_user.yml:/opt/canal-adapter/conf/rdb/mytest_user.yml
-  #   depends_on:
-  #     - canal-server
+  canal-adapter:
+    # image: slpcat/canal-adapter:v1.1.5
+    build:
+      context: ./canal-adapter
+    container_name: canal-adapter
+    ports:
+      - 8081:8081
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    # volumes:
+    # - ./canal-adapter/conf:/opt/adapter/conf
+    # depends_on:
+    #   - canal-server
 
   canal-admin:
     image: canal/canal-admin:v1.1.6
@@ -123,9 +121,11 @@ services:
       - TZ=Asia/Shanghai
       - server.port=8089
       - canal.adminUser=admin
-      - canal.adminPasswd=admin
+      - canal.adminPasswd=123456
       - spring.datasource.address=mysql:3306
       - spring.datasource.database=canal_manager
       - spring.datasource.username=root
       - spring.datasource.password=123456
+      - mysql
+    depends_on:
       - mysql
