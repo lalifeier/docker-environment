@@ -1,0 +1,45 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  pulsar:
+    image: apachepulsar/pulsar:2.10.2
+    container_name: pulsar
+    ports:
+      - 6650:6650
+      - 8080:8080
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      # - BOOKIE_MEM=-Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g
+      # - PULSAR_MEM=" -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g"
+    # volumes:
+    # - ./pulsar/conf:/pulsar/conf:rw
+    # - /data/pulsar/data:/pulsar/data:rw
+    command: bin/pulsar standalone
+    # command: >
+    #   bash -c "bin/apply-config-from-env.py conf/broker.conf && \
+    #            bin/apply-config-from-env.py conf/pulsar_env.sh && \
+    #            exec bin/pulsar broker"
+
+  pulsar-manager:
+    image: apachepulsar/pulsar-manager:v0.3.0
+    container_name: pulsar-manager
+    ports:
+      - 9527:9527
+      - 7750:7750
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - SPRING_CONFIGURATION_FILE=/pulsar-manager/pulsar-manager/application.properties
+    volumes:
+      - ./pulsar-manager/application.properties:/pulsar-manager/pulsar-manager/application.properties
+    depends_on:
+      - pulsar
