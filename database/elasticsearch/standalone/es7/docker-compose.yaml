@@ -1,0 +1,39 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  elasticsearch:
+    image: elasticsearch:${STACK_VERSION}
+    container_name: elasticsearch
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - node.name=elasticsearch
+      - cluster.name=elasticsearch-cluster
+      - network.bind_host=0.0.0.0
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+
+  kibana:
+    image: kibana:${STACK_VERSION}
+    container_name: kibana
+    ports:
+      - 5601:5601
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
