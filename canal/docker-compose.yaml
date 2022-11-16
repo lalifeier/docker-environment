@@ -72,7 +72,7 @@ services:
       - zookeeper
 
   efak:
-    image: nickzurich/kafka-eagle:latest
+    image: nickzurich/kafka-eagle:3.0.1
     container_name: efak
     ports:
       - 8048:8048
@@ -151,25 +151,26 @@ services:
       - /data/canal/server/logs:/home/admin/canal-server/logs
     depends_on:
       - canal-admin
-  canal-adapter:
-    # image: slpcat/canal-adapter:v1.1.5
-    build:
-      context: ./canal-adapter
-    image: canal-adapter:latest
-    container_name: canal-adapter
-    ports:
-      - 8081:8081
-    networks:
-      - app_net
-    restart: always
-    environment:
-      - TZ=Asia/Shanghai
-    volumes:
-      # - ./canal-adapter/conf/application.yml:/opt/canal/adapter/conf/application.yml
-      - ./canal-adapter/conf:/opt/canal/adapter/conf
-      - /data/canal/adapter/logs:/opt/canal/adapter/logs
-    depends_on:
-      - canal-server
+
+  # canal-adapter:
+  #   # image: slpcat/canal-adapter:v1.1.5
+  #   build:
+  #     context: ./canal-adapter
+  #   image: canal-adapter:latest
+  #   container_name: canal-adapter
+  #   ports:
+  #     - 8081:8081
+  #   networks:
+  #     - app_net
+  #   restart: always
+  #   environment:
+  #     - TZ=Asia/Shanghai
+  #   volumes:
+  #     # - ./canal-adapter/conf/application.yml:/opt/canal/adapter/conf/application.yml
+  #     - ./canal-adapter/conf:/opt/canal/adapter/conf
+  #     - /data/canal/adapter/logs:/opt/canal/adapter/logs
+  #   depends_on:
+  #     - canal-server
 
   canal-admin:
     image: canal/canal-admin:v1.1.6
