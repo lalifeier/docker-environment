@@ -130,15 +130,15 @@ services:
     restart: always
     environment:
       - TZ=Asia/Shanghai
-      - canal.auto.scan=false
-      - canal.destinations=test
-      - canal.instance.master.address=mysql:3306
-      - canal.instance.dbUsername=canal
-      - canal.instance.dbPassword=canal
-      - canal.instance.filter.regex=.*\\..*
-      - canal.instance.connectionCharset=UTF-8
-      - canal.instance.tsdb.enable=true
-      - canal.instance.gtidon=false
+      # - canal.auto.scan=false
+      # - canal.destinations=test
+      # - canal.instance.master.address=mysql:3306
+      # - canal.instance.dbUsername=canal
+      # - canal.instance.dbPassword=canal
+      # - canal.instance.filter.regex=.*\\..*
+      # - canal.instance.connectionCharset=UTF-8
+      # - canal.instance.tsdb.enable=true
+      # - canal.instance.gtidon=false
       - canal.admin.manager=canal-admin:8089
       - canal.admin.port=11110
       - canal.admin.user=admin
@@ -147,7 +147,7 @@ services:
       - canal.admin.passwd=6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9
       # - canal.admin.register.cluster=test
     volumes:
-      - ./canal-server/conf:/home/admin/canal-server/conf
+      # - ./canal-server/conf:/home/admin/canal-server/conf
       - /data/canal/server/logs:/home/admin/canal-server/logs
     depends_on:
       - canal-admin
