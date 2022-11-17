@@ -188,7 +188,8 @@ services:
       - spring.datasource.address=mysql:3306
       - spring.datasource.database=canal_manager
       - spring.datasource.username=root
-      - spring.datasource.password=canal
-      - mysql
+      - spring.datasource.password=123456
+    volumes:
+      - /data/canal/admin/logs:/home/admin/canal-admin/logs
     depends_on:
       - mysql
