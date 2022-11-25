@@ -1,0 +1,52 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  # 默认账号：admin，默认密码：Yearning_admin
+  yearning:
+    image: chaiyd/yearning:latest
+    container_name: yearning
+    ports:
+      - 8000:8000
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_ADDR=mysql
+      - MYSQL_USER=yearning
+      - MYSQL_PASSWORD=123456
+      - MYSQL_DB=yearning
+      # - SECRET_KEY=dbcjqheupqjsuwsm
+      # - IS_DOCKER:=is_docker
+    # 第一次安装，取消下列compose 中的注释进行初始化
+    command: /bin/bash -c "./Yearning install && ./Yearning run"
+    # 升级使用
+    # command: /bin/bash -c "./Yearning migrate"
+    # 重置admin密码
+    # command: /bin/bash -c "./Yearning reset_super"
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - 3306:3306
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_USER=yearning
+      - MYSQL_PASSWORD=123456
+      - MYSQL_DATABASE=yearning
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+  # volumes:
+  #   - /data/mysql/data:/var/lib/mysql
