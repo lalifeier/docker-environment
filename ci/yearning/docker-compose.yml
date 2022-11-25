@@ -21,7 +21,7 @@ services:
       - MYSQL_PASSWORD=123456
       - MYSQL_DB=yearning
       # - SECRET_KEY=dbcjqheupqjsuwsm
-      # - IS_DOCKER:=is_docker
+      - IS_DOCKER=is_docker
     # 第一次安装，取消下列compose 中的注释进行初始化
     command: /bin/bash -c "./Yearning install && ./Yearning run"
     # 升级使用
