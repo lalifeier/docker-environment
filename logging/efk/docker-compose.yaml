@@ -5,9 +5,28 @@ networks:
     external: true
 
 services:
-  fluent:
+  # fluent-bit:
+  #   image: fluent/fluent-bit:latest
+  #   container_name: fluent-bit
+  #   ports:
+  #     - 24224:24224
+  #   networks:
+  #     - app_net
+  #   restart: always
+  #   environment:
+  #     - TZ=Asia/Shanghai
+  #   volumes:
+  #     - ./conf/:/etc/fluent-bit/:ro
+  #     - ./fluentd/etc/fluent.conf:/fluentd/etc/fluent.conf
+  #     # - ./fluentd/etc:/fluentd/etc
+  #     - /data/fluentd/log:/fluentd/log
+  #   command:
+  #     - /fluent-bit/bin/fluent-bit
+  #     - --config=/etc/fluent-bit/fluent-bit.conf
+
+  fluentd:
     image: fluentd:latest
-    container_name: fluent
+    container_name: fluentd
     ports:
       - 24224:24224
       - 24224:24224/udp
