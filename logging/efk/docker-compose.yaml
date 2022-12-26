@@ -25,7 +25,8 @@ services:
   #     - --config=/etc/fluent-bit/fluent-bit.conf
 
   fluentd:
-    image: fluentd:latest
+    build: ./fluentd
+    # image: fluentd:latest
     container_name: fluentd
     ports:
       - 24224:24224
@@ -33,19 +34,22 @@ services:
     networks:
       - app_net
     restart: always
+    # privileged: true
     environment:
       - TZ=Asia/Shanghai
+      # - FLUENT_UID=0
     volumes:
-      - ./fluentd/etc/fluent.conf:/fluentd/etc/fluent.conf
+      - ./fluentd/conf/fluent.conf:/fluentd/etc/fluent.conf
+      - /var/lib/docker/containers:/var/lib/docker/containers
       # - ./fluentd/etc:/fluentd/etc
-      - /data/fluentd/log:/fluentd/log
+      # - /data/fluentd/log:/fluentd/log
 
   nginx:
     image: nginx:stable-alpine
     container_name: nginx
     ports:
-      - 1080:80
-      - 1443:443
+      - 80:80
+      - 443:443
     networks:
       - app_net
     restart: always

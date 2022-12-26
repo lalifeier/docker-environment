@@ -1,0 +1,24 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  minio:
+    image: quay.io/minio/minio
+    container_name: minio
+    ports:
+      - 9000:9000
+      - 9090:9090
+    networks:
+      - app_net
+    privileged: true
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=123456
+    volumes:
+      - /data/minio:/data
+    command: server /data --console-address ":9090"
