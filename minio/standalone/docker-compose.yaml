@@ -13,12 +13,12 @@ services:
       - 9090:9090
     networks:
       - app_net
-    privileged: true
+    # privileged: true
     restart: always
     environment:
       - TZ=Asia/Shanghai
-      - MINIO_ROOT_USER=admin
-      - MINIO_ROOT_PASSWORD=123456
+      - MINIO_ROOT_USER=minio
+      - MINIO_ROOT_PASSWORD=minio123
     volumes:
       - /data/minio:/data
     command: server /data --console-address ":9090"
