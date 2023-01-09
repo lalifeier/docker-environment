@@ -1,0 +1,73 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  rmqnamesrv:
+    image: apache/rocketmq:4.5.0
+    container_name: rmqnamesrv
+    ports:
+      - 9876:9876
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - JAVA_OPT=-server -Xms512m -Xmx512m
+    # volumes:
+    #   - /data/rocketmq/namesrv/logs:/home/rocketmq/logs
+    #   - /data/rocketmq/namesrv/store:/home/rocketmq/store
+    command: sh mqnamesrv
+
+  rmqbroker:
+    image: apache/rocketmq:4.5.0
+    container_name: rmqbroker
+    ports:
+      - 10909:10909
+      - 10911:10911
+      - 10912:10912
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - NAMESRV_ADDR=rmqnamesrv:9876
+      - JAVA_OPT_EXT=-server -Xms512M -Xmx512M -Xmn256m
+    # volumes:
+    #   - /data/rocketmq/broker/logs:/home/rocketmq/logs
+    #   - /data/rocketmq/broker/store:/home/rocketmq/store
+    #      - ./broker/conf/broker.conf:/home/rocketmq/rocketmq-4.5.0/conf/broker.conf
+    command: sh mqbroker
+    #    command: sh mqbroker -n namesrv:9876 -c ../conf/broker.conf
+    depends_on:
+      - rmqnamesrv
+
+  # rmqconsole:
+  #   image: styletang/rocketmq-console-ng
+  #   container_name: rmqconsole
+  #   ports:
+  #     - 8080:8080
+  #   networks:
+  #     - app_net
+  #   restart: always
+  #   environment:
+  #     - TZ=Asia/Shanghai
+  #     - JAVA_OPTS=-Drocketmq.namesrv.addr=rmqnamesrv:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false
+  #   depends_on:
+  #     - rmqnamesrv
+
+  rocketmq-dashboard:
+    image: apacherocketmq/rocketmq-dashboard:latest
+    container_name: rocketmq-dashboard
+    ports:
+      - 8080:8080
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - JAVA_OPTS=-Drocketmq.namesrv.addr=rmqnamesrv:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false
+    depends_on:
+      - rmqnamesrv
