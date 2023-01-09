@@ -16,6 +16,6 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - /data/openvpn:/conf:/etc/openvpn
+      - /data/openvpn:/etc/openvpn
     cap_add:
       - NET_ADMIN
