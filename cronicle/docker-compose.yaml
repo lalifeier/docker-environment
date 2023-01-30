@@ -1,0 +1,25 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  cronicle:
+    image: bluet/cronicle-docker:latest
+    container_name: cronicle
+    # hostname: cronicle
+    ports:
+      - 3012:3012
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      # - CRONICLE_base_app_url=http://cronicle/
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      # - /data/cronicle/data:/opt/cronicle/data:rw
+      # - /data/cronicle/logs:/opt/cronicle/logs:rw
+      # - /data/cronicle/plugins:/opt/cronicle/plugins:rw
+      # - /data/cronicle/app:/app:rw
