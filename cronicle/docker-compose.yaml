@@ -4,6 +4,7 @@ networks:
   app_net:
     external: true
 
+# The default credentials for the web interface are: admin / admin
 services:
   cronicle:
     image: bluet/cronicle-docker:latest
