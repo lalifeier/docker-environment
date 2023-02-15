@@ -49,4 +49,4 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_general_ci
   # volumes:
-  #   - /data/mysql/data:/var/lib/mysql
+  #   - /data/docker/mysql/data:/var/lib/mysql

@@ -20,8 +20,8 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - ./conf:/data/configdb
-      # - /data/mongo-replica/rs1/db:/data/db
-      # - /data/mongo-replica/rs1/log:/var/log/mongodb
+      # - /data/docker/mongo-replica/rs1/db:/data/db
+      # - /data/docker/mongo-replica/rs1/log:/var/log/mongodb
     command: mongod --config /data/configdb/mongod.conf
     healthcheck:
       test: test $$(echo "rs.status().ok" | mongo -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --quiet) -eq 1
@@ -52,8 +52,8 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - ./conf:/data/configdb
-      # - /data/mongo-replica/rs2/db:/data/db
-      # - /data/mongo-replica/rs2/log:/var/log/mongodb
+      # - /data/docker/mongo-replica/rs2/db:/data/db
+      # - /data/docker/mongo-replica/rs2/log:/var/log/mongodb
     command: mongod --config /data/configdb/mongod.conf
 
   mongo-rs3:
@@ -71,8 +71,8 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - ./conf:/data/configdb
-      # - /data/mongo-replica/rs3/db:/data/db
-      # - /data/mongo-replica/rs3/log:/var/log/mongodb
+      # - /data/docker/mongo-replica/rs3/db:/data/db
+      # - /data/docker/mongo-replica/rs3/log:/var/log/mongodb
     command: mongod --config /data/configdb/mongod.conf
 
   mongo-init:

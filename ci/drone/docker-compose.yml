@@ -25,7 +25,7 @@ services:
       - GITEA__database__USER=postgres
       - GITEA__database__PASSWD=123456
     volumes:
-      - /data/gitea/data:/data
+      - /data/docker/gitea/data:/data
     depends_on:
       - postgres
 
@@ -43,7 +43,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=123456
     volumes:
-      - /data/postgres/data:/var/lib/postgresql/data
+      - /data/docker/postgres/data:/var/lib/postgresql/data
 
   drone-server:
     image: drone/drone:latest
@@ -68,7 +68,7 @@ services:
       - DRONE_GITEA_CLIENT_SECRET=$DRONE_GITEA_CLIENT_SECRET
       - DRONE_GITEE_SKIP_VERIFY=false
     volumes:
-      - /data/drone/data:/data
+      - /data/docker/drone/data:/data
     depends_on:
       - postgres
 

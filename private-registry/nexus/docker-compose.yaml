@@ -16,4 +16,4 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - /data/nexus:/nexus-data
+      - /data/docker/nexus:/nexus-data

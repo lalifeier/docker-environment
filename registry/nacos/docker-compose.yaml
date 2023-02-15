@@ -29,5 +29,5 @@ services:
       - JVM_XMS=256m
       - JVM_XMX=256m
     volumes:
-      - /data/nacos/logs:/home/nacos/logs
-      # - /data/nacos/init.d/custom.properties:/home/nacos/init.d/custom.properties
+      - /data/docker/nacos/logs:/home/nacos/logs
+      # - /data/docker/nacos/init.d/custom.properties:/home/nacos/init.d/custom.properties

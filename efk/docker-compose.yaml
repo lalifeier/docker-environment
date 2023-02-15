@@ -18,7 +18,7 @@ services:
       - TZ=Asia/Shanghai
       - ALLOW_ANONYMOUS_LOGIN=yes
     # volumes:
-    #   - /data/zookeeper:/bitnami/zookeeper
+    #   - /data/docker/zookeeper:/bitnami/zookeeper
 
   kafka:
     image: "bitnami/kafka:latest"
@@ -48,7 +48,7 @@ services:
       # 开启JMX监控
       - JMX_PORT=9999
     # volumes:
-    #   - /data/kafka:/bitnami/kafka
+    #   - /data/docker/kafka:/bitnami/kafka
     depends_on:
       - zookeeper
 

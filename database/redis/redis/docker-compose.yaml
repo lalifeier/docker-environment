@@ -17,4 +17,4 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - ./redis.conf:/etc/redis/redis.conf
-      - /data/redis/data:/data
+      - /data/docker/redis/data:/data

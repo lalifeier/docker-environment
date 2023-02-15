@@ -19,7 +19,7 @@ services:
   #     - ./conf/:/etc/fluent-bit/:ro
   #     - ./fluentd/etc/fluent.conf:/fluentd/etc/fluent.conf
   #     # - ./fluentd/etc:/fluentd/etc
-  #     - /data/fluentd/log:/fluentd/log
+  #     - /data/docker/fluentd/log:/fluentd/log
   #   command:
   #     - /fluent-bit/bin/fluent-bit
   #     - --config=/etc/fluent-bit/fluent-bit.conf
@@ -42,7 +42,7 @@ services:
       - ./fluentd/conf/fluent.conf:/fluentd/etc/fluent.conf
       - /var/lib/docker/containers:/var/lib/docker/containers
       # - ./fluentd/etc:/fluentd/etc
-      # - /data/fluentd/log:/fluentd/log
+      # - /data/docker/fluentd/log:/fluentd/log
 
   nginx:
     image: nginx:stable-alpine
@@ -101,7 +101,7 @@ services:
       - JMX_PORT=9999
       # - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.rmi.port=9999
     # volumes:
-    #   - /data/kafka:/bitnami/kafka
+    #   - /data/docker/kafka:/bitnami/kafka
     depends_on:
       - zookeeper
 

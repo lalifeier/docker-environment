@@ -20,7 +20,7 @@ services:
       # - CRONICLE_base_app_url=http://cronicle/
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:rw
-      # - /data/cronicle/data:/opt/cronicle/data:rw
-      # - /data/cronicle/logs:/opt/cronicle/logs:rw
-      # - /data/cronicle/plugins:/opt/cronicle/plugins:rw
-      # - /data/cronicle/app:/app:rw
+      # - /data/docker/cronicle/data:/opt/cronicle/data:rw
+      # - /data/docker/cronicle/logs:/opt/cronicle/logs:rw
+      # - /data/docker/cronicle/plugins:/opt/cronicle/plugins:rw
+      # - /data/docker/cronicle/app:/app:rw

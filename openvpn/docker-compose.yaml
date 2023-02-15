@@ -16,6 +16,6 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - /data/openvpn:/etc/openvpn
+      - /data/docker/openvpn:/etc/openvpn
     cap_add:
       - NET_ADMIN

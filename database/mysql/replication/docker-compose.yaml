@@ -22,8 +22,8 @@ services:
       - MYSQL_REPLICATION_PASSWORD=backup123
     volumes:
       # - ./replication/mysql-master/conf:/etc/mysql/conf.d
-      - /data/replication/mysql-master/data:/var/lib/mysql
-      - /data/replication/mysql-master/logs:/var/log/mysql
+      - /data/docker/replication/mysql-master/data:/var/lib/mysql
+      - /data/docker/replication/mysql-master/logs:/var/log/mysql
 
   mysql-slave:
     image: mishamx/mysql
@@ -44,7 +44,7 @@ services:
       - MYSQL_MASTER_PORT=3306
     volumes:
       # - ./replication/mysql-slave/conf:/etc/mysql/conf.d
-      - /data/replication/mysql-slave/data:/var/lib/mysql
-      - /data/replication/mysql-slave/logs:/var/log/mysql
+      - /data/docker/replication/mysql-slave/data:/var/lib/mysql
+      - /data/docker/replication/mysql-slave/logs:/var/log/mysql
     depends_on:
       - mysql-master

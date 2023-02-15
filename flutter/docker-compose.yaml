@@ -20,8 +20,7 @@ services:
       # - UID=$(id -u)
       # - GID=$(id -g)
     volumes:
-      - /data/code:/data/code
-
+      - /data/docker/code:/data/code
 #   flutter-android:
 #     build:
 #       context: .
@@ -36,11 +35,10 @@ services:
 #       # - UID=$(id -u)
 #       # - GID=$(id -g)
 #     volumes:
-#       - /data/code:/data/code
+#       - /data/docker/code:/data/code
 #       - /dev/bus/usb:/dev/bus/usb
 #     devices:
 #       - /dev/bus
-
 
 # # xhost local:$USER
 #   flutter-android-emulator:
@@ -58,7 +56,7 @@ services:
 #       # - GID=$(id -g)
 #       # - DISPLAY
 #     volumes:
-#       - /data/code:/data/code
+#       - /data/docker/code:/data/code
 #       - /tmp/.X11-unix:/tmp/.X11-unix
 #     devices:
 #       - /dev/kvm
@@ -80,5 +78,5 @@ services:
 #       # - UID=$(id -u)
 #       # - GID=$(id -g)
 #     volumes:
-#       - /data/code:/data/code
+#       - /data/docker/code:/data/code
 #     entrypoint: flutter-web

@@ -24,7 +24,7 @@ services:
       - ZOO_SERVERS=0.0.0.0:12888:13888,zk2:22888:23888,zk3:32888:33888
     volumes:
       #   - ./zookeeper/conf/zoo.cfg:/opt/bitnami/zookeeper/conf/zoo.cfg
-      - /data/zookeeper-cluster/zk1/data:/bitnami/zookeeper/data
+      - /data/docker/zookeeper-cluster/zk1/data:/bitnami/zookeeper/data
 
   zk2:
     image: "bitnami/zookeeper:latest"
@@ -45,7 +45,7 @@ services:
       - ZOO_SERVERS=zk1:12888:13888,0.0.0.0:22888:23888,zk3:32888:33888
     volumes:
       #   - ./zookeeper/conf/zoo.cfg:/opt/bitnami/zookeeper/conf/zoo.cfg
-      - /data/zookeeper-cluster/zk2/data:/bitnami/zookeeper/data
+      - /data/docker/zookeeper-cluster/zk2/data:/bitnami/zookeeper/data
 
   zk3:
     image: "bitnami/zookeeper:latest"
@@ -66,4 +66,4 @@ services:
       - ZOO_SERVERS=zk1:12888:13888,zk2:22888:23888,0.0.0.0:32888:33888
     volumes:
       #   - ./zookeeper/conf/zoo.cfg:/opt/bitnami/zookeeper/conf/zoo.cfg
-      - /data/zookeeper-cluster/zk3/data:/bitnami/zookeeper/data
+      - /data/docker/zookeeper-cluster/zk3/data:/bitnami/zookeeper/data

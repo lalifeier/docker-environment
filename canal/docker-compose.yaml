@@ -22,8 +22,8 @@ services:
     volumes:
       - ./mysql/conf.d:/etc/mysql/conf.d
       - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-      # - /data/mysql/data:/var/lib/mysql
-      - /data/mysql/logs:/var/log/mysql
+      # - /data/docker/mysql/data:/var/lib/mysql
+      - /data/docker/mysql/logs:/var/log/mysql
 
   zookeeper:
     image: bitnami/zookeeper:latest
@@ -67,7 +67,7 @@ services:
       - JMX_PORT=9999
       # - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.rmi.port=9999
     # volumes:
-    #   - /data/kafka:/bitnami/kafka
+    #   - /data/docker/kafka:/bitnami/kafka
     depends_on:
       - zookeeper
 
@@ -148,7 +148,7 @@ services:
       # - canal.admin.register.cluster=test
     volumes:
       # - ./canal-server/conf:/home/admin/canal-server/conf
-      - /data/canal/server/logs:/home/admin/canal-server/logs
+      - /data/docker/canal/server/logs:/home/admin/canal-server/logs
     depends_on:
       - canal-admin
 
@@ -168,7 +168,7 @@ services:
   #   volumes:
   #     # - ./canal-adapter/conf/application.yml:/opt/canal/adapter/conf/application.yml
   #     - ./canal-adapter/conf:/opt/canal/adapter/conf
-  #     - /data/canal/adapter/logs:/opt/canal/adapter/logs
+  #     - /data/docker/canal/adapter/logs:/opt/canal/adapter/logs
   #   depends_on:
   #     - canal-server
 
@@ -190,6 +190,6 @@ services:
       - spring.datasource.username=root
       - spring.datasource.password=123456
     volumes:
-      - /data/canal/admin/logs:/home/admin/canal-admin/logs
+      - /data/docker/canal/admin/logs:/home/admin/canal-admin/logs
     depends_on:
       - mysql

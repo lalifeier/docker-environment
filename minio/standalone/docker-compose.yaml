@@ -20,5 +20,5 @@ services:
       - MINIO_ROOT_USER=minio
       - MINIO_ROOT_PASSWORD=minio123
     volumes:
-      - /data/minio:/data
+      - /data/docker/minio:/data
     command: server /data --console-address ":9090"

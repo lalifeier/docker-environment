@@ -16,5 +16,5 @@ services:
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - /data/nginx/logs:/var/log/nginx
-      - /data/code:/data/web
+      - /data/docker/nginx/logs:/var/log/nginx
+      - /data/docker/code:/data/web

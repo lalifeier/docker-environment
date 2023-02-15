@@ -25,8 +25,8 @@ services:
     volumes:
       - ./clickhouse/config.xml:/etc/clickhouse-server/config.xml
       - ./clickhouse/users.xml:/etc/clickhouse-server/users.xml
-      - /data/clickhouse-server/data:/var/lib/clickhouse
-      - /data/clickhouse-server/logs:/var/log/clickhouse-server
+      - /data/docker/clickhouse-server/data:/var/lib/clickhouse
+      - /data/docker/clickhouse-server/logs:/var/log/clickhouse-server
 
   prometheus:
     image: prom/prometheus
@@ -42,7 +42,7 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - /data/prometheus/data:/prometheus
+      - /data/docker/prometheus/data:/prometheus
 
   grafana:
     image: grafana/grafana:latest
@@ -59,4 +59,4 @@ services:
       # - GF_SECURITY_ADMIN_USER=admin
       # - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
-      - /data/grafana/data:/var/lib/grafana
+      - /data/docker/grafana/data:/var/lib/grafana

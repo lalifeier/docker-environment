@@ -24,4 +24,4 @@ services:
       - POSTGRES_PASSWORD=123456
       # - ALLOW_IP_RANGE=0.0.0.0/0
     volumes:
-      - /data/postgresql/standalone/data:/var/lib/postgresql/data
+      - /data/docker/postgresql/standalone/data:/var/lib/postgresql/data

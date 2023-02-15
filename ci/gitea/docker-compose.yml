@@ -25,7 +25,7 @@ services:
       - GITEA__database__USER=gitea
       - GITEA__database__PASSWD=123456
     volumes:
-      - /data/gitea/data:/data
+      - /data/docker/gitea/data:/data
     depends_on:
       - mysql
 
@@ -44,4 +44,4 @@ services:
       - MYSQL_PASSWORD=123456
       - MYSQL_DATABASE=gitea
     volumes:
-      - /data/mysql/data:/var/lib/mysql
+      - /data/docker/mysql/data:/var/lib/mysql

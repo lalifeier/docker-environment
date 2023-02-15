@@ -28,9 +28,9 @@ services:
     # - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     # - ./elasticsearch/config/certs:/usr/share/elasticsearch/config/certs
     # - ./elasticsearch/cert/elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12
-    # - /data/elasticsearch/data:/usr/share/elasticsearch/data
-    # - /data/elasticsearch/logs:/usr/share/elasticsearch/logs
-    # - /data/elasticsearch/plugins:/usr/share/elasticsearch/plugins
+    # - /data/docker/elasticsearch/data:/usr/share/elasticsearch/data
+    # - /data/docker/elasticsearch/logs:/usr/share/elasticsearch/logs
+    # - /data/docker/elasticsearch/plugins:/usr/share/elasticsearch/plugins
 
   skywalking-oap:
     image: apache/skywalking-oap-server:9.2.0

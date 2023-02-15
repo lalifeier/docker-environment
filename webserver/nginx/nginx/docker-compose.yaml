@@ -19,7 +19,7 @@ services:
     volumes:
       - ./etc/conf.d:/etc/nginx/conf.d
       - ./etc/nginx.conf:/etc/nginx/nginx.conf
-      - /data/nginx/logs:/var/log/nginx
+      - /data/docker/nginx/logs:/var/log/nginx
       - /code:/var/www/html
     # links:
     #   - php74-fpm:php74-fpm

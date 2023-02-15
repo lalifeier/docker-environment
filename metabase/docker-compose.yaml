@@ -16,7 +16,7 @@ services:
       - app_net
     restart: always
     volumes:
-      - /data/metabase/metabase-data:/metabase-data
+      - /data/docker/metabase/metabase-data:/metabase-data
       # - ./plugins:/plugins
       # - type: bind
       #   source: ./plugins

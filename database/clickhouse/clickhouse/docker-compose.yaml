@@ -23,5 +23,5 @@ services:
     volumes:
       - ./conf/config.xml:/etc/clickhouse-server/config.xml
       - ./conf/users.xml:/etc/clickhouse-server/users.xml
-      - /data/clickhouse-server/data:/var/lib/clickhouse
-      - /data/clickhouse-server/logs:/var/log/clickhouse-server
+      - /data/docker/clickhouse-server/data:/var/lib/clickhouse
+      - /data/docker/clickhouse-server/logs:/var/log/clickhouse-server

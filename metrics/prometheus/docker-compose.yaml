@@ -18,7 +18,7 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - ./conf/prometheus.yml:/etc/prometheus/prometheus.yml
-      - /data/prometheus/data:/prometheus
+      - /data/docker/prometheus/data:/prometheus
 
   grafana:
     image: grafana/grafana:latest
@@ -34,7 +34,7 @@ services:
       # - GF_SECURITY_ADMIN_USER=admin
       # - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
-      - /data/grafana/data:/var/lib/grafana
+      - /data/docker/grafana/data:/var/lib/grafana
 
   node_exporter:
     image: quay.io/prometheus/node-exporter:latest

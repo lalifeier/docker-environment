@@ -28,5 +28,5 @@ services:
     #   --lower_case_table_names=1
     volumes:
       - ./conf:/etc/mysql/conf.d
-      - /data/mysql/data:/var/lib/mysql
-      - /data/mysql/logs:/var/log/mysql
+      - /data/docker/mysql/data:/var/lib/mysql
+      - /data/docker/mysql/logs:/var/log/mysql

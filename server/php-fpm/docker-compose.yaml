@@ -20,7 +20,7 @@ services:
       - ./php81/php.ini:/usr/local/etc/php/php.ini
       - ./php81/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
       - ./php81/conf.d:/usr/local/etc/php/conf.d
-      - /data/php-fpm/php81/logs:/var/log/php-fpm
+      - /data/docker/php-fpm/php81/logs:/var/log/php-fpm
       - /code:/data
 
   php74-fpm:
@@ -38,5 +38,5 @@ services:
       - ./php74/php.ini:/usr/local/etc/php/php.ini
       - ./php74/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
       - ./php74/conf.d:/usr/local/etc/php/conf.d
-      - /data/php-fpm/php74/logs:/var/log/php-fpm
+      - /data/docker/php-fpm/php74/logs:/var/log/php-fpm
       - /code:/data

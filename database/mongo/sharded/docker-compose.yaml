@@ -23,8 +23,8 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./config-server/conf:/etc/mongo
-      # - /data/mongo/sharded/config/server1/db:/data/db
-      # - /data/mongo/sharded/config/server1/log:/var/log/mongodb
+      # - /data/docker/mongo/sharded/config/server1/db:/data/db
+      # - /data/docker/mongo/sharded/config/server1/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   mongo-config-server2:
@@ -44,8 +44,8 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./config-server/conf:/etc/mongo
-      # - /data/mongo/sharded/config/server2/db:/data/db
-      # - /data/mongo/sharded/config/server2/log:/var/log/mongodb
+      # - /data/docker/mongo/sharded/config/server2/db:/data/db
+      # - /data/docker/mongo/sharded/config/server2/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   mongo-config-server3:
@@ -65,8 +65,8 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./config-server/conf:/etc/mongo
-      # - /data/mongo/sharded/config/server3/db:/data/db
-      # - /data/mongo/sharded/config/server3/log:/var/log/mongodb
+      # - /data/docker/mongo/sharded/config/server3/db:/data/db
+      # - /data/docker/mongo/sharded/config/server3/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   # shard server Shard1: sh1r1 ~ sh1r3
@@ -87,8 +87,8 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./shard1-server/conf:/etc/mongo
-      # - /data/mongo/sharded/shard1/server1/db:/data/db
-      # - /data/mongo/sharded/shard1/server1/log:/var/log/mongodb
+      # - /data/docker/mongo/sharded/shard1/server1/db:/data/db
+      # - /data/docker/mongo/sharded/shard1/server1/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   mongo-shard1-server2:
@@ -108,8 +108,8 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./shard1-server/conf:/etc/mongo
-      # - /data/mongo/sharded/shard1/server2/db:/data/db
-      # - /data/mongo/sharded/shard1/server2/log:/var/log/mongodb
+      # - /data/docker/mongo/sharded/shard1/server2/db:/data/db
+      # - /data/docker/mongo/sharded/shard1/server2/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   mongo-shard1-server3:
@@ -129,8 +129,8 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./shard1-server/conf:/etc/mongo
-      # - /data/mongo/sharded/shard1/server3/db:/data/db
-      # - /data/mongo/sharded/shard1/server3/log:/var/log/mongodb
+      # - /data/docker/mongo/sharded/shard1/server3/db:/data/db
+      # - /data/docker/mongo/sharded/shard1/server3/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   # shard server Shard2: sh2r1 ~ sh2r3
@@ -151,8 +151,8 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./shard2-server/conf:/etc/mongo
-      # - /data/mongo/sharded/shard2/server1/db:/data/db
-      # - /data/mongo/sharded/shard2/server1/log:/var/log/mongodb
+      # - /data/docker/mongo/sharded/shard2/server1/db:/data/db
+      # - /data/docker/mongo/sharded/shard2/server1/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   mongo-shard2-server2:
@@ -172,8 +172,8 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./shard2-server/conf:/etc/mongo
-      # - /data/mongo/sharded/shard2/server2/db:/data/db
-      # - /data/mongo/sharded/shard2/server2/log:/var/log/mongodb
+      # - /data/docker/mongo/sharded/shard2/server2/db:/data/db
+      # - /data/docker/mongo/sharded/shard2/server2/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   mongo-shard2-server3:
@@ -193,8 +193,8 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./shard2-server/conf:/etc/mongo
-      # - /data/mongo/sharded/shard2/server3/db:/data/db
-      # - /data/mongo/sharded/shard2/server3/log:/var/log/mongodb
+      # - /data/docker/mongo/sharded/shard2/server3/db:/data/db
+      # - /data/docker/mongo/sharded/shard2/server3/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   # router
@@ -217,8 +217,8 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./mongos-server/conf:/etc/mongo
-      # - /data/mongo/sharded/mongos/server1/db:/data/db
-      # - /data/mongo/sharded/mongos/server1/log:/var/log/mongodb
+      # - /data/docker/mongo/sharded/mongos/server1/db:/data/db
+      # - /data/docker/mongo/sharded/mongos/server1/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   mongos-server2:
@@ -240,8 +240,8 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./mongos-server/conf:/etc/mongo
-      # - /data/mongo/sharded/mongos/server2/db:/data/db
-      # - /data/mongo/sharded/mongos/server2/log:/var/log/mongodb
+      # - /data/docker/mongo/sharded/mongos/server2/db:/data/db
+      # - /data/docker/mongo/sharded/mongos/server2/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf
 
   mongos-server3:
@@ -263,6 +263,6 @@ services:
     volumes:
       # - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ./mongos-server/conf:/etc/mongo
-      # - /data/mongo/sharded/mongos/server3/db:/data/db
-      # - /data/mongo/sharded/mongos/server3/log:/var/log/mongodb
+      # - /data/docker/mongo/sharded/mongos/server3/db:/data/db
+      # - /data/docker/mongo/sharded/mongos/server3/log:/var/log/mongodb
     command: mongod --config /etc/mongo/mongo.conf

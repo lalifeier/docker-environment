@@ -20,7 +20,7 @@ services:
       # - PULSAR_MEM=" -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g"
     # volumes:
     # - ./pulsar/conf:/pulsar/conf:rw
-    # - /data/pulsar/data:/pulsar/data:rw
+    # - /data/docker/pulsar/data:/pulsar/data:rw
     command: bin/pulsar standalone
     # command: >
     #   bash -c "bin/apply-config-from-env.py conf/broker.conf && \

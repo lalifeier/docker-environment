@@ -25,7 +25,7 @@ services:
     # volumes:
     # - ./zookeeper/bin/zkServer.sh:/opt/bitnami/zookeeper/bin/zkServer.sh
     #   - ./zookeeper/conf/zoo.cfg:/opt/bitnami/zookeeper/conf/zoo.cfg
-    #   - /data/zookeeper:/bitnami/zookeeper
+    #   - /data/docker/zookeeper:/bitnami/zookeeper
 
   kafka:
     image: "bitnami/kafka:latest"
@@ -56,7 +56,7 @@ services:
       - JMX_PORT=9999
       # - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.rmi.port=9999
     # volumes:
-    #   - /data/kafka:/bitnami/kafka
+    #   - /data/docker/kafka:/bitnami/kafka
     # - ./kafka/bin/kafka-server-start.sh:/opt/bitnami/kafka/bin/kafka-server-start.sh
     depends_on:
       - zookeeper
@@ -103,7 +103,7 @@ services:
   #     - ZK_HOSTS=zookeeper:2181
   #   volumes:
   #     - ./efak/conf/system-config.properties:/usr/local/efak/conf/system-config.properties
-  #     - /data/efak/logs:/usr/local/efak/logs
+  #     - /data/docker/efak/logs:/usr/local/efak/logs
   #   depends_on:
   #     - zookeeper
   #     - kafka

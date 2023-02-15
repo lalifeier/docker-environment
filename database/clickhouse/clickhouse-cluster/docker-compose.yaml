@@ -25,8 +25,8 @@ services:
       - ./ch1/conf/config.xml:/etc/clickhouse-server/config.xml
       - ./ch1/conf/users.xml:/etc/clickhouse-server/users.xml
       - ./ch1/conf/metrika.xml:/etc/metrika.xml
-      - /data/clickhouse-cluster/ch1/data:/var/lib/clickhouse
-      - /data/clickhouse-cluster/ch1/logs:/var/log/clickhouse-server
+      - /data/docker/clickhouse-cluster/ch1/data:/var/lib/clickhouse
+      - /data/docker/clickhouse-cluster/ch1/logs:/var/log/clickhouse-server
 
   ch2:
     image: yandex/clickhouse-server:latest
@@ -48,8 +48,8 @@ services:
       - ./ch2/conf/config.xml:/etc/clickhouse-server/config.xml
       - ./ch2/conf/users.xml:/etc/clickhouse-server/users.xml
       - ./ch2/conf/metrika.xml:/etc/metrika.xml
-      - /data/clickhouse-cluster/ch2/data:/var/lib/clickhouse
-      - /data/clickhouse-cluster/ch2/logs:/var/log/clickhouse-server
+      - /data/docker/clickhouse-cluster/ch2/data:/var/lib/clickhouse
+      - /data/docker/clickhouse-cluster/ch2/logs:/var/log/clickhouse-server
 
   ch3:
     image: yandex/clickhouse-server:latest
@@ -71,8 +71,8 @@ services:
       - ./ch3/conf/config.xml:/etc/clickhouse-server/config.xml
       - ./ch3/conf/users.xml:/etc/clickhouse-server/users.xml
       - ./ch3/conf/metrika.xml:/etc/metrika.xml
-      - /data/clickhouse-cluster/ch3/data:/var/lib/clickhouse
-      - /data/clickhouse-cluster/ch3/logs:/var/log/clickhouse-server
+      - /data/docker/clickhouse-cluster/ch3/data:/var/lib/clickhouse
+      - /data/docker/clickhouse-cluster/ch3/logs:/var/log/clickhouse-server
 
   ch4:
     image: yandex/clickhouse-server:latest
@@ -94,8 +94,8 @@ services:
       - ./ch4/conf/config.xml:/etc/clickhouse-server/config.xml
       - ./ch4/conf/users.xml:/etc/clickhouse-server/users.xml
       - ./ch4/conf/metrika.xml:/etc/metrika.xml
-      - /data/clickhouse-cluster/ch4/data:/var/lib/clickhouse
-      - /data/clickhouse-cluster/ch4/logs:/var/log/clickhouse-server
+      - /data/docker/clickhouse-cluster/ch4/data:/var/lib/clickhouse
+      - /data/docker/clickhouse-cluster/ch4/logs:/var/log/clickhouse-server
 
   ch5:
     image: yandex/clickhouse-server:latest
@@ -117,8 +117,8 @@ services:
       - ./ch5/conf/config.xml:/etc/clickhouse-server/config.xml
       - ./ch5/conf/users.xml:/etc/clickhouse-server/users.xml
       - ./ch5/conf/metrika.xml:/etc/metrika.xml
-      - /data/clickhouse-cluster/ch5/data:/var/lib/clickhouse
-      - /data/clickhouse-cluster/ch5/logs:/var/log/clickhouse-server
+      - /data/docker/clickhouse-cluster/ch5/data:/var/lib/clickhouse
+      - /data/docker/clickhouse-cluster/ch5/logs:/var/log/clickhouse-server
 
   ch6:
     image: yandex/clickhouse-server:latest
@@ -140,5 +140,5 @@ services:
       - ./ch6/conf/config.xml:/etc/clickhouse-server/config.xml
       - ./ch6/conf/users.xml:/etc/clickhouse-server/users.xml
       - ./ch6/conf/metrika.xml:/etc/metrika.xml
-      - /data/clickhouse-cluster/ch6/data:/var/lib/clickhouse
-      - /data/clickhouse-cluster/ch6/logs:/var/log/clickhouse-server
+      - /data/docker/clickhouse-cluster/ch6/data:/var/lib/clickhouse
+      - /data/docker/clickhouse-cluster/ch6/logs:/var/log/clickhouse-server

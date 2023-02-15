@@ -22,8 +22,8 @@ services:
       - XTRABACKUP_PASSWORD=pxc123
     volumes:
       # - ./pxc/node1/conf:/etc/mysql/conf.d
-      - /data/pxc/node1/data:/var/lib/mysql
-      - /data/pxc/node1/logs:/var/log/mysql
+      - /data/docker/pxc/node1/data:/var/lib/mysql
+      - /data/docker/pxc/node1/logs:/var/log/mysql
 
   pxc-node2:
     image: percona/percona-xtradb-cluster:5.7
@@ -43,8 +43,8 @@ services:
       - CLUSTER_JOIN=pxc-node1
     volumes:
       # - ./pxc/node2/conf:/etc/mysql/conf.d
-      - /data/pxc/node2/data:/var/lib/mysql
-      - /data/pxc/node2/logs:/var/log/mysql
+      - /data/docker/pxc/node2/data:/var/lib/mysql
+      - /data/docker/pxc/node2/logs:/var/log/mysql
     depends_on:
       - pxc-node1
 
@@ -66,7 +66,7 @@ services:
       - CLUSTER_JOIN=pxc-node1
     volumes:
       # - ./pxc/node3/conf:/etc/mysql/conf.d
-      - /data/pxc/node3/data:/var/lib/mysql
-      - /data/pxc/node3/logs:/var/log/mysql
+      - /data/docker/pxc/node3/data:/var/lib/mysql
+      - /data/docker/pxc/node3/logs:/var/log/mysql
     depends_on:
       - pxc-node1

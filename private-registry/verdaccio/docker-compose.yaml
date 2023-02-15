@@ -21,5 +21,5 @@ services:
       # - VERDACCIO_PORT=4873
     volumes:
       - ./conf:/verdaccio/conf
-      - /data/verdaccio/storage:/verdaccio/storage
-      - /data/verdaccio/plugins:/verdaccio/plugins
+      - /data/docker/verdaccio/storage:/verdaccio/storage
+      - /data/docker/verdaccio/plugins:/verdaccio/plugins

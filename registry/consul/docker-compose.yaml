@@ -19,4 +19,4 @@ services:
       - app_net
     restart: always
     volumes:
-      - /data/consul/data:/bitnami
+      - /data/docker/consul/data:/bitnami

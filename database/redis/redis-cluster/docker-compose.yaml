@@ -21,7 +21,7 @@ services:
       - REDIS_NODES=redis-node1 redis-node2 redis-node3
     volumes:
       # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-      - /data/redis-cluster/node1/data:/bitnami/redis/data
+      - /data/docker/redis-cluster/node1/data:/bitnami/redis/data
 
   redis-node2:
     image: bitnami/redis-cluster:latest
@@ -39,7 +39,7 @@ services:
       - REDIS_NODES=redis-node1 redis-node2 redis-node3
     volumes:
       # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-      - /data/redis-cluster/node2/data:/bitnami/redis/data
+      - /data/docker/redis-cluster/node2/data:/bitnami/redis/data
 
   redis-node3:
     image: bitnami/redis-cluster:latest
@@ -57,4 +57,4 @@ services:
       - REDIS_NODES=redis-node1 redis-node2 redis-node3
     volumes:
       # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-      - /data/redis-cluster/node3/data:/bitnami/redis/data
+      - /data/docker/redis-cluster/node3/data:/bitnami/redis/data

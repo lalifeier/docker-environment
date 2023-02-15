@@ -20,7 +20,7 @@ services:
     command: jobmanager
     volumes:
       # - ./jobmanager/conf/flink-conf.yaml:/opt/flink/conf/flink-conf.yaml
-      - /data/flink/jobmanager:/opt/flink/usrlib
+      - /data/docker/flink/jobmanager:/opt/flink/usrlib
     environment:
       - TZ=Asia/Shanghai
       - |
@@ -42,7 +42,7 @@ services:
     # scale: 1
     volumes:
       # - ./taskmanager/conf/flink-conf.yaml:/opt/flink/conf/flink-conf.yaml
-      - /data/flink/taskmanager:/opt/flink/usrlib
+      - /data/docker/flink/taskmanager:/opt/flink/usrlib
     environment:
       - TZ=Asia/Shanghai
       - |

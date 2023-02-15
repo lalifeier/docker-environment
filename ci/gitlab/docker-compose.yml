@@ -20,6 +20,6 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - /data/gitlab/etc:/etc/gitlab
-      - /data/gitlab/log:/var/log/gitlab
-      - /data/gitlab/opt:/var/opt/gitlab
+      - /data/docker/gitlab/etc:/etc/gitlab
+      - /data/docker/gitlab/log:/var/log/gitlab
+      - /data/docker/gitlab/opt:/var/opt/gitlab

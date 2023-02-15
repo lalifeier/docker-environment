@@ -17,4 +17,4 @@ services:
       - TZ=Asia/Shanghai
       # - MEILI_MASTER_KEY=
     volumes:
-      - /data/meilisearch/data:/meili_data
+      - /data/docker/meilisearch/data:/meili_data

@@ -22,8 +22,8 @@ services:
       # - MINIO_SERVER_URL=
       # - MINIO_BROWSER_REDIRECT_URL=
     volumes:
-      - /data/minio1/data1:/data1
-      - /data/minio1/data2:/data2
+      - /data/docker/minio1/data1:/data1
+      - /data/docker/minio1/data2:/data2
     command: server --console-address ":9090" http://minio{1...4}/data{1...2}
 
   minio2:
@@ -41,8 +41,8 @@ services:
       - MINIO_ROOT_USER=minio
       - MINIO_ROOT_PASSWORD=minio123
     volumes:
-      - /data/minio2/data1:/data1
-      - /data/minio2/data2:/data2
+      - /data/docker/minio2/data1:/data1
+      - /data/docker/minio2/data2:/data2
     command: server --console-address ":9090" http://minio{1...4}/data{1...2}
 
   minio3:
@@ -60,8 +60,8 @@ services:
       - MINIO_ROOT_USER=minio
       - MINIO_ROOT_PASSWORD=minio123
     volumes:
-      - /data/minio3/data1:/data1
-      - /data/minio3/data2:/data2
+      - /data/docker/minio3/data1:/data1
+      - /data/docker/minio3/data2:/data2
     command: server --console-address ":9090" http://minio{1...4}/data{1...2}
 
   minio4:
@@ -79,8 +79,8 @@ services:
       - MINIO_ROOT_USER=minio
       - MINIO_ROOT_PASSWORD=minio123
     volumes:
-      - /data/minio4/data1:/data1
-      - /data/minio4/data2:/data2
+      - /data/docker/minio4/data1:/data1
+      - /data/docker/minio4/data2:/data2
     command: server --console-address ":9090" http://minio{1...4}/data{1...2}
 
   nginx:
@@ -97,7 +97,7 @@ services:
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      # - /data/nginx/logs:/var/log/nginx
+      # - /data/docker/nginx/logs:/var/log/nginx
     depends_on:
       - minio1
       - minio2

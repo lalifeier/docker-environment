@@ -19,5 +19,5 @@ services:
     volumes:
       - ./etc/conf.d:/etc/nginx/conf.d
       - ./etc/nginx.conf:/etc/nginx/nginx.conf
-      - /data/openresty/logs:/var/log/nginx
+      - /data/docker/openresty/logs:/var/log/nginx
       - /code:/var/www/html

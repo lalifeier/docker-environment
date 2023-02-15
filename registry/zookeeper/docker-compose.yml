@@ -20,4 +20,4 @@ services:
       - ALLOW_ANONYMOUS_LOGIN=yes
     volumes:
       #   - ./zookeeper/conf/zoo.cfg:/opt/bitnami/zookeeper/conf/zoo.cfg
-      - /data/zookeeper:/bitnami/zookeeper
+      - /data/docker/zookeeper:/bitnami/zookeeper

@@ -21,7 +21,7 @@ services:
       - REDIS_PASSWORD=''
     volumes:
       #   # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-      - /data/redis-cluster/node1/data:/bitnami/redis/data
+      - /data/docker/redis-cluster/node1/data:/bitnami/redis/data
 
   redis-slave-node1:
     image: "bitnami/redis:latest"
@@ -41,7 +41,7 @@ services:
       - REDIS_MASTER_PASSWORD=''
     volumes:
       # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-      - /data/redis-cluster/node1/data:/bitnami/redis/data
+      - /data/docker/redis-cluster/node1/data:/bitnami/redis/data
     depends_on:
       - redis-master
 
@@ -63,7 +63,7 @@ services:
       - REDIS_MASTER_PASSWORD=''
     volumes:
       # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-      - /data/redis-cluster/node1/data:/bitnami/redis/data
+      - /data/docker/redis-cluster/node1/data:/bitnami/redis/data
     depends_on:
       - redis-master
 
@@ -84,7 +84,7 @@ services:
       - REDIS_SENTINEL_DOWN_AFTER_MILLISECONDS=1000
     volumes:
       # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-      - /data/redis-cluster/node1/data:/bitnami/redis/data
+      - /data/docker/redis-cluster/node1/data:/bitnami/redis/data
     depends_on:
       - redis-master
       - redis-slave-node1
@@ -107,7 +107,7 @@ services:
       - REDIS_SENTINEL_DOWN_AFTER_MILLISECONDS=1000
     volumes:
       # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-      - /data/redis-cluster/node1/data:/bitnami/redis/data
+      - /data/docker/redis-cluster/node1/data:/bitnami/redis/data
     depends_on:
       - redis-master
       - redis-slave-node1
@@ -130,7 +130,7 @@ services:
       - REDIS_SENTINEL_DOWN_AFTER_MILLISECONDS=1000
     volumes:
       # - ./redis-cluster/node1/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf
-      - /data/redis-cluster/node1/data:/bitnami/redis/data
+      - /data/docker/redis-cluster/node1/data:/bitnami/redis/data
     depends_on:
       - redis-master
       - redis-slave-node1
