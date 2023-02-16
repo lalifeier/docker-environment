@@ -1,0 +1,21 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  dingtalk-chatgpt:
+    image: dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+    container_name: dingtalk-chatgpt
+    ports:
+      - 8090:8090
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - APIKEY=
+      - SESSION_TIMEOUT=600
+    # volumes:
+    # - ./config.json:/app/config.json

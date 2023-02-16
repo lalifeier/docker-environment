@@ -1,0 +1,17 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  wechat-chatgpt:
+    image: holegots/wechat-chatgpt:1.0.2
+    container_name: wechat-chatgpt
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./config.yaml:/app/config.yaml

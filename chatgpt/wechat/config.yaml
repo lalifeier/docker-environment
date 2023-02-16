@@ -1,0 +1,6 @@
+chatGPTAccountPool:
+  - email:
+    password:
+    isGoogleLogin: true
+chatPrivateTiggerKeyword: ""
+openAIProxy:
