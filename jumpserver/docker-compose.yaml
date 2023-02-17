@@ -1,0 +1,71 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - 3306:3306
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=jumpserver
+      - MYSQL_USER=jumpserver
+      - MYSQL_PASSWORD=123456
+    volumes:
+      - /data/docker/mysql/data:/var/lib/mysql
+      - /data/docker/mysql/logs:/var/log/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - 6379:6379
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /data/docker/redis/data:/data
+    command: >
+      --bind 127.0.0.1
+      --protected-mode no
+      --appendonly yes
+      --requirepass 123456
+
+  # user admin
+  # password admin
+  jumpserver:
+    image: jumpserver/jms_all:latest
+    container_name: jumpserver
+    ports:
+      - 80:80
+      - 2222:2222
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - SECRET_KEY=$SECRET_KEY
+      - BOOTSTRAP_TOKEN=$BOOTSTRAP_TOKEN
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=jumpserver
+      - DB_PASSWORD=123456
+      - DB_NAME=jumpserver
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=123456
+    volumes:
+      - /data/docker/jumpserver:/opt/jumpserver/data/media
