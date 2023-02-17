@@ -42,12 +42,11 @@ services:
       --bind 127.0.0.1
       --protected-mode no
       --appendonly yes
-      --requirepass 123456
 
   # user admin
   # password admin
   jumpserver:
-    image: jumpserver/jms_all:latest
+    image: jumpserver/jms_all:v2.28.7
     container_name: jumpserver
     ports:
       - 80:80
@@ -66,6 +65,8 @@ services:
       - DB_NAME=jumpserver
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - REDIS_PASSWORD=123456
     volumes:
       - /data/docker/jumpserver:/opt/jumpserver/data/media
+    depends_on:
+      - mysql
+      - redis
