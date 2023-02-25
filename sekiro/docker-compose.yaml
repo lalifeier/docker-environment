@@ -1,0 +1,19 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  sekiro:
+    build:
+      context: .
+    image: sekiro
+    container_name: sekiro
+    ports:
+      - 5612:5612
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
