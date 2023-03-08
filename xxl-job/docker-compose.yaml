@@ -1,0 +1,56 @@
+version: "3.7"
+
+networks:
+  app_net:
+    external: true
+
+services:
+  # http://localhost:8086/xxl-job-admin
+  # user admin
+  # password 123456
+  xxl-job:
+    image: xuxueli/xxl-job-admin:2.3.1
+    container_name: xxl-job
+    ports:
+      - 8080:8080
+    networks:
+      - app_net
+    restart: always
+    volumes:
+      - /data/docker/xxl-job/logs:/data/applogs
+    environment:
+      - TZ=Asia/Shanghai
+      - JAVA_OPTS=-Xmx512m
+      # - PARAMS=--spring.datasource.url=jdbc:mysql://mysql:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai --spring.datasource.username=root --spring.datasource.password=123456 --xxl.job.accessToken=
+      - spring_datasource_url=jdbc:mysql://mysql:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+      - spring_datasource_username=root
+      - spring_datasource_password=123456
+      # - spring_mail_host=
+      # - spring_mail_port=
+      # - spring_mail_username=
+      # - spring_mail_password=
+      # - xxl_job_accessToken=
+      # - xxl_job_i18n=
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - 3306:3306
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_USER=xxl-job
+      - MYSQL_PASSWORD=123456
+      - MYSQL_DATABASE=xxl-job
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+    volumes:
+      - ./xxl-job/tables_xxl_job.sql:/docker-entrypoint-initdb.d/init.sql
+      - /data/docker/mysql/data:/var/lib/mysql
