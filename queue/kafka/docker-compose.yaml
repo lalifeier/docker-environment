@@ -75,6 +75,7 @@ services:
   #     - zookeeper
   #     - kafka
 
+  # admin/123456
   efak:
     image: nickzurich/kafka-eagle:latest
     container_name: efak
@@ -109,3 +110,19 @@ services:
   #     - kafka
   #   stdin_open: true
   #   tty: true
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    container_name: kafdrop
+    ports:
+      - 9000:9000
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - KAFKA_BROKERCONNECT=kafka:9092
+      - JVM_OPTS=-Xms32M -Xmx64M
+      - SERVER_SERVLET_CONTEXTPATH=/
+    depends_on:
+      - kafka
