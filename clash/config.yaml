@@ -35,7 +35,7 @@ dns:
   enable: true
   ipv6: false
   listen: 0.0.0.0:1053
-  enhanced-mode: redir-host # redir-host or fake-ip
+  # enhanced-mode: redir-host # redir-host or fake-ip
   # fake-ip-range: 198.18.0.1/16 # Fake IP addresses pool CIDR
   use-hosts: true # lookup hosts and return IP record
   nameserver:
@@ -293,4 +293,7 @@ rules:
   - RULE-SET,gfw,PROXY
   - RULE-SET,greatfire,PROXY
   - RULE-SET,telegramcidr,PROXY
+  - DOMAIN,chatbot.theb.ai,PROXY
+  - DOMAIN-SUFFIX,bing.com,PROXY
+  - DOMAIN-SUFFIX,ngocn2.org,PROXY
   - MATCH,DIRECT
