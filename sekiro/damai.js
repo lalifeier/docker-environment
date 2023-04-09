@@ -4,7 +4,7 @@
 // @version      0.1
 // @description  try to take over the world!
 // @author       lalifeier
-// @match        *://*.damai.cn/*
+// @match        *://m.damai.cn/*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @grant        none
 // ==/UserScript==
@@ -184,11 +184,20 @@
     // http://127.0.0.1:5612/business-demo/invoke?group=damai-ticket&action=getUA
     client.registerAction("getUA", function (request, resolve, reject) {
       // console.log(request);
+
+
       data = {
         // window.__acjs_awsc_140.getUA()
         'ua': AWSC.configFY().getUA(),
-        'bx-ua': AWSC.configFYEx().fyObj.getFYToken(),
-        'bx-umidtoken': AWSC.configFYEx().fyObj.getUidToken()
+        'bx-ua': AWSC.configFYEx().fyObj.getFYToken({loadTime: 18, location: "cn", timeout: 2000}),
+        'bx-umidtoken': AWSC.configFYEx().fyObj.getUidToken({
+          MaxFocusLog: 3,
+          MaxKSLog: 5,
+          MaxMTLog: 20,
+          MaxNGPLog: 10,
+          location: "cn",
+          timeout: 2000
+        })
       }
       resolve({data});
     });
