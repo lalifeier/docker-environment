@@ -5,6 +5,36 @@ networks:
     external: true
 
 services:
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - 8080:8080
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    ports:
+      - 9100:9100
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - "/:/host:ro,rslave"
+
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -18,7 +48,7 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - ./conf/prometheus.yml:/etc/prometheus/prometheus.yml
-      - /data/docker/prometheus/data:/prometheus
+      # - /data/docker/prometheus/data:/prometheus
 
   grafana:
     image: grafana/grafana:latest
@@ -33,18 +63,5 @@ services:
       - TZ=Asia/Shanghai
       # - GF_SECURITY_ADMIN_USER=admin
       # - GF_SECURITY_ADMIN_PASSWORD=admin
-    volumes:
-      - /data/docker/grafana/data:/var/lib/grafana
-
-  node_exporter:
-    image: quay.io/prometheus/node-exporter:latest
-    container_name: node_exporter
-    ports:
-      - 9100:9100
-    networks:
-      - app_net
-    restart: always
-    environment:
-      - TZ=Asia/Shanghai
-    volumes:
-      - "/:/host:ro,rslave"
+    # volumes:
+    #   - /data/docker/grafana/data:/var/lib/grafana
