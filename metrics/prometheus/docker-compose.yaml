@@ -48,7 +48,15 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - ./conf/prometheus.yml:/etc/prometheus/prometheus.yml
-      # - /data/docker/prometheus/data:/prometheus
+      # - ./prometheus/rules/:/etc/prometheus/rules/
+      - /data/docker/prometheus/data:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      # - --web.console.libraries=/etc/prometheus/console_libraries
+      # - --web.console.templates=/etc/prometheus/consoles
+      # - --storage.tsdb.retention=200h
+      # - --web.enable-lifecycle
 
   grafana:
     image: grafana/grafana:latest
@@ -63,5 +71,26 @@ services:
       - TZ=Asia/Shanghai
       # - GF_SECURITY_ADMIN_USER=admin
       # - GF_SECURITY_ADMIN_PASSWORD=admin
-    # volumes:
-    #   - /data/docker/grafana/data:/var/lib/grafana
+    volumes:
+      - /data/docker/grafana/data:/var/lib/grafana
+      # - ./grafana/datasources:/etc/grafana/datasources
+    depends_on:
+      - prometheus
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    hostname: alertmanager
+    ports:
+      - 9093:9093
+    networks:
+      - app_net
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./conf/alertmanager.yml:/etc/alertmanager.yml
+      - /data/docker/alertmanager/data:/alertmanager
+    command:
+      - --config.file=/etc/alertmanager.yml
+      - --storage.path=/alertmanager
