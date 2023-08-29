@@ -21,6 +21,7 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - ./Country.mmdb:/root/.config/clash/Country.mmdb
+      - ./ruleset:/root/.config/clash/ruleset
       - ./config.yaml:/root/.config/clash/config.yaml
       - ./ui:/ui # dashboard volume
     # # TUN

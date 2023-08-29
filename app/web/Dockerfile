@@ -1,52 +1,32 @@
-ARG APP_PATH=/app
+FROM node:lts-slim AS dependencies
+WORKDIR /workspace/app
 
-# Stage: staging
-FROM node:lts-slim AS staging
-
-ARG APP_PATH
-
-WORKDIR $APP_PATH
-
-RUN npm install -g pnpm && \
-    pnpm config set registry https://registry.npmmirror.com
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
 COPY .npmrc package.json pnpm-lock.yaml ./
 
-RUN pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm-cache,target=~/.local/share/pnpm/store pnpm install --frozen-lockfile
+
+FROM dependencies AS builder
+WORKDIR /workspace/app
 
 COPY . .
 
+RUN pnpm run -r build
 
-# Stage: development
-FROM staging as development
+FROM dependencies AS dev
+WORKDIR /workspace/app
 
-ARG APP_PATH
+COPY . .
 
-WORKDIR $APP_PATH
+CMD [ "pnpm", "dev" ]
 
-RUN pnpm install
+FROM nginx:stable-alpine AS prod
+WORKDIR /workspace/app
 
-CMD ["pnpm", "dev"]
-
-
-# Stage: build
-FROM staging as build
-
-ARG APP_PATH
-
-WORKDIR $APP_PATH
-
-RUN pnpm build
-
-
-# Stage: production
-FROM nginx:stable-alpine AS production
-
-ARG APP_PATH
-
-WORKDIR $APP_PATH
-
-COPY --from=build $APP_PATH/dist /usr/share/nginx/html
-COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /workspace/app/dist /usr/share/nginx/html
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 CMD ["nginx", "-g", "daemon off;"]
