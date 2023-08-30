@@ -7,7 +7,7 @@ RUN corepack enable
 
 COPY .npmrc package.json pnpm-lock.yaml ./
 
-RUN --mount=type=cache,id=pnpm-cache,target=~/.local/share/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm-cache,target=~/.local/share/pnpm/store,sharing=locked pnpm install --frozen-lockfile
 
 FROM dependencies AS builder
 WORKDIR /workspace/app

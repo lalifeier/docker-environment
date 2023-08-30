@@ -1,31 +1,29 @@
-ARG APP_PATH=/app
-ARG APP_NANE=hello
-
-FROM golang:alpine AS build
+FROM golang:alpine AS builder
+WORKDIR /workspace/app
 
 ENV CGO_ENABLED 0 \
     GOOS linux \
     GOPROXY https://goproxy.cn,direct
 
-ARG APP_PATH
-ARG APP_NANE
-WORKDIR $APP_PATH
-
 COPY go.mod go.sum ./
-RUN go mod download
+
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=~/.cache/go-build \
+    go mod download
 
 COPY . .
 
-RUN go build -ldflags="-s -w" -o $APP_PATH/$APP_NANE ./main.go
+RUN --mount=type=cache,target=/root/.cache/go-build CGO_ENABLED=0 go build -ldflags "-s -w" -o app .
 
 FROM alpine
+WORKDIR /workspace/app
 
 RUN apk update --no-cache && apk add --no-cache ca-certificates tzdata
 
-ARG APP_PATH
-ARG APP_NANE
-WORKDIR $APP_PATH
+COPY --from=builder /workspace/app/app .
 
-COPY --from=build $APP_PATH/$APP_NANE $APP_PATH/$APP_NANE
+CMD ["sh", "-c", "./app"]
 
-CMD ["sh", "-c", "${APP_NANE}"]
+
+
+

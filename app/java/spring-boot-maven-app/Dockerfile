@@ -1,19 +1,20 @@
+
 # FROM eclipse-temurin:17-jdk AS builder
-FROM gradle:8.1.1-jdk17-focal AS builder
+FROM maven:3.8.4-openjdk-17-slim AS builder
 WORKDIR /workspace/app
 
-# COPY gradle/ ./gradle/
-# COPY buildSrc/ ./buildSrc/
-# COPY *.gradle.kts gradle.properties gradlew ./
+COPY pom.xml ./
+RUN --mount=type=cache,id=mvn-cache,target=~/.m2,sharing=locked mvn -e -B dependency:resolve
 
-COPY . .
+COPY ./src ./src
+# RUN mvn clean install -Dmaven.test.skip=true
+RUN --mount=type=cache,id=mvn-cache,target=~/.m2,sharing=locked mvn -e -B package -DskipTests
 
-RUN --mount=type=cache,id=gradle-cache,target=~/.gradle gradle clean build -x test --no-daemon --info
 
 FROM eclipse-temurin:17-jre-alpine AS layers-builder
 WORKDIR /workspace/app
 
-COPY --from=builder build/libs/*.jar app.jar
+COPY --from=builder /workspace/app/target/*.jar app.jar
 RUN java -Djarmode=layertools -jar app.jar extract
 
 FROM eclipse-temurin:17-jre-alpine
