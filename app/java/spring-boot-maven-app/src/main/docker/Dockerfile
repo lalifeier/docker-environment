@@ -10,7 +10,6 @@ COPY ./src ./src
 # RUN mvn clean install -Dmaven.test.skip=true
 RUN --mount=type=cache,id=mvn-cache,target=~/.m2,sharing=locked mvn -e -B package -DskipTests
 
-
 FROM eclipse-temurin:17-jre-alpine AS layers-builder
 WORKDIR /workspace/app
 

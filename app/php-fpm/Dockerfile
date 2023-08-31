@@ -5,7 +5,7 @@ RUN apk update && apk add unzip
 ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-WORKDIR /app
+WORKDIR /workspace/app
 
 COPY ./composer.json ./composer.lock ./
 
@@ -21,7 +21,7 @@ RUN mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 COPY ./docker/common/php/conf.d /usr/local/etc/php/conf.d
 COPY ./docker/production/php/conf.d /usr/local/etc/php/conf.d
 
-WORKDIR /app
+WORKDIR /workspace/app
 
-COPY --from=build /app ./
+COPY --from=build /workspace/app ./
 COPY ./ ./

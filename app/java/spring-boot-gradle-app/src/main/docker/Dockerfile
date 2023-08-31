@@ -2,6 +2,7 @@
 FROM gradle:8.1.1-jdk17-focal AS builder
 WORKDIR /workspace/app
 
+
 COPY gradle/ ./gradle/
 # COPY buildSrc/ ./buildSrc/
 COPY *.gradle.kts gradle.properties gradlew gradlew.bat ./
