@@ -87,16 +87,16 @@ proxy-providers:
       # lazy: true
       url: https://www.gstatic.com/generate_204
 
-  # freenode:
-  #   type: http
-  #   path: ./freenode.yaml
-  #   url: https://ghproxy.com/https://raw.githubusercontent.com/openrunner/clash-freenode@main/clash.yaml
-  #   interval: 7200
-  #   health-check:
-  #     enable: true
-  #     interval: 600
-  #     # lazy: true
-  #     url: https://www.gstatic.com/generate_204
+  freenode:
+    type: http
+    path: ./freenode.yaml
+    url: https://ghproxy.com/https://raw.githubusercontent.com/openrunner/clash-freenode/main/clash.yaml
+    interval: 7200
+    health-check:
+      enable: true
+      interval: 600
+      # lazy: true
+      url: https://www.gstatic.com/generate_204
 
   tbbatbb:
     type: http
@@ -131,16 +131,16 @@ proxy-providers:
   #     # lazy: true
   #     url: https://www.gstatic.com/generate_204
 
-  subscribe:
-    type: http
-    path: ./subscribe.yaml
-    url: https://ghproxy.com/https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml
-    interval: 7200
-    health-check:
-      enable: true
-      interval: 600
-      # lazy: true
-      url: https://www.gstatic.com/generate_204
+  # subscribe:
+  #   type: http
+  #   path: ./subscribe.yaml
+  #   url: https://ghproxy.com/https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml
+  #   interval: 7200
+  #   health-check:
+  #     enable: true
+  #     interval: 600
+  #     # lazy: true
+  #     url: https://www.gstatic.com/generate_204
 
 # 代理组策略
 proxy-groups:
@@ -152,7 +152,8 @@ proxy-groups:
       - tbbatbb
       # - free_proxy_ss
       # - sub
-      - subscribe
+      # - subscribe
+      - freenode
     proxies:
       # - ♻️ 自动选择
       - DIRECT
