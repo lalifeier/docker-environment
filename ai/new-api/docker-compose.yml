@@ -1,0 +1,21 @@
+version: "2"
+services:
+  new-api:
+    image: calciumion/new-api:latest
+    container_name: new-api
+    command: --log-dir /app/logs
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/data
+      - ./logs:/app/logs
+    environment:
+      - SQL_DSN=root:123456@tcp(mysql:3306)/new-api  # Point to the mysql service
+      - REDIS_CONN_STRING=redis://redis
+      - TZ=Asia/Shanghai
+      #      - SESSION_SECRET=random_string  # 多机部署时设置，必须修改这个随机字符串！！！！！！！
+      #      - NODE_TYPE=slave  # Uncomment for slave node in multi-node deployment
+      #      - SYNC_FREQUENCY=60  # Uncomment if regular database syncing is needed
+      #      - FRONTEND_BASE_URL=https://openai.justsong.cn  # Uncomment for multi-node deployment with front-end URL
+
+
