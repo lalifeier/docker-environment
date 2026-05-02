@@ -1,0 +1,117 @@
+version: "3.7"
+
+services:
+  cli-proxy-api:
+    image: eceasy/cli-proxy-api:latest
+    pull_policy: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VERSION: ${VERSION:-dev}
+        COMMIT: ${COMMIT:-none}
+        BUILD_DATE: ${BUILD_DATE:-unknown}
+    container_name: cli-proxy-api
+    # env_file:
+    #   - .env
+    environment:
+      DEPLOY: ${DEPLOY:-}
+      HTTP_PROXY: http://172.17.0.1:7890
+      HTTPS_PROXY: http://172.17.0.1:7890
+      NO_PROXY: localhost,127.0.0.1,.local,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+    ports:
+      - "22:22"
+      - "8317:8317"
+      - "8085:8085"
+      - "1455:1455"
+      - "54545:54545"
+      - "51121:51121"
+      - "11451:11451"
+    restart: always
+    volumes:
+      - ./CLIProxyAPI/config.yaml:/CLIProxyAPI/config.yaml
+      - ./CLIProxyAPI/auths:/root/.cli-proxy-api
+      - /data/docker/CLIProxyAPI/logs:/CLIProxyAPI/logs
+    dns:
+      - 223.5.5.5
+      - 101.226.4.6
+
+  # grok2api:
+  #   container_name: grok2api
+  #   image: ghcr.io/chenyme/grok2api:latest
+  #   ports:
+  #     - "${HOST_PORT:-8000}:${SERVER_PORT:-8000}"
+  #   networks:
+  #     - app_net
+  #   restart: always
+  #   environment:
+  #     TZ: Asia/Shanghai
+  #     LOG_LEVEL: ${LOG_LEVEL:-DEBUG}
+  #     SERVER_HOST: ${SERVER_HOST:-0.0.0.0}
+  #     SERVER_PORT: ${SERVER_PORT:-8000}
+  #     SERVER_WORKERS: ${SERVER_WORKERS:-1}
+  #     ACCOUNT_STORAGE: ${ACCOUNT_STORAGE:-local}
+  #     ACCOUNT_LOCAL_PATH: ${ACCOUNT_LOCAL_PATH:-data/accounts.db}
+  #     ACCOUNT_REDIS_URL: ${ACCOUNT_REDIS_URL:-}
+  #     ACCOUNT_MYSQL_URL: ${ACCOUNT_MYSQL_URL:-}
+  #     ACCOUNT_POSTGRESQL_URL: ${ACCOUNT_POSTGRESQL_URL:-}
+  #     # 启用 CF 自动刷新: 取消以下三行注释，并取消底部 flaresolverr 服务的注释
+  #     # FLARESOLVERR_URL: http://flaresolverr:8191
+  #     # CF_REFRESH_INTERVAL: "600"
+  #     # CF_TIMEOUT: "60"
+
+  #     # ACCOUNT_STORAGE: local | redis | mysql | postgresql
+  #     # ACCOUNT_LOCAL_PATH: SQLite path when ACCOUNT_STORAGE=local
+  #     # ACCOUNT_REDIS_URL: Redis DSN when ACCOUNT_STORAGE=redis
+  #     # ACCOUNT_MYSQL_URL: MySQL DSN when ACCOUNT_STORAGE=mysql
+  #     # ACCOUNT_POSTGRESQL_URL: PostgreSQL DSN when ACCOUNT_STORAGE=postgresql
+
+  #     HTTP_PROXY: http://172.17.0.1:7890
+  #     HTTPS_PROXY: http://172.17.0.1:7890
+  #     NO_PROXY: localhost,127.0.0.1,.local,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+  #   volumes:
+  #     - /data/docker/grok2api/data:/app/data
+  #     - /data/docker/grok2api/logs:/app/logs
+
+  # # 如果出口 IP 不干净，可取消以下注释使用 Warp 作为落地代理
+  # # 启用后将 proxy.base_proxy_url 设为 socks5://warp:1080
+  # warp:
+  #   image: caomingjun/warp
+  #   container_name: warp
+  #   restart: always
+  #   # add removed rule back (https://github.com/opencontainers/runc/pull/3468)
+  #   device_cgroup_rules:
+  #     - 'c 10:200 rwm'
+  #   ports:
+  #     - "1080:1080"
+  #   environment:
+  #     - WARP_SLEEP=2
+  #     # - WARP_LICENSE_KEY= # optional
+  #     # - WARP_ENABLE_NAT=1 # enable nat
+  #   cap_add:
+  #     # Docker already have them, these are for podman users
+  #     - MKNOD
+  #     - AUDIT_WRITE
+  #     # additional required cap for warp, both for podman and docker
+  #     - NET_ADMIN
+  #   sysctls:
+  #     - net.ipv6.conf.all.disable_ipv6=0
+  #     - net.ipv4.conf.all.src_valid_mark=1
+  #     # uncomment for nat
+  #     # - net.ipv4.ip_forward=1
+  #     # - net.ipv6.conf.all.forwarding=1
+  #     # - net.ipv6.conf.all.accept_ra=2
+  #   volumes:
+  #     - /data/docker/cloudflare-warp:/var/lib/cloudflare-warp
+
+
+  # # 启用 CF 自动刷新时取消以下注释
+  # flaresolverr:
+  #   container_name: flaresolverr
+  #   image: ghcr.io/flaresolverr/flaresolverr:latest
+  #   ports:
+  #     - "127.0.0.1:8191:8191"
+  #   environment:
+  #     TZ: Asia/Shanghai
+  #     LOG_LEVEL: info
+  #   restart: unless-stopped
