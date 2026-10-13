@@ -26,7 +26,7 @@ services:
       - /data/docker/mysql/logs:/var/log/mysql
 
   zookeeper:
-    image: bitnami/zookeeper:latest
+    image: soldevelo/zookeeper:latest
     container_name: zookeeper
     hostname: zookeeper
     ports:
@@ -39,7 +39,7 @@ services:
       - ALLOW_ANONYMOUS_LOGIN=yes
 
   kafka:
-    image: bitnami/kafka:latest
+    image: soldevelo/kafka:latest
     container_name: kafka
     hostname: kafka
     ports:

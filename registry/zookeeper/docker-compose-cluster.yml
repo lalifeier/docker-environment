@@ -6,7 +6,7 @@ networks:
 
 services:
   zk1:
-    image: "bitnami/zookeeper:latest"
+    image: "soldevelo/zookeeper:latest"
     container_name: zk1
     hostname: zk1
     ports:
@@ -27,7 +27,7 @@ services:
       - /data/docker/zookeeper-cluster/zk1/data:/bitnami/zookeeper/data
 
   zk2:
-    image: "bitnami/zookeeper:latest"
+    image: "soldevelo/zookeeper:latest"
     container_name: zk2
     hostname: zk2
     ports:
@@ -48,7 +48,7 @@ services:
       - /data/docker/zookeeper-cluster/zk2/data:/bitnami/zookeeper/data
 
   zk3:
-    image: "bitnami/zookeeper:latest"
+    image: "soldevelo/zookeeper:latest"
     container_name: zk3
     hostname: zk3
     ports:

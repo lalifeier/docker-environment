@@ -6,7 +6,7 @@ networks:
 
 services:
   zookeeper:
-    image: "bitnami/zookeeper:latest"
+    image: "soldevelo/zookeeper:latest"
     ports:
       - "2181:2181"
     environment:
@@ -14,7 +14,7 @@ services:
       - ALLOW_ANONYMOUS_LOGIN=yes
 
   kafka1:
-    image: "bitnami/kafka:latest"
+    image: "soldevelo/kafka:latest"
     container_name: kafka1
     hostname: kafka1
     ports:
@@ -35,7 +35,7 @@ services:
       - zookeeper
 
   kafka2:
-    image: "bitnami/kafka:latest"
+    image: "soldevelo/kafka:latest"
     container_name: kafka2
     hostname: kafka2
     ports:
@@ -56,7 +56,7 @@ services:
       - zookeeper
 
   kafka3:
-    image: "bitnami/kafka:latest"
+    image: "soldevelo/kafka:latest"
     container_name: kafka3
     hostname: kafka3
     ports:

@@ -62,7 +62,7 @@ services:
         tag: nginx
 
   zookeeper:
-    image: bitnami/zookeeper:latest
+    image: soldevelo/zookeeper:latest
     container_name: zookeeper
     ports:
       - 2181:2181
@@ -74,7 +74,7 @@ services:
       - ALLOW_ANONYMOUS_LOGIN=yes
 
   kafka:
-    image: bitnami/kafka:latest
+    image: soldevelo/kafka:latest
     container_name: kafka
     ports:
       - 9092:9092

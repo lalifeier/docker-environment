@@ -6,7 +6,7 @@ networks:
 
 services:
   zookeeper:
-    image: "bitnami/zookeeper:latest"
+    image: "soldevelo/zookeeper:latest"
     container_name: zookeeper
     hostname: zookeeper
     ports:

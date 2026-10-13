@@ -6,7 +6,7 @@ networks:
 
 services:
   zookeeper:
-    image: "bitnami/zookeeper:latest"
+    image: "soldevelo/zookeeper:latest"
     container_name: zookeeper
     hostname: zookeeper
     ports:
@@ -28,7 +28,7 @@ services:
     #   - /data/docker/zookeeper:/bitnami/zookeeper
 
   kafka:
-    image: "bitnami/kafka:latest"
+    image: "soldevelo/kafka:latest"
     container_name: kafka
     hostname: kafka
     ports:
